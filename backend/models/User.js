@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema(
         password: { type: String, required: [true, "Mot de passe requis."] },
         firstName: { type: String },
         lastName: { type: String },
-        phoneNumber: { type: String },
+        phone: { type: String },
     },
     { timestamps: true }
 );

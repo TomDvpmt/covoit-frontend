@@ -19,26 +19,23 @@ const login = async (req, res, next) => {
     }
 
     const token = jwt.sign(
-        { userId: user.id },
+        { userId: user._id },
         process.env.JWT_TOKEN_GENERATION_PHRASE
     );
 
     res.status(200).json({
         message: "Utilisateur connecté.",
-        id: user.id,
+        id: user._id,
         token,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        phone: user.phone,
     });
 };
 
 const register = async (req, res, next) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const phoneNumber = req.body.phoneNumber;
+    const { email, password, firstName, lastName, phone } = req.body;
 
     const userAlreadyExists = await User.findOne({ email });
 
@@ -57,7 +54,7 @@ const register = async (req, res, next) => {
         password: hash,
         firstName,
         lastName,
-        phoneNumber,
+        phone,
     });
 
     if (!user) {
@@ -75,8 +72,24 @@ const register = async (req, res, next) => {
         email,
         firstName,
         lastName,
-        phoneNumber,
+        phone,
     });
 };
 
-module.exports = { login, register };
+const getOneUser = (req, res) => {
+    const authId = req.auth.id;
+    const paramsId = parseInt(req.params.id);
+    const userId = paramsId === 0 ? authId : paramsId;
+
+    User.findOne({ _id: userId })
+        .then((data) => res.status(200).json(data))
+        .catch((error) => {
+            console.log(error);
+            res.status(400).json({
+                message:
+                    "Impossible de récupérer les données de l'utilisateur.",
+            });
+        });
+};
+
+module.exports = { login, register, getOneUser };

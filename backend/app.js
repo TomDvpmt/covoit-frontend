@@ -1,8 +1,15 @@
 const express = require("express");
-const app = express();
+const cors = require("cors");
+const connectToDb = require("./config/database");
 const userRoutes = require("./routes/user");
-//
 
-app.use("/user", userRoutes);
+connectToDb();
+
+const app = express();
+
+app.use(express.json());
+app.use(cors());
+
+app.use("/API/user", userRoutes);
 
 module.exports = app;
