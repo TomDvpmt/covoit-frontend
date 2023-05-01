@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const FormInputFirstName = ({ firstName, setFirstName }) => {
     FormInputFirstName.propTypes = {
-        firstName: PropTypes.string.isRequired,
+        firstName: PropTypes.string,
         setFirstName: PropTypes.func.isRequired,
     };
 

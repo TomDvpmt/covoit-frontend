@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserData, logOut } from "../../features/user/userSlice";
 import { selectPageLocation } from "../../features/page/pageSlice";
 
+import { getOneUser } from "../../utils/user";
+
 import Header from "../../layout/Header";
 import NavBar from "../NavBar";
 import PageHeading from "../PageHeading";
@@ -15,7 +17,6 @@ import { useEffect } from "react";
 const PageWrapper = () => {
     const token = sessionStorage.getItem("token");
     const page = useSelector(selectPageLocation);
-    const user = useLoaderData();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -23,16 +24,20 @@ const PageWrapper = () => {
             dispatch(logOut());
             return;
         }
-        dispatch(
-            setUserData({
-                id: user._id,
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                phone: user.phone,
-            })
-        );
-    }, [dispatch, token, user]);
+        getOneUser(0)
+            .then((data) =>
+                dispatch(
+                    setUserData({
+                        id: data._id,
+                        email: data.email,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        phone: data.phone,
+                    })
+                )
+            )
+            .catch((error) => console.error(error));
+    }, [dispatch, token]);
 
     return (
         <Box

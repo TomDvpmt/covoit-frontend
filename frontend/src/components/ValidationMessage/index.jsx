@@ -9,7 +9,7 @@ const ValidationMessage = ({ text }) => {
         text: PropTypes.string.isRequired,
     };
     return (
-        <Typography color={theme.palette.success} mb="1rem">
+        <Typography color={theme.palette.success.main} mb="1rem">
             {text}
         </Typography>
     );

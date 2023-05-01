@@ -28,7 +28,7 @@ const MenuUser = () => {
     const handleLogOut = (e) => {
         setAnchorEl(null);
         sessionStorage.removeItem("token");
-        dispatch(logOut());
+        dispatch(logOut);
         navigate("/login");
     };
 

@@ -5,19 +5,25 @@ const theme = createTheme({
         // on Paletton : https://paletton.com/#uid=62V0u0kretxgWCylXvju2o3yej2
 
         primary: {
+            // blue
+            main: "#034A5E",
+        },
+        secondary: {
             // green
             main: "#007022",
             light: "#97D9A3",
         },
-        secondary: {
+        error: {
             // orange-red
             main: "#EB3E23",
         },
-        error: {
-            main: "#FF0000",
-        },
         success: {
-            main: "#034A5E",
+            // green
+            main: "#007022",
+        },
+        warning: {
+            // orange-red
+            main: "#EB3E23",
         },
     },
     typography: {

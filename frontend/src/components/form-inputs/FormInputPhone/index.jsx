@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const FormInputPhone = ({ phone, setPhone }) => {
     FormInputPhone.propTypes = {
-        phone: PropTypes.string.isRequired,
+        phone: PropTypes.string,
         setPhone: PropTypes.func.isRequired,
     };
 

@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { logIn, setUserData } from "../../features/user/userSlice";
 
 import FormInputEmail from "../../components/form-inputs/FormInputEmail";
 import FormInputPassword from "../../components/form-inputs/FormInputPassword";
@@ -13,6 +17,9 @@ import { Box, Button } from "@mui/material";
 import theme from "../../styles/theme";
 
 const Register = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -31,6 +38,8 @@ const Register = () => {
             setErrorMessage("Les mots de passe ne correspondent pas.");
             return;
         }
+
+        // Register
 
         try {
             const response = await fetch("API/user/register", {
@@ -54,6 +63,51 @@ const Register = () => {
             console.log(data);
         } catch (error) {
             setErrorMessage("Impossible de créer le compte.");
+            return;
+        }
+
+        // Auto log in after register
+        console.log(email, password);
+        try {
+            fetch("API/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        response
+                            .json()
+                            .then((data) => setErrorMessage(data.message));
+                        return;
+                    }
+                    response.json().then((data) => {
+                        sessionStorage.setItem("token", data.token);
+                        dispatch(logIn());
+                        dispatch(
+                            setUserData({
+                                id: data.id,
+                                email: data.email,
+                                firstName: data.firstName,
+                                lastName: data.lastName,
+                                phone: data.phone,
+                            })
+                        );
+                    });
+                    navigate("/");
+                })
+                .catch((error) => {
+                    console.error(error);
+                    setErrorMessage("Connexion impossible.");
+                });
+        } catch (error) {
+            setErrorMessage("Connexion impossible.");
+            return;
         }
     };
 

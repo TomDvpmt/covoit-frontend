@@ -19,7 +19,7 @@ const FormInputPasswordConfirm = ({ passwordConfirm, setPasswordConfirm }) => {
             margin="dense"
             id="passwordConfirm"
             name="passwordConfirm"
-            type="passwordConfirm"
+            type="password"
             label="Confirmez votre mot de passe"
             value={passwordConfirm}
             onChange={handleChange}

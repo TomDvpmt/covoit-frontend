@@ -11,13 +11,12 @@ import Profile from "../../pages/Profile";
 import Trip from "../../pages/Trip";
 import Error404 from "../../pages/Error404";
 
-import { getOneUser } from "../../utils/requests";
+import { getOneUser } from "../../utils/user";
 
 const Router = () => {
     const router = createBrowserRouter([
         {
             element: <PageWrapper />,
-            loader: async () => getOneUser(0),
             errorElement: <ErrorBoundary />,
             children: [
                 {

@@ -9,13 +9,17 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-        res.status(401).json({ message: "Email ou mot de passe invalide." });
+        return res
+            .status(401)
+            .json({ message: "Email ou mot de passe invalide." });
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatch) {
-        res.status(401).json({ message: "Email ou mot de passe invalide." });
+        return res
+            .status(401)
+            .json({ message: "Email ou mot de passe invalide." });
     }
 
     const token = jwt.sign(
@@ -37,43 +41,50 @@ const login = async (req, res, next) => {
 const register = async (req, res, next) => {
     const { email, password, firstName, lastName, phone } = req.body;
 
-    const userAlreadyExists = await User.findOne({ email });
+    try {
+        const userAlreadyExists = await User.findOne({ email });
 
-    if (userAlreadyExists) {
-        res.status(400).json({
-            message:
-                "Cette adresse e-mail est déjà utilisée, veuillez en choisir une autre.",
+        if (userAlreadyExists) {
+            res.status(400).json({
+                message:
+                    "Cette adresse e-mail est déjà utilisée, veuillez en choisir une autre.",
+            });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(password, salt);
+
+        const user = await User.create({
+            email,
+            password: hash,
+            firstName,
+            lastName,
+            phone,
         });
+
+        if (!user) {
+            res.status(400).json({
+                message: "Impossible de créer l'utilisateur.",
+            });
+        }
+
+        const token = jwt.sign(
+            { userId: user.id },
+            process.env.JWT_TOKEN_GENERATION_PHRASE
+        );
+        res.status(201).json({
+            message: "Utilisateur créé.",
+            _id: user.id,
+            token,
+            email,
+            firstName,
+            lastName,
+            phone,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erreur serveur." });
     }
-
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
-
-    const user = await User.create({
-        email,
-        password: hash,
-        firstName,
-        lastName,
-        phone,
-    });
-
-    if (!user) {
-        res.status(400).json({ message: "Impossible de créer l'utilisateur." });
-    }
-
-    const token = jwt.sign(
-        { userId: user.id },
-        process.env.JWT_TOKEN_GENERATION_PHRASE
-    );
-    res.status(201).json({
-        message: "Utilisateur créé.",
-        _id: user.id,
-        token,
-        email,
-        firstName,
-        lastName,
-        phone,
-    });
 };
 
 const getOneUser = (req, res) => {
@@ -84,7 +95,7 @@ const getOneUser = (req, res) => {
     User.findOne({ _id: userId })
         .then((data) => res.status(200).json(data))
         .catch((error) => {
-            console.log(error);
+            console.error(error);
             res.status(400).json({
                 message:
                     "Impossible de récupérer les données de l'utilisateur.",
@@ -92,4 +103,36 @@ const getOneUser = (req, res) => {
         });
 };
 
-module.exports = { login, register, getOneUser };
+const updateUser = (req, res) => {
+    const userId = req.auth.id;
+    const newData = req.body;
+    User.updateOne({ _id: userId }, { ...newData })
+        .then(() => res.status(200).json({ message: "Utilisateur modifié." }))
+        .catch((error) => {
+            console.error(error);
+            res.status(400).json({
+                message: "Impossible de modifier l'utilisateur",
+            });
+        });
+};
+
+const deleteUser = (req, res) => {
+    const paramId = req.params.id;
+    const authId = req.auth.id;
+
+    console.log(authId);
+    console.log(paramId);
+
+    if (paramId !== authId) {
+        res.status(401).json({ message: "Non autorisé." });
+        return;
+    }
+
+    User.deleteOne({ _id: authId })
+        .then(() => res.status(200).json({ message: "Utilisateur supprimé." }))
+        .catch((error) => {
+            console.error(error);
+        });
+};
+
+module.exports = { login, register, getOneUser, updateUser, deleteUser };

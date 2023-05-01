@@ -26,39 +26,42 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await fetch("API/user/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
+        fetch("API/user/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                password,
+            }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    response
+                        .json()
+                        .then((data) => setErrorMessage(data.message));
+                    return;
+                }
+                response.json().then((data) => {
+                    sessionStorage.setItem("token", data.token);
+                    dispatch(logIn());
+                    dispatch(
+                        setUserData({
+                            id: data.id,
+                            email: data.email,
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            phone: data.phone,
+                        })
+                    );
+                });
+                navigate("/");
+            })
+            .catch((error) => {
+                console.error(error);
+                setErrorMessage("Connexion impossible.");
             });
-            if (!response.ok) {
-                response.json().then((data) => setErrorMessage(data.message));
-                return;
-            }
-            const data = await response.json();
-            console.log(data);
-            sessionStorage.setItem("token", data.token);
-            dispatch(logIn());
-            dispatch(
-                setUserData({
-                    id: data.id,
-                    email: data.email,
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    phone: data.phone,
-                })
-            );
-            navigate("/");
-        } catch (error) {
-            console.error(error);
-            setErrorMessage("Connexion impossible.");
-        }
     };
 
     return (

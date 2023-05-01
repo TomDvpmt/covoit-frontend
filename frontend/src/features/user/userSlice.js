@@ -16,11 +16,31 @@ export const userSlice = createSlice({
             state.isLoggedIn = true;
             state.data = action.payload;
         },
+        setUserEmail: (state, action) => {
+            state.data.email = action.payload;
+        },
+        setUserFirstName: (state, action) => {
+            state.data.firstName = action.payload;
+        },
+        setUserLastName: (state, action) => {
+            state.data.lastName = action.payload;
+        },
+        setUserPhone: (state, action) => {
+            state.data.phone = action.payload;
+        },
         logOut: () => initialState,
     },
 });
 
-export const { logIn, logOut, setUserData } = userSlice.actions;
+export const {
+    logIn,
+    logOut,
+    setUserData,
+    setUserEmail,
+    setUserFirstName,
+    setUserLastName,
+    setUserPhone,
+} = userSlice.actions;
 
 export const selectUserIsLoggedIn = (state) => state.user.isLoggedIn;
 export const selectUserId = (state) => state.user.data.id;
