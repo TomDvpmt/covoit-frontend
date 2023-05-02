@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 
 import { setUserData } from "../../features/user/userSlice";
 
-import FormInputEmail from "../../components/form-inputs/FormInputEmail";
-import FormInputPassword from "../../components/form-inputs/FormInputPassword";
+import UserInputEmail from "../../components/form-inputs/UserInputEmail";
+import UserInputPassword from "../../components/form-inputs/UserInputPassword";
 import ErrorMessage from "../../components/ErrorMessage";
 
 import { logIn } from "../../features/user/userSlice";
@@ -76,8 +76,8 @@ const Login = () => {
                 alignItems: "flex-end",
             }}>
             {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
-            <FormInputEmail email={email} setEmail={setEmail} />
-            <FormInputPassword password={password} setPassword={setPassword} />
+            <UserInputEmail email={email} setEmail={setEmail} />
+            <UserInputPassword password={password} setPassword={setPassword} />
             <Button type="submit" variant="contained" sx={{ mt: ".5rem" }}>
                 Se connecter
             </Button>

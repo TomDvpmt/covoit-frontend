@@ -4,12 +4,12 @@ import { useDispatch } from "react-redux";
 
 import { logIn, setUserData } from "../../features/user/userSlice";
 
-import FormInputEmail from "../../components/form-inputs/FormInputEmail";
-import FormInputPassword from "../../components/form-inputs/FormInputPassword";
-import FormInputPasswordConfirm from "../../components/form-inputs/FormInputPasswordConfirm";
-import FormInputFirstName from "../../components/form-inputs/FormInputFirstName";
-import FormInputLastName from "../../components/form-inputs/FormInputLastName";
-import FormInputPhone from "../../components/form-inputs/FormInputPhone";
+import UserInputEmail from "../../components/form-inputs/UserInputEmail";
+import UserInputPassword from "../../components/form-inputs/UserInputPassword";
+import UserInputPasswordConfirm from "../../components/form-inputs/UserInputPasswordConfirm";
+import UserInputFirstName from "../../components/form-inputs/UserInputFirstName";
+import UserInputLastName from "../../components/form-inputs/UserInputLastName";
+import UserInputPhone from "../../components/form-inputs/UserInputPhone";
 import ErrorMessage from "../../components/ErrorMessage";
 
 import { Box, Button } from "@mui/material";
@@ -67,7 +67,6 @@ const Register = () => {
         }
 
         // Auto log in after register
-        console.log(email, password);
         try {
             fetch("API/user/login", {
                 method: "POST",
@@ -123,18 +122,18 @@ const Register = () => {
                 alignItems: "flex-end",
             }}>
             {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
-            <FormInputEmail email={email} setEmail={setEmail} />
-            <FormInputPassword password={password} setPassword={setPassword} />
-            <FormInputPasswordConfirm
+            <UserInputEmail email={email} setEmail={setEmail} />
+            <UserInputPassword password={password} setPassword={setPassword} />
+            <UserInputPasswordConfirm
                 passwordConfirm={passwordConfirm}
                 setPasswordConfirm={setPasswordConfirm}
             />
-            <FormInputFirstName
+            <UserInputFirstName
                 firstName={firstName}
                 setFirstName={setFirstName}
             />
-            <FormInputLastName lastName={lastName} setLastName={setLastName} />
-            <FormInputPhone phone={phone} setPhone={setPhone} />
+            <UserInputLastName lastName={lastName} setLastName={setLastName} />
+            <UserInputPhone phone={phone} setPhone={setPhone} />
             <Button type="submit" variant="contained" sx={{ mt: ".5rem" }}>
                 Valider
             </Button>

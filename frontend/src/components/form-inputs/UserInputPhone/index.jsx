@@ -1,8 +1,8 @@
 import { TextField } from "@mui/material";
 import PropTypes from "prop-types";
 
-const FormInputPhone = ({ phone, setPhone }) => {
-    FormInputPhone.propTypes = {
+const UserInputPhone = ({ phone, setPhone }) => {
+    UserInputPhone.propTypes = {
         phone: PropTypes.string,
         setPhone: PropTypes.func.isRequired,
     };
@@ -25,4 +25,4 @@ const FormInputPhone = ({ phone, setPhone }) => {
     );
 };
 
-export default FormInputPhone;
+export default UserInputPhone;

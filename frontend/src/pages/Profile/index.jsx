@@ -16,10 +16,10 @@ import {
     selectUserPhone,
 } from "../../features/user/userSlice";
 
-import FormInputEmail from "../../components/form-inputs/FormInputEmail";
-import FormInputFirstName from "../../components/form-inputs/FormInputFirstName";
-import FormInputLastName from "../../components/form-inputs/FormInputLastName";
-import FormInputPhone from "../../components/form-inputs/FormInputPhone";
+import UserInputEmail from "../../components/form-inputs/UserInputEmail";
+import UserInputFirstName from "../../components/form-inputs/UserInputFirstName";
+import UserInputLastName from "../../components/form-inputs/UserInputLastName";
+import UserInputPhone from "../../components/form-inputs/UserInputPhone";
 import DeleteDialog from "../../components/DeleteDialog";
 import ValidationMessage from "../../components/ValidationMessage";
 import ErrorMessage from "../../components/ErrorMessage";
@@ -62,13 +62,6 @@ const Profile = () => {
     const [validationMessage, setValidationMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    useEffect(() => {
-        setNewEmail(prevEmail);
-        setNewFirstName(prevFirstName);
-        setNewLastName(prevLastName);
-        setNewPhone(prevPhone);
-    }, [prevEmail, prevFirstName, prevLastName, prevPhone]);
-
     const leftCellStyle = {
         width: "45%",
         textAlign: "right",
@@ -76,6 +69,10 @@ const Profile = () => {
     };
 
     const handleUpdateUser = () => {
+        setNewEmail(prevEmail);
+        setNewFirstName(prevFirstName);
+        setNewLastName(prevLastName);
+        setNewPhone(prevPhone);
         setErrorMessage("");
         setValidationMessage("");
         setShowUpdateForm((showUpdateForm) => !showUpdateForm);
@@ -193,26 +190,25 @@ const Profile = () => {
                     )}
                 </Box>
             </Box>
-            {/* <Collapse in={showUpdateForm}> */}
-            {showUpdateForm && (
+            <Collapse in={showUpdateForm}>
                 <Box
                     component="form"
                     onSubmit={handleSubmit}
                     maxWidth={theme.maxWidth.form}
                     margin="auto">
-                    <FormInputEmail email={newEmail} setEmail={setNewEmail} />
+                    <UserInputEmail email={newEmail} setEmail={setNewEmail} />
 
-                    <FormInputFirstName
+                    <UserInputFirstName
                         firstName={newFirstName}
                         setFirstName={setNewFirstName}
                     />
 
-                    <FormInputLastName
+                    <UserInputLastName
                         lastName={newLastName}
                         setLastName={setNewLastName}
                     />
 
-                    <FormInputPhone phone={newPhone} setPhone={setNewPhone} />
+                    <UserInputPhone phone={newPhone} setPhone={setNewPhone} />
 
                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                         <Button
@@ -223,8 +219,7 @@ const Profile = () => {
                         </Button>
                     </Box>
                 </Box>
-            )}
-            {/* </Collapse> */}
+            </Collapse>
         </>
     );
 };

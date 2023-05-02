@@ -3,15 +3,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import PageWrapper from "../../layout/PageWrapper";
 import SetPage from "../../layout/SetPage";
-import ErrorBoundary from "../../components/ErrorBoundary";
 import Home from "../../pages/Home";
 import Login from "../../pages/Login";
 import Register from "../../pages/Register";
 import Profile from "../../pages/Profile";
-import Trip from "../../pages/Trip";
+import MyRides from "../../pages/MyRides";
+import Ride from "../../pages/Ride";
 import Error404 from "../../pages/Error404";
-
-import { getOneUser } from "../../utils/user";
+import ErrorBoundary from "../../components/ErrorBoundary";
 
 const Router = () => {
     const router = createBrowserRouter([
@@ -56,11 +55,20 @@ const Router = () => {
                     ),
                 },
                 {
+                    path: "/myrides/",
+                    element: (
+                        <>
+                            <SetPage page="myrides" />
+                            <MyRides />
+                        </>
+                    ),
+                },
+                {
                     path: "/trip",
                     element: (
                         <>
                             <SetPage page="trip" />
-                            <Trip />
+                            <Ride />
                         </>
                     ),
                 },

@@ -1,8 +1,7 @@
-import { Outlet, useLoaderData } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { setUserData, logOut } from "../../features/user/userSlice";
-import { selectPageLocation } from "../../features/page/pageSlice";
 
 import { getOneUser } from "../../utils/user";
 
@@ -16,7 +15,6 @@ import { useEffect } from "react";
 
 const PageWrapper = () => {
     const token = sessionStorage.getItem("token");
-    const page = useSelector(selectPageLocation);
     const dispatch = useDispatch();
 
     useEffect(() => {

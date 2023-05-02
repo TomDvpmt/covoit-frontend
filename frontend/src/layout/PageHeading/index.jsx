@@ -12,6 +12,7 @@ const PageHeading = () => {
         register: "Créer un compte",
         profile: "Mes informations",
         home: "",
+        myrides: "Mes trajets",
         trip: "",
         error404: "Page introuvable.",
     };

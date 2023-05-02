@@ -4,7 +4,14 @@ import { useDispatch } from "react-redux";
 
 import { logOut } from "../../features/user/userSlice";
 
-import { Menu, MenuItem, IconButton, Avatar } from "@mui/material";
+import {
+    Menu,
+    MenuItem,
+    ListItemIcon,
+    IconButton,
+    Avatar,
+} from "@mui/material";
+import { Settings, Logout, DirectionsCar } from "@mui/icons-material";
 
 const MenuUser = () => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -20,6 +27,11 @@ const MenuUser = () => {
         setAnchorEl(null);
     };
 
+    const handleMyRides = () => {
+        handleClose();
+        navigate("/myrides");
+    };
+
     const handleProfile = () => {
         handleClose();
         navigate("/profile");
@@ -28,7 +40,7 @@ const MenuUser = () => {
     const handleLogOut = (e) => {
         setAnchorEl(null);
         sessionStorage.removeItem("token");
-        dispatch(logOut);
+        dispatch(logOut());
         navigate("/login");
     };
 
@@ -44,8 +56,25 @@ const MenuUser = () => {
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}>
-                <MenuItem onClick={handleProfile}>Profil</MenuItem>
-                <MenuItem onClick={handleLogOut}>Déconnexion</MenuItem>
+                <MenuItem onClick={handleMyRides}>
+                    <ListItemIcon>
+                        <DirectionsCar />
+                    </ListItemIcon>
+                    Mes trajets
+                </MenuItem>
+                <MenuItem onClick={handleProfile}>
+                    <ListItemIcon>
+                        <Settings />
+                    </ListItemIcon>
+                    Profil
+                </MenuItem>
+
+                <MenuItem onClick={handleLogOut}>
+                    <ListItemIcon>
+                        <Logout />
+                    </ListItemIcon>
+                    Déconnexion
+                </MenuItem>
             </Menu>
         </>
     );

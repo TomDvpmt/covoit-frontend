@@ -2,8 +2,8 @@ import { TextField } from "@mui/material";
 
 import PropTypes from "prop-types";
 
-const FormInputEmail = ({ email, setEmail }) => {
-    FormInputEmail.propTypes = {
+const UserInputEmail = ({ email, setEmail }) => {
+    UserInputEmail.propTypes = {
         email: PropTypes.string.isRequired,
         setEmail: PropTypes.func.isRequired,
     };
@@ -28,4 +28,4 @@ const FormInputEmail = ({ email, setEmail }) => {
     );
 };
 
-export default FormInputEmail;
+export default UserInputEmail;

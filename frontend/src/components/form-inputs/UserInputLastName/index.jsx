@@ -1,8 +1,8 @@
 import { TextField } from "@mui/material";
 import PropTypes from "prop-types";
 
-const FormInputLastName = ({ lastName, setLastName }) => {
-    FormInputLastName.propTypes = {
+const UserInputLastName = ({ lastName, setLastName }) => {
+    UserInputLastName.propTypes = {
         lastName: PropTypes.string,
         setLastName: PropTypes.func.isRequired,
     };
@@ -25,4 +25,4 @@ const FormInputLastName = ({ lastName, setLastName }) => {
     );
 };
 
-export default FormInputLastName;
+export default UserInputLastName;
