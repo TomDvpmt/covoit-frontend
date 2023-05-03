@@ -13,17 +13,29 @@ import theme from "../../../styles/theme";
 
 import PropTypes from "prop-types";
 
-const RideInputDestination = ({ destination, setDestination }) => {
-    RideInputDestination.propTypes = {
-        destination: PropTypes.string.isRequired,
-        setDestination: PropTypes.func.isRequired,
+const RideInputLocation = ({ type, location, setLocation }) => {
+    RideInputLocation.propTypes = {
+        type: PropTypes.string.isRequired,
+        location: PropTypes.string.isRequired,
+        setLocation: PropTypes.func.isRequired,
+    };
+
+    const locationTexts = {
+        departure: {
+            label: "Départ",
+            placeholder: "D'où souhaitez-vous partir ?",
+        },
+        destination: {
+            label: "Destination",
+            placeholder: "Où souhaitez-vous aller ?",
+        },
     };
 
     const [cities, setCities] = useState([]);
     const [showCitiesMenu, setShowCitiesMenu] = useState(false);
 
     const handleTextInputChange = (e) => {
-        setDestination(e.target.value);
+        setLocation(e.target.value);
 
         const query = e.target.value;
 
@@ -36,7 +48,7 @@ const RideInputDestination = ({ destination, setDestination }) => {
     };
 
     const handleCitySelect = (e) => {
-        setDestination(e.target.id);
+        setLocation(e.target.id);
         setShowCitiesMenu(false);
     };
 
@@ -47,19 +59,20 @@ const RideInputDestination = ({ destination, setDestination }) => {
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
             <FormControl required fullWidth margin="dense">
-                <InputLabel htmlFor="outlined-adornment-destination">
-                    Destination
+                <InputLabel htmlFor="outlined-adornment-location">
+                    {locationTexts[type].label}
                 </InputLabel>
                 <OutlinedInput
-                    id="outlined-adornment-destination"
+                    id="outlined-adornment-location"
                     type="text"
                     startAdornment={
                         <InputAdornment position="start">
                             <LocationOn />
                         </InputAdornment>
                     }
-                    label="Destination"
-                    value={destination}
+                    label={locationTexts[type].label}
+                    placeholder={locationTexts[type].placeholder}
+                    value={location}
                     onChange={handleTextInputChange}
                 />
             </FormControl>
@@ -92,4 +105,4 @@ const RideInputDestination = ({ destination, setDestination }) => {
     );
 };
 
-export default RideInputDestination;
+export default RideInputLocation;

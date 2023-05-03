@@ -1,10 +1,7 @@
-import RideInputDeparture from "../../components/form-inputs/RideInputDeparture";
-import RideInputDestination from "../../components/form-inputs/RideInputDestination";
+import RideInputLocation from "../../components/form-inputs/RideInputLocation";
 import RideInputDepartureDate from "../../components/form-inputs/RideInputDepartureDate";
-import RideInputAvailableSeats from "../../components/form-inputs/RideInputAvailableSeats";
+import RideInputSeats from "../../components/form-inputs/RideInputSeats";
 import RideInputPrice from "../../components/form-inputs/RideInputPrice";
-
-import dayjs from "dayjs";
 
 import { Box, Collapse, Typography, Button } from "@mui/material";
 import { useState } from "react";
@@ -13,7 +10,7 @@ const MyRides = () => {
     const [departure, setDeparture] = useState("");
     const [destination, setDestination] = useState("");
     const [departureDate, setDepartureDate] = useState(Date.now());
-    const [availableSeats, setAvailableSeats] = useState(1);
+    const [seats, setSeats] = useState(0);
     const [price, setPrice] = useState(0);
     const [showCreateRideForm, setShowCreateRideForm] = useState(true);
 
@@ -24,16 +21,11 @@ const MyRides = () => {
             departure,
             destination,
             departureDate,
-            availableSeats,
+            seats,
             price,
         };
 
-        fetch("https://geo.api.gouv.fr/departements/01/communes", {
-            method: "GET",
-        })
-            .then((response) => response.json())
-            .then((data) => console.log(data))
-            .catch((error) => console.log(error));
+        console.log(data);
     };
 
     return (
@@ -53,23 +45,30 @@ const MyRides = () => {
                             gap: ".5rem",
                             alignItems: "center",
                         }}>
-                        <RideInputDeparture
-                            departure={departure}
-                            setDeparture={setDeparture}
+                        <RideInputLocation
+                            type="departure"
+                            location={departure}
+                            setLocation={setDeparture}
                         />
-                        <RideInputDestination
-                            destination={destination}
-                            setDestination={setDestination}
+                        <RideInputLocation
+                            type="destination"
+                            location={destination}
+                            setLocation={setDestination}
                         />
                         <RideInputDepartureDate
                             departureDate={departureDate}
                             setDepartureDate={setDepartureDate}
                         />
-                        <RideInputAvailableSeats
-                            availableSeats={availableSeats}
-                            setAvailableSeats={setAvailableSeats}
+                        <RideInputSeats
+                            type="total"
+                            seats={seats}
+                            setSeats={setSeats}
                         />
-                        <RideInputPrice price={price} setPrice={setPrice} />
+                        <RideInputPrice
+                            type="fixed"
+                            price={price}
+                            setPrice={setPrice}
+                        />
                     </Box>
                     <Button type="submit" variant="contained" color="primary">
                         Valider

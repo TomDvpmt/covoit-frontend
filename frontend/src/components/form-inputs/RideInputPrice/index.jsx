@@ -3,16 +3,25 @@ import {
     InputLabel,
     OutlinedInput,
     InputAdornment,
-    Typography,
 } from "@mui/material";
 import { Euro } from "@mui/icons-material";
 
 import PropTypes from "prop-types";
 
-const RideInputPrice = ({ price, setPrice }) => {
+const RideInputPrice = ({ type, price, setPrice }) => {
     RideInputPrice.propTypes = {
+        type: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired,
         setPrice: PropTypes.func.isRequired,
+    };
+
+    const priceTexts = {
+        fixed: {
+            label: "Prix",
+        },
+        max: {
+            label: "Prix maximum",
+        },
     };
 
     const handleChange = (e) => {
@@ -21,7 +30,9 @@ const RideInputPrice = ({ price, setPrice }) => {
 
     return (
         <FormControl required margin="dense">
-            <InputLabel htmlFor="outlined-adornment-price">Prix</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-price">
+                {priceTexts[type].label}
+            </InputLabel>
             <OutlinedInput
                 id="outlined-adornment-price"
                 type="text"
@@ -30,7 +41,7 @@ const RideInputPrice = ({ price, setPrice }) => {
                         <Euro fontSize="small" />
                     </InputAdornment>
                 }
-                label="Prix"
+                label={priceTexts[type].label}
                 value={price}
                 onChange={handleChange}
                 inputProps={{
