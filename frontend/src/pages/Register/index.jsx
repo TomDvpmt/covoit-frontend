@@ -42,7 +42,7 @@ const Register = () => {
         // Register
 
         try {
-            const response = await fetch("API/user/register", {
+            const response = await fetch("API/users/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -68,7 +68,7 @@ const Register = () => {
 
         // Auto log in after register
         try {
-            fetch("API/user/login", {
+            fetch("API/users/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

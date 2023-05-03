@@ -46,7 +46,7 @@ const PageWrapper = () => {
             }}>
             <Header />
             <NavBar />
-            <Box component="main" sx={{ flexGrow: "1" }}>
+            <Box component="main" sx={{ flexGrow: "1", p: ".5rem" }}>
                 <PageHeading />
                 <Outlet />
             </Box>

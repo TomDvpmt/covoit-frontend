@@ -26,7 +26,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        fetch("API/user/login", {
+        fetch("API/users/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

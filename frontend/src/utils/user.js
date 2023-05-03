@@ -4,7 +4,7 @@ export const getOneUser = async (id) => {
         return {};
     }
     try {
-        const response = await fetch(`/API/user/${id}`, {
+        const response = await fetch(`/API/users/${id}`, {
             method: "GET",
             headers: {
                 authorization: `BEARER ${token}`,

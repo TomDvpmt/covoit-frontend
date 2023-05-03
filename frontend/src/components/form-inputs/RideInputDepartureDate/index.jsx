@@ -11,7 +11,7 @@ const RideInputDepartureDate = ({ departureDate, setDepartureDate }) => {
     };
 
     const handleChange = (e) => {
-        setDepartureDate(Date.parse(dayjs(e)));
+        setDepartureDate(Date.parse(e));
     };
 
     return (

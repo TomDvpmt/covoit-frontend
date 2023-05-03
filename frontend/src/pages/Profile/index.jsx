@@ -20,7 +20,7 @@ import UserInputEmail from "../../components/form-inputs/UserInputEmail";
 import UserInputFirstName from "../../components/form-inputs/UserInputFirstName";
 import UserInputLastName from "../../components/form-inputs/UserInputLastName";
 import UserInputPhone from "../../components/form-inputs/UserInputPhone";
-import DeleteDialog from "../../components/DeleteDialog";
+import DeleteAccountDialog from "../../components/DeleteAccountDialog";
 import ValidationMessage from "../../components/ValidationMessage";
 import ErrorMessage from "../../components/ErrorMessage";
 
@@ -99,7 +99,7 @@ const Profile = () => {
         }
 
         try {
-            fetch(`/API/user/${userId}`, {
+            fetch(`/API/users/${userId}`, {
                 method: "PUT",
                 headers: {
                     authorization: `BEARER ${token}`,
@@ -181,7 +181,7 @@ const Profile = () => {
                         Supprimer le compte
                     </Button>
                     {showDialog && (
-                        <DeleteDialog
+                        <DeleteAccountDialog
                             userId={userId}
                             showDialog={showDialog}
                             setShowDialog={setShowDialog}
