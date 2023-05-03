@@ -57,7 +57,7 @@ const RideInputLocation = ({ type, location, setLocation }) => {
     }, [cities]);
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box sx={{ flexGrow: "1", display: "flex", flexDirection: "column" }}>
             <FormControl required fullWidth margin="dense">
                 <InputLabel htmlFor="outlined-adornment-location">
                     {locationTexts[type].label}

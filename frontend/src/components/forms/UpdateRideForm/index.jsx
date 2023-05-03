@@ -53,6 +53,7 @@ const UpdateRideForm = ({
             setErrorMessage(
                 "Modification impossible : il y a plus de passagers que de places disponibles."
             );
+            return;
         }
 
         const updateData = {
@@ -93,6 +94,7 @@ const UpdateRideForm = ({
                     <Box
                         sx={{
                             display: "flex",
+                            justifyContent: "flex-end",
                             gap: ".5rem",
                         }}>
                         <Button

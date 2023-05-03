@@ -19,8 +19,8 @@ const RideInputSeats = ({ type, seats, setSeats }) => {
         total: {
             label: "Nombre maximum de passagers",
         },
-        available: {
-            label: "Places disponibles",
+        passengers: {
+            label: "Places souhaitées",
         },
     };
 
@@ -29,7 +29,7 @@ const RideInputSeats = ({ type, seats, setSeats }) => {
     };
 
     return (
-        <FormControl required margin="dense">
+        <FormControl required margin="dense" sx={{ flexGrow: "1" }}>
             <InputLabel htmlFor="outlined-adornment-seats">
                 {seatsTexts[type].label}
             </InputLabel>

@@ -24,7 +24,7 @@ const CreateRideForm = ({ showCreateRideForm, setShowCreateRideForm }) => {
     const [departure, setDeparture] = useState("");
     const [destination, setDestination] = useState("");
     const [departureDate, setDepartureDate] = useState(Date.now());
-    const [seats, setSeats] = useState(0);
+    const [seats, setSeats] = useState(1);
     const [price, setPrice] = useState(0);
 
     const handleSubmit = (e) => {
@@ -53,7 +53,7 @@ const CreateRideForm = ({ showCreateRideForm, setShowCreateRideForm }) => {
                 setDeparture("");
                 setDestination("");
                 setDepartureDate(Date.now());
-                setSeats(0);
+                setSeats(1);
                 setPrice(0);
                 setShowCreateRideForm(false);
             })

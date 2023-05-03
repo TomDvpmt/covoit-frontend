@@ -15,21 +15,19 @@ const RideInputDepartureDate = ({ departureDate, setDepartureDate }) => {
     };
 
     return (
-        <>
-            <FormControl margin="dense">
-                <DateTimePicker
-                    required
-                    label="Date et heure de départ *"
-                    value={dayjs(departureDate)}
-                    onChange={handleChange}
-                    slotProps={{
-                        inputAdornment: {
-                            position: "start",
-                        },
-                    }}
-                />
-            </FormControl>
-        </>
+        <FormControl margin="dense" sx={{ flexGrow: "1" }}>
+            <DateTimePicker
+                required
+                label="Date et heure de départ *"
+                value={dayjs(departureDate)}
+                onChange={handleChange}
+                slotProps={{
+                    inputAdornment: {
+                        position: "start",
+                    },
+                }}
+            />
+        </FormControl>
     );
 };
 

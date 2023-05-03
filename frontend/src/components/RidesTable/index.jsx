@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-
-import { selectUserId } from "../../features/user/userSlice";
 
 import UpdateRideForm from "../forms/UpdateRideForm";
 import DeleteRideDialog from "../DeleteRideDialog";
+import Loader from "../Loader";
 
 import dayjs from "dayjs";
 
@@ -17,6 +15,7 @@ import {
     TableCell,
     Typography,
     IconButton,
+    Button,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 
@@ -30,77 +29,79 @@ const RidesTable = ({
     setErrorMessage,
 }) => {
     RidesTable.propTypes = {
-        type: PropTypes.string.isRequired,
-        showCreateRideForm: PropTypes.bool.isRequired,
-        showDeleteRideDialog: PropTypes.bool.isRequired,
-        setShowDeleteRideDialog: PropTypes.func.isRequired,
-        setErrorMessage: PropTypes.func.isRequired,
+        type: PropTypes.object.isRequired,
+        showCreateRideForm: PropTypes.bool,
+        showDeleteRideDialog: PropTypes.bool,
+        setShowDeleteRideDialog: PropTypes.func,
+        setErrorMessage: PropTypes.func,
     };
 
     const token = sessionStorage.getItem("token");
-    const userId = useSelector(selectUserId);
 
     const [rides, setRides] = useState([]);
-    const [filters, setFilters] = useState({});
     const [showUpdateRideForm, setShowUpdateRideForm] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        switch (type) {
-            case "driver":
-                setFilters({
-                    driverId: userId,
-                });
-                break;
-            case "passenger":
-                setFilters({});
-                break;
-            case "search":
-                setFilters({});
-                break;
-            default:
-                setFilters({});
-        }
-    }, []);
-
-    useEffect(() => {
-        fetch("/API/rides/", {
-            method: "POST",
-            headers: {
-                Authorization: `BEARER ${token}`,
-            },
-            body: JSON.stringify({
-                filters,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setRides(data.results);
+        if (token && Object.keys(type.filters).length > 0) {
+            console.log(type);
+            setLoading(true);
+            fetch("/API/rides/", {
+                method: "POST",
+                headers: {
+                    Authorization: `BEARER ${token}`,
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    filters: type.filters,
+                }),
             })
-            .catch((error) => console.error(error));
+                .then((response) => response.json())
+                .then((data) => {
+                    setRides(data.results);
+                })
+                .catch((error) => console.error(error))
+                .finally(setLoading(false));
+        }
     }, [
         token,
-        userId,
+        type.filters,
         showCreateRideForm,
         showDeleteRideDialog,
         showUpdateRideForm,
     ]);
 
+    const handleBookRide = () => {
+        //
+    };
+
     const handleEdit = (e) => {
+        setErrorMessage("");
         setShowUpdateRideForm(true);
     };
 
     const handleDelete = (e) => {
+        setErrorMessage("");
         setShowDeleteRideDialog(true);
     };
 
-    return (
+    return loading ? (
+        <Loader />
+    ) : (
         <Paper elevation={4}>
             <TableContainer>
                 <Table>
                     <TableBody
                         sx={{
                             "& td": {
+                                textAlign: "center",
                                 fontSize: ".8em",
+                                paddingLeft: ".5rem",
+                                paddingRight: ".5rem",
+                            },
+                            "& .denseCell": {
+                                paddingLeft: "0",
+                                paddingRight: "0",
                             },
                         }}>
                         <TableRow
@@ -114,18 +115,26 @@ const RidesTable = ({
                             <TableCell>Date de départ</TableCell>
                             <TableCell>Places disponibles</TableCell>
                             <TableCell>Passagers</TableCell>
-                            <TableCell>Prix</TableCell>
-                            <TableCell></TableCell>
+                            <TableCell>Prix&nbsp;/ passager</TableCell>
+                            <TableCell colSpan={3}></TableCell>
                         </TableRow>
+                        {rides?.length === 0 && (
+                            <TableRow>
+                                <TableCell colSpan={6}>
+                                    Aucun trajet disponible selon ces critères.
+                                </TableCell>
+                            </TableRow>
+                        )}
                         {rides
                             ?.sort((a, b) => {
                                 return a.departureDate - b.departureDate;
                             })
                             .map((ride, index) => {
                                 const date = dayjs(ride.departureDate);
+                                console.log(date);
                                 const day = `${date.$D < 10 ? 0 : ""}${
                                     date.$D
-                                }/${date.$M < 10 ? 0 : ""}${date.$M}/${
+                                }/${date.$M + 1 < 10 ? 0 : ""}${date.$M + 1}/${
                                     date.$y
                                 }`;
                                 const time = `${date.$H}h${
@@ -138,22 +147,25 @@ const RidesTable = ({
                                         <TableCell>
                                             {ride.destination}
                                         </TableCell>
-                                        <TableCell>{`Le ${day} à ${time}`}</TableCell>
-                                        {(type === "driver" ||
-                                            type === "search") && (
-                                            <TableCell>
-                                                {ride.totalSeats -
-                                                    ride.passengers.length}
-                                            </TableCell>
-                                        )}
                                         <TableCell>
-                                            {type === "driver"
+                                            {`Le ${day}`}
+                                            <br />
+                                            {`à ${time}`}
+                                        </TableCell>
+                                        <TableCell>
+                                            {(type.name === "driver" ||
+                                                type.name === "search") &&
+                                                ride.totalSeats -
+                                                    ride.passengers.length}
+                                        </TableCell>
+                                        <TableCell>
+                                            {type.name === "driver"
                                                 ? ride.passengers?.map(
-                                                      (passenger, index) => (
+                                                      (index) => (
                                                           <Typography
                                                               key={index}
                                                               component="span">
-                                                              {passenger.email}
+                                                              {"<passenger>"}
                                                           </Typography>
                                                       )
                                                   )
@@ -162,55 +174,68 @@ const RidesTable = ({
                                         <TableCell>
                                             {ride.price}&nbsp;€
                                         </TableCell>
-                                        <TableCell
-                                            sx={{
-                                                paddingLeft: "0",
-                                                paddingRight: "0",
-                                            }}>
-                                            <IconButton
-                                                onClick={handleEdit}
-                                                id={ride._id}>
-                                                <Edit />
-                                            </IconButton>
-                                        </TableCell>
-                                        <TableCell
-                                            sx={{
-                                                paddingLeft: "0",
-                                                paddingRight: "0",
-                                            }}>
-                                            <IconButton
-                                                onClick={handleDelete}
-                                                id={ride._id}>
-                                                <Delete />
-                                            </IconButton>
-                                        </TableCell>
-                                        <UpdateRideForm
-                                            prevRideData={{
-                                                id: ride._id,
-                                                departure: ride.departure,
-                                                destination: ride.destination,
-                                                departureDate:
-                                                    ride.departureDate,
-                                                totalSeats: ride.totalSeats,
-                                                passengers: ride.passengers,
-                                            }}
-                                            showUpdateRideForm={
-                                                showUpdateRideForm
-                                            }
-                                            setShowUpdateRideForm={
-                                                setShowUpdateRideForm
-                                            }
-                                            setErrorMessage={setErrorMessage}
-                                        />
-                                        <DeleteRideDialog
-                                            rideId={ride._id}
-                                            showDeleteRideDialog={
-                                                showDeleteRideDialog
-                                            }
-                                            setShowDeleteRideDialog={
-                                                setShowDeleteRideDialog
-                                            }
-                                        />
+                                        {type.name === "driver" && (
+                                            <TableCell className="denseCell">
+                                                <IconButton
+                                                    onClick={handleEdit}
+                                                    id={ride._id}>
+                                                    <Edit />
+                                                </IconButton>
+                                            </TableCell>
+                                        )}
+                                        {type.name === "driver" && (
+                                            <TableCell className="denseCell">
+                                                <IconButton
+                                                    onClick={handleDelete}
+                                                    id={ride._id}>
+                                                    <Delete />
+                                                </IconButton>
+                                            </TableCell>
+                                        )}
+                                        {type.name === "search" && (
+                                            <TableCell>
+                                                <Button
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    onClick={handleBookRide}>
+                                                    Réserver
+                                                </Button>
+                                            </TableCell>
+                                        )}
+                                        {type.name === "driver" && (
+                                            <UpdateRideForm
+                                                prevRideData={{
+                                                    id: ride._id,
+                                                    departure: ride.departure,
+                                                    destination:
+                                                        ride.destination,
+                                                    departureDate:
+                                                        ride.departureDate,
+                                                    totalSeats: ride.totalSeats,
+                                                    passengers: ride.passengers,
+                                                }}
+                                                showUpdateRideForm={
+                                                    showUpdateRideForm
+                                                }
+                                                setShowUpdateRideForm={
+                                                    setShowUpdateRideForm
+                                                }
+                                                setErrorMessage={
+                                                    setErrorMessage
+                                                }
+                                            />
+                                        )}
+                                        {type.name === "driver" && (
+                                            <DeleteRideDialog
+                                                rideId={ride._id}
+                                                showDeleteRideDialog={
+                                                    showDeleteRideDialog
+                                                }
+                                                setShowDeleteRideDialog={
+                                                    setShowDeleteRideDialog
+                                                }
+                                            />
+                                        )}
                                     </TableRow>
                                 );
                             })}

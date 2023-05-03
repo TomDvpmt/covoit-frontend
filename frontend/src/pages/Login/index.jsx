@@ -70,7 +70,7 @@ const Login = () => {
             onSubmit={handleSubmit}
             sx={{
                 maxWidth: theme.maxWidth.form,
-                margin: "3rem auto",
+                margin: "0 auto",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "flex-end",

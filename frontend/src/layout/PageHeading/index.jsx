@@ -11,14 +11,14 @@ const PageHeading = () => {
         login: "Connexion",
         register: "Créer un compte",
         profile: "Mes informations",
-        home: "",
+        home: "Chercher un trajet",
         myrides: "Mes trajets",
         trip: "",
         error404: "Page introuvable.",
     };
 
     return (
-        <Typography component="h1" variant="h4" align="center" mt="5rem">
+        <Typography component="h1" variant="h1" align="center">
             {pageHeadings[page]}
         </Typography>
     );
