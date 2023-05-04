@@ -4,7 +4,7 @@ import RideInputLocation from "../../components/form-inputs/RideInputLocation";
 import RideInputDepartureDate from "../../components/form-inputs/RideInputDepartureDate";
 import RideInputSeats from "../../components/form-inputs/RideInputSeats";
 import RideInputPrice from "../../components/form-inputs/RideInputPrice";
-import RidesTable from "../../components/RidesTable";
+import RidesList from "../../components/RidesList";
 
 import { Box, Typography, Button } from "@mui/material";
 
@@ -110,7 +110,7 @@ const Home = () => {
                         sx={{ m: "2rem 0 1rem" }}>
                         Résultats
                     </Typography>
-                    <RidesTable type="query" rides={queryRides} />
+                    <RidesList type="query" rides={queryRides} />
                 </>
             )}
         </Box>

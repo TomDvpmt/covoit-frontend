@@ -3,6 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isLoggedIn: false,
     data: {},
+    rides: {
+        driver: [],
+        passenger: [],
+    },
 };
 
 export const userSlice = createSlice({
@@ -28,6 +32,18 @@ export const userSlice = createSlice({
         setUserPhone: (state, action) => {
             state.data.phone = action.payload;
         },
+        setDriverRides: (state, action) => {
+            state.rides.driver = action.payload;
+        },
+        updateDriverRide: (state, action) => {
+            const rideId = action.payload.id;
+            const updateData = action.payload.updateData;
+            state.rides.driver.find(
+                (ride) => (ride._id = rideId)
+            ).departureDate = updateData.departureDate;
+            state.rides.driver.find((ride) => (ride._id = rideId)).totalSeats =
+                updateData.totalSeats;
+        },
         logOut: () => initialState,
     },
 });
@@ -40,6 +56,8 @@ export const {
     setUserFirstName,
     setUserLastName,
     setUserPhone,
+    setDriverRides,
+    updateDriverRide,
 } = userSlice.actions;
 
 export const selectUserIsLoggedIn = (state) => state.user.isLoggedIn;
@@ -48,5 +66,6 @@ export const selectUserEmail = (state) => state.user.data.email;
 export const selectUserFirstName = (state) => state.user.data.firstName;
 export const selectUserLastName = (state) => state.user.data.lastName;
 export const selectUserPhone = (state) => state.user.data.phone;
+export const selectDriverRides = (state) => state.user.rides.driver;
 
 export default userSlice.reducer;

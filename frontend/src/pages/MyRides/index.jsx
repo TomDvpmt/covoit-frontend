@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { selectUserId } from "../../features/user/userSlice";
+import {
+    selectDriverRides,
+    selectUserId,
+    setDriverRides,
+} from "../../features/user/userSlice";
 
-import RidesTable from "../../components/RidesTable";
+import RidesList from "../../components/RidesList";
 import CreateRideForm from "../../components/forms/CreateRideForm";
 import ErrorMessage from "../../components/ErrorMessage";
 
@@ -13,7 +17,9 @@ const MyRides = () => {
     const token = sessionStorage.getItem("token");
     const userId = useSelector(selectUserId);
 
-    const [driverRides, setDriverRides] = useState([]);
+    const driverRides = useSelector(selectDriverRides);
+    const dispatch = useDispatch();
+    // const [driverRides, setDriverRides] = useState([]);
 
     const [showCreateRideForm, setShowCreateRideForm] = useState(false);
     const [showDeleteRideDialog, setShowDeleteRideDialog] = useState(false);
@@ -37,7 +43,8 @@ const MyRides = () => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    setDriverRides(data.results);
+                    dispatch(setDriverRides(data.results));
+                    // setDriverRides(data.results);
                 })
                 .catch((error) => console.error(error));
     }, [token, userId, showCreateRideForm, showDeleteRideDialog]);
@@ -49,16 +56,7 @@ const MyRides = () => {
                 <Typography component="h2" variant="h2">
                     Comme conducteur
                 </Typography>
-                {userId && (
-                    <RidesTable
-                        type="driver"
-                        rides={driverRides}
-                        showCreateRideForm={showCreateRideForm}
-                        showDeleteRideDialog={showDeleteRideDialog}
-                        setShowDeleteRideDialog={setShowDeleteRideDialog}
-                        setErrorMessage={setErrorMessage}
-                    />
-                )}
+                {userId && <RidesList type="driver" rides={driverRides} />}
                 <Button
                     variant={showCreateRideForm ? "outlined" : "contained"}
                     onClick={handleShowCreateRideForm}

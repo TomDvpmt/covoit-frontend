@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { updateDriverRide } from "../../../features/user/userSlice";
 
 import RideInputDepartureDate from "../../form-inputs/RideInputDepartureDate";
 import RideInputSeats from "../../form-inputs/RideInputSeats";
@@ -11,15 +14,16 @@ const UpdateRideForm = ({
     prevRideData,
     showUpdateRideForm,
     setShowUpdateRideForm,
-    setErrorMessage,
+    // setErrorMessage,
 }) => {
     UpdateRideForm.propTypes = {
         prevRideData: PropTypes.object.isRequired,
         showUpdateRideForm: PropTypes.bool.isRequired,
         setShowUpdateRideForm: PropTypes.func.isRequired,
-        setErrorMessage: PropTypes.func.isRequired,
+        // setErrorMessage: PropTypes.func.isRequired,
     };
     const token = sessionStorage.getItem("token");
+    const dispatch = useDispatch();
 
     const rideId = prevRideData.id;
     const prevDepartureDate = prevRideData.departureDate;
@@ -42,17 +46,17 @@ const UpdateRideForm = ({
 
         if (newDepartureDate < Date.now()) {
             setShowUpdateRideForm(false);
-            setErrorMessage(
-                "La date est dépassée, veuillez en choisir une autre."
-            );
+            // setErrorMessage(
+            //     "La date est dépassée, veuillez en choisir une autre."
+            // );
             return;
         }
 
         if (newTotalSeats < passengers.length) {
             setShowUpdateRideForm(false);
-            setErrorMessage(
-                "Modification impossible : il y a plus de passagers que de places disponibles."
-            );
+            // setErrorMessage(
+            //     "Modification impossible : il y a plus de passagers que de places disponibles."
+            // );
             return;
         }
 
@@ -71,7 +75,7 @@ const UpdateRideForm = ({
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
+                dispatch(updateDriverRide({ id: rideId, updateData }));
                 setShowUpdateRideForm(false);
             })
             .catch((error) => console.error(error));
