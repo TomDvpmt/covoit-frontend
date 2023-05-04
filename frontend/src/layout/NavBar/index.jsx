@@ -4,9 +4,13 @@ import { useSelector } from "react-redux";
 import NavPagesMenu from "../../components/NavPagesMenu";
 import NavUserMenu from "../../components/NavUserMenu";
 
-import { selectUserIsLoggedIn } from "../../features/user/userSlice";
+import {
+    selectUserFirstName,
+    selectUserIsLoggedIn,
+} from "../../features/user/userSlice";
+import { selectPageLocation } from "../../features/page/pageSlice";
 
-import { AppBar, Toolbar, Box, Link } from "@mui/material";
+import { AppBar, Toolbar, Box, Link, Typography } from "@mui/material";
 import theme from "../../styles/theme";
 
 const navLinkStyle = {
@@ -16,11 +20,22 @@ const navLinkStyle = {
 
 const NavBar = () => {
     const isLoggedIn = useSelector(selectUserIsLoggedIn);
+    const firstName = useSelector(selectUserFirstName);
+    const page = useSelector(selectPageLocation);
 
     return (
-        <AppBar position="static" sx={{ bgcolor: theme.palette.primary }}>
-            <Toolbar sx={{ justifyContent: "space-between" }}>
-                <NavPagesMenu />
+        <AppBar
+            component="nav"
+            position="static"
+            sx={{ bgcolor: theme.palette.primary }}>
+            <Toolbar
+                sx={{
+                    justifyContent:
+                        isLoggedIn && page === "home"
+                            ? "flex-end"
+                            : "space-between",
+                }}>
+                {isLoggedIn && page === "home" ? null : <NavPagesMenu />}
                 <Box
                     sx={{
                         display: {
@@ -29,36 +44,50 @@ const NavBar = () => {
                         },
                         gap: "1rem",
                     }}>
-                    <Link
-                        component={NavLink}
-                        variant="button"
-                        underline="none"
-                        to="/"
-                        sx={navLinkStyle}>
-                        Accueil
-                    </Link>
+                    {page !== "home" && (
+                        <Link
+                            component={NavLink}
+                            variant="button"
+                            underline="none"
+                            to="/"
+                            sx={navLinkStyle}>
+                            Trouver un trajet
+                        </Link>
+                    )}
                     {!isLoggedIn && (
                         <>
-                            <Link
-                                component={NavLink}
-                                variant="button"
-                                underline="none"
-                                to="/login"
-                                sx={navLinkStyle}>
-                                Se connecter
-                            </Link>
-                            <Link
-                                component={NavLink}
-                                variant="button"
-                                underline="none"
-                                to="/register"
-                                sx={navLinkStyle}>
-                                Créer un compte
-                            </Link>
+                            {page !== "login" && (
+                                <Link
+                                    component={NavLink}
+                                    variant="button"
+                                    underline="none"
+                                    to="/login"
+                                    sx={navLinkStyle}>
+                                    Se connecter
+                                </Link>
+                            )}
+                            {page !== "register" && (
+                                <Link
+                                    component={NavLink}
+                                    variant="button"
+                                    underline="none"
+                                    to="/register"
+                                    sx={navLinkStyle}>
+                                    Créer un compte
+                                </Link>
+                            )}
                         </>
                     )}
                 </Box>
-                {isLoggedIn && <NavUserMenu />}
+                <Box
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: ".5rem",
+                    }}>
+                    {isLoggedIn && <Typography>{firstName}</Typography>}
+                    {isLoggedIn && <NavUserMenu />}
+                </Box>
             </Toolbar>
         </AppBar>
     );

@@ -1,7 +1,4 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
-
-import { selectUserId } from "../../features/user/userSlice";
 
 import RideInputLocation from "../../components/form-inputs/RideInputLocation";
 import RideInputDepartureDate from "../../components/form-inputs/RideInputDepartureDate";
@@ -18,11 +15,39 @@ const Home = () => {
     const [seats, setSeats] = useState(1);
     const [price, setPrice] = useState(0);
     const [showResults, setShowResults] = useState(false);
+    const [queryRides, setQueryRides] = useState([]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        setShowResults(true);
+        fetch("/API/rides/", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                filters: {
+                    departure,
+                    destination,
+                    departureDate: {
+                        $gte: departureDate - 24 * 60 * 60 * 1000, // more than 24h before
+                        $lte: departureDate + 24 * 60 * 60 * 1000, // less than 24h after
+                    },
+                    totalSeats: {
+                        $gte: seats,
+                    },
+                    price: {
+                        $lte: price,
+                    },
+                },
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setQueryRides(data.results);
+                setShowResults(true);
+            })
+            .catch((error) => console.error(error));
     };
 
     return (
@@ -85,25 +110,7 @@ const Home = () => {
                         sx={{ m: "2rem 0 1rem" }}>
                         Résultats
                     </Typography>
-                    <RidesTable
-                        type={{
-                            name: "search",
-                            filters: {
-                                departure,
-                                destination,
-                                departureDate: {
-                                    $gte: departureDate - 24 * 60 * 60 * 1000, // more than 24h before
-                                    $lte: departureDate + 24 * 60 * 60 * 1000, // less than 24h after
-                                },
-                                totalSeats: {
-                                    $gte: seats,
-                                },
-                                price: {
-                                    $lte: price,
-                                },
-                            },
-                        }}
-                    />
+                    <RidesTable type="query" rides={queryRides} />
                 </>
             )}
         </Box>

@@ -11,7 +11,7 @@ const PageHeading = () => {
         login: "Connexion",
         register: "Créer un compte",
         profile: "Mes informations",
-        home: "Chercher un trajet",
+        home: "Trouver un trajet",
         myrides: "Mes trajets",
         trip: "",
         error404: "Page introuvable.",

@@ -3,12 +3,14 @@ import { Link as NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { selectUserIsLoggedIn } from "../../features/user/userSlice";
+import { selectPageLocation } from "../../features/page/pageSlice";
 
 import { Link, Menu, MenuItem } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 
 const NavPagesMenu = () => {
     const isLoggedIn = useSelector(selectUserIsLoggedIn);
+    const page = useSelector(selectPageLocation);
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -40,17 +42,19 @@ const NavPagesMenu = () => {
                 }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}>
-                <MenuItem>
-                    <Link
-                        component={NavLink}
-                        variant="button"
-                        underline="none"
-                        to="/"
-                        onClick={handleClose}>
-                        Accueil
-                    </Link>
-                </MenuItem>
-                {!isLoggedIn && (
+                {page !== "home" && (
+                    <MenuItem>
+                        <Link
+                            component={NavLink}
+                            variant="button"
+                            underline="none"
+                            to="/"
+                            onClick={handleClose}>
+                            Trouver un trajet
+                        </Link>
+                    </MenuItem>
+                )}
+                {!isLoggedIn && page !== "login" && (
                     <MenuItem>
                         <Link
                             component={NavLink}
@@ -62,7 +66,7 @@ const NavPagesMenu = () => {
                         </Link>
                     </MenuItem>
                 )}
-                {!isLoggedIn && (
+                {!isLoggedIn && page !== "register" && (
                     <MenuItem>
                         <Link
                             component={NavLink}

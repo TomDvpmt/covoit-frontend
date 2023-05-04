@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+
+import { selectUserId } from "../../features/user/userSlice";
 
 import UpdateRideForm from "../forms/UpdateRideForm";
 import DeleteRideDialog from "../DeleteRideDialog";
@@ -23,56 +26,28 @@ import PropTypes from "prop-types";
 
 const RidesTable = ({
     type,
+    rides,
     showCreateRideForm,
     showDeleteRideDialog,
     setShowDeleteRideDialog,
     setErrorMessage,
 }) => {
     RidesTable.propTypes = {
-        type: PropTypes.object.isRequired,
+        type: PropTypes.string.isRequired,
+        rides: PropTypes.array.isRequired,
         showCreateRideForm: PropTypes.bool,
         showDeleteRideDialog: PropTypes.bool,
         setShowDeleteRideDialog: PropTypes.func,
         setErrorMessage: PropTypes.func,
     };
 
-    const token = sessionStorage.getItem("token");
+    const userId = useSelector(selectUserId);
 
-    const [rides, setRides] = useState([]);
     const [showUpdateRideForm, setShowUpdateRideForm] = useState(false);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        if (token && Object.keys(type.filters).length > 0) {
-            console.log(type);
-            setLoading(true);
-            fetch("/API/rides/", {
-                method: "POST",
-                headers: {
-                    Authorization: `BEARER ${token}`,
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    filters: type.filters,
-                }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    setRides(data.results);
-                })
-                .catch((error) => console.error(error))
-                .finally(setLoading(false));
-        }
-    }, [
-        token,
-        type.filters,
-        showCreateRideForm,
-        showDeleteRideDialog,
-        showUpdateRideForm,
-    ]);
+    const [loading, setLoading] = useState(false);
 
     const handleBookRide = () => {
-        //
+        // if not logged in, dialog (se connecter / créer un compte / annuler)
     };
 
     const handleEdit = (e) => {
@@ -131,7 +106,6 @@ const RidesTable = ({
                             })
                             .map((ride, index) => {
                                 const date = dayjs(ride.departureDate);
-                                console.log(date);
                                 const day = `${date.$D < 10 ? 0 : ""}${
                                     date.$D
                                 }/${date.$M + 1 < 10 ? 0 : ""}${date.$M + 1}/${
@@ -153,13 +127,13 @@ const RidesTable = ({
                                             {`à ${time}`}
                                         </TableCell>
                                         <TableCell>
-                                            {(type.name === "driver" ||
-                                                type.name === "search") &&
+                                            {(type === "driver" ||
+                                                type === "query") &&
                                                 ride.totalSeats -
                                                     ride.passengers.length}
                                         </TableCell>
                                         <TableCell>
-                                            {type.name === "driver"
+                                            {type === "driver"
                                                 ? ride.passengers?.map(
                                                       (index) => (
                                                           <Typography
@@ -174,7 +148,21 @@ const RidesTable = ({
                                         <TableCell>
                                             {ride.price}&nbsp;€
                                         </TableCell>
-                                        {type.name === "driver" && (
+                                        {type === "query" && (
+                                            <TableCell>
+                                                {ride.driverId !== userId && (
+                                                    <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        onClick={
+                                                            handleBookRide
+                                                        }>
+                                                        Réserver
+                                                    </Button>
+                                                )}
+                                            </TableCell>
+                                        )}
+                                        {type === "driver" && (
                                             <TableCell className="denseCell">
                                                 <IconButton
                                                     onClick={handleEdit}
@@ -183,7 +171,7 @@ const RidesTable = ({
                                                 </IconButton>
                                             </TableCell>
                                         )}
-                                        {type.name === "driver" && (
+                                        {type === "driver" && (
                                             <TableCell className="denseCell">
                                                 <IconButton
                                                     onClick={handleDelete}
@@ -192,17 +180,7 @@ const RidesTable = ({
                                                 </IconButton>
                                             </TableCell>
                                         )}
-                                        {type.name === "search" && (
-                                            <TableCell>
-                                                <Button
-                                                    variant="contained"
-                                                    color="secondary"
-                                                    onClick={handleBookRide}>
-                                                    Réserver
-                                                </Button>
-                                            </TableCell>
-                                        )}
-                                        {type.name === "driver" && (
+                                        {type === "driver" && (
                                             <UpdateRideForm
                                                 prevRideData={{
                                                     id: ride._id,
@@ -225,7 +203,7 @@ const RidesTable = ({
                                                 }
                                             />
                                         )}
-                                        {type.name === "driver" && (
+                                        {type === "driver" && (
                                             <DeleteRideDialog
                                                 rideId={ride._id}
                                                 showDeleteRideDialog={

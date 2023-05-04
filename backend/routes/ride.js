@@ -11,7 +11,7 @@ const {
 const router = express.Router();
 
 router.post("/create", auth, createRide);
-router.post("/", auth, getRides);
+router.post("/", getRides);
 router.put("/:id", auth, checkDriver, updateRide);
 router.delete("/:id", auth, checkDriver, deleteRide);
 

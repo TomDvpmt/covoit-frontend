@@ -18,7 +18,11 @@ const Header = () => {
                 <Box>
                     <img src={logo} alt="Covoit" width="100" />
                 </Box>
-                <Typography variant="h2">Covoit</Typography>
+                <Typography
+                    component="span"
+                    sx={{ fontSize: "2rem", textTransform: "uppercase" }}>
+                    Covoit'
+                </Typography>
             </Box>
         </Box>
     );

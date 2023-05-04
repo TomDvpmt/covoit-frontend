@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import { selectUserId } from "../../features/user/userSlice";
@@ -10,7 +10,10 @@ import ErrorMessage from "../../components/ErrorMessage";
 import { Box, Typography, Button } from "@mui/material";
 
 const MyRides = () => {
+    const token = sessionStorage.getItem("token");
     const userId = useSelector(selectUserId);
+
+    const [driverRides, setDriverRides] = useState([]);
 
     const [showCreateRideForm, setShowCreateRideForm] = useState(false);
     const [showDeleteRideDialog, setShowDeleteRideDialog] = useState(false);
@@ -19,6 +22,25 @@ const MyRides = () => {
     const handleShowCreateRideForm = () => {
         setShowCreateRideForm((show) => !show);
     };
+
+    useEffect(() => {
+        userId &&
+            fetch("/API/rides/", {
+                method: "POST",
+                headers: {
+                    Authorization: `BEARER ${token}`,
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    filters: { driverId: userId },
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    setDriverRides(data.results);
+                })
+                .catch((error) => console.error(error));
+    }, [token, userId, showCreateRideForm, showDeleteRideDialog]);
 
     return (
         <>
@@ -29,12 +51,8 @@ const MyRides = () => {
                 </Typography>
                 {userId && (
                     <RidesTable
-                        type={{
-                            name: "driver",
-                            filters: {
-                                driverId: userId,
-                            },
-                        }}
+                        type="driver"
+                        rides={driverRides}
                         showCreateRideForm={showCreateRideForm}
                         showDeleteRideDialog={showDeleteRideDialog}
                         setShowDeleteRideDialog={setShowDeleteRideDialog}
