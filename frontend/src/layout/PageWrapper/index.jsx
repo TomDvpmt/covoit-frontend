@@ -14,7 +14,7 @@ import Header from "../../layout/Header";
 import NavBar from "../NavBar";
 import PageHeading from "../PageHeading";
 import Footer from "../../layout/Footer";
-import ErrorMessage from "../../components/ErrorMessage"; // replace with ErrorBoundary
+import ErrorMessage from "../../components/ErrorMessage"; // to be replaced with ErrorBoundary
 
 import theme from "../../styles/theme";
 import { Box } from "@mui/material";

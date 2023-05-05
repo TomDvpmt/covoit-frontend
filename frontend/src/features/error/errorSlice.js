@@ -48,6 +48,9 @@ const errorSlice = createSlice({
         setDeleteUserErrorMessage: (state, action) => {
             state.deleteUser = action.payload;
         },
+        setBookRideErrorMessage: (state, action) => {
+            state.bookRide = action.payload;
+        },
         setCreateRideErrorMessage: (state, action) => {
             state.createRide = action.payload;
         },
@@ -71,6 +74,7 @@ export const {
     setDisplayProfileErrorMessage,
     setUpdateUserErrorMessage,
     setDeleteUserErrorMessage,
+    setBookRideErrorMessage,
     setCreateRideErrorMessage,
     setUpdateRideErrorMessage,
     setDeleteRideErrorMessage,
@@ -89,6 +93,7 @@ export const selectDisplayProfileErrorMessage = (state) =>
     state.error.displayProfile;
 export const selectUpdateUserErrorMessage = (state) => state.error.updateUser;
 export const selectDeleteUserErrorMessage = (state) => state.error.deleteUser;
+export const selectBookRideErrorMessage = (state) => state.error.bookRide;
 export const selectCreateRideErrorMessage = (state) => state.error.createRide;
 export const selectUpdateRideErrorMessage = (state) => state.error.updateRide;
 export const selectDeleteRideErrorMessage = (state) => state.error.deleteRide;

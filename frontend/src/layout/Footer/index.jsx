@@ -10,9 +10,7 @@ const Footer = () => {
                 bgcolor: theme.palette.primary.main,
                 minHeight: "100px",
                 color: "white",
-            }}>
-            Footer
-        </Box>
+            }}></Box>
     );
 };
 

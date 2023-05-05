@@ -23,7 +23,7 @@ import UserInputEmail from "../../components/form-inputs/UserInputEmail";
 import UserInputFirstName from "../../components/form-inputs/UserInputFirstName";
 import UserInputLastName from "../../components/form-inputs/UserInputLastName";
 import UserInputPhone from "../../components/form-inputs/UserInputPhone";
-import DialogUserDelete from "../../components/DialogUserDelete";
+import UserDeleteDialog from "../../components/UserDeleteDialog";
 import ValidationMessage from "../../components/ValidationMessage";
 import ErrorMessage from "../../components/ErrorMessage";
 
@@ -192,7 +192,7 @@ const Profile = () => {
                         Supprimer le compte
                     </Button>
                     {showDeleteDialog && (
-                        <DialogUserDelete
+                        <UserDeleteDialog
                             userId={userId}
                             showDeleteDialog={showDeleteDialog}
                             setShowDeleteDialog={setShowDeleteDialog}

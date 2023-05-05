@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 
 import { selectUserId } from "../../features/user/userSlice";
 
 import { getOneUser } from "../../utils/user";
 
-import DialogRideUpdate from "../DialogRideUpdate";
-import DialogRideDelete from "../DialogRideDelete";
+import RideBookButton from "../RideBookButton";
+import RideUpdateDialog from "../RideUpdateDialog";
+import RideDeleteDialog from "../RideDeleteDialog";
 
 import {
     Card,
     CardHeader,
     CardContent,
-    Button,
     Typography,
     IconButton,
     Box,
@@ -38,27 +38,53 @@ const RideCard = ({ ride }) => {
         ride: PropTypes.object.isRequired,
     };
 
+    const rideId = ride._id;
+    const driverId = ride.driverId;
+    const dispatch = useDispatch();
+
     const userId = useSelector(selectUserId);
 
     const [driver, setDriver] = useState({});
     const [formatedDate, setFormatedDate] = useState("");
-    const [showDialogRideUpdate, setShowDialogRideUpdate] = useState(false);
-    const [showDialogRideDelete, setShowDialogRideDelete] = useState(false);
+    const [showRideUpdateDialog, setShowRideUpdateDialog] = useState(false);
+    const [showRideDeleteDialog, setShowRideDeleteDialog] = useState(false);
 
-    const handleBookRide = () => {
-        // if not logged in, dialog (se connecter / créer un compte / annuler)
-    };
+    // Accept request :
+    // try {
+    //     const token = sessionStorage.getItem("token");
+
+    //     const updateData = {
+    //         newPassenger: userId,
+    //     };
+
+    //     const response = await fetch(`/API/rides/${rideId}`, {
+    //         method: "PUT",
+    //         headers: {
+    //             Authorization: `BEARER ${token}`,
+    //             "content-type": "application/json",
+    //         },
+    //         body: JSON.stringify(updateData),
+    //     });
+    //     if (!response.ok) {
+    //         const data = await response.json();
+    //         throw new Error(data.message);
+    //     }
+    // } catch (error) {
+    //     console.error(error);
+    //     dispatch(setBookRideErrorMessage(error.message));
+    // }
+    // };
 
     const handleEditRide = () => {
-        setShowDialogRideUpdate(true);
+        setShowRideUpdateDialog(true);
     };
 
     const handleDeleteRide = () => {
-        setShowDialogRideDelete(true);
+        setShowRideDeleteDialog(true);
     };
 
     useEffect(() => {
-        getOneUser(ride.driverId)
+        getOneUser(driverId)
             .then((driverData) => setDriver(driverData))
             .catch((error) => console.log(error));
     }, [ride]);
@@ -95,30 +121,23 @@ const RideCard = ({ ride }) => {
                 subheader={formatedDate}
                 action={
                     <>
-                        {ride.driverId === userId && (
+                        {driverId === userId && (
                             <>
                                 <IconButton
                                     color="secondary"
                                     onClick={handleEditRide}
-                                    id={ride._id}>
+                                    id={rideId}>
                                     <Edit />
                                 </IconButton>
                                 <IconButton
                                     color="secondary"
                                     onClick={handleDeleteRide}
-                                    id={ride._id}>
+                                    id={rideId}>
                                     <Delete />
                                 </IconButton>
                             </>
                         )}
-                        {ride.driverId !== userId && (
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={handleBookRide}>
-                                Réserver
-                            </Button>
-                        )}
+                        {driverId !== userId && <RideBookButton ride={ride} />}
                     </>
                 }
             />
@@ -134,7 +153,7 @@ const RideCard = ({ ride }) => {
                         flexDirection: "column",
                         gap: ".5rem",
                     }}>
-                    {driver._id !== userId && (
+                    {driverId !== userId && (
                         <Typography
                             sx={{
                                 display: "flex",
@@ -209,23 +228,28 @@ const RideCard = ({ ride }) => {
                     </Typography>
                     <Typography>par passager</Typography>
                 </Box>
-                <DialogRideUpdate
+                <RideUpdateDialog
                     prevRideData={{
-                        id: ride._id,
+                        id: rideId,
                         departure: ride.departure,
                         destination: ride.destination,
                         departureDate: ride.departureDate,
                         totalSeats: ride.totalSeats,
                         passengers: ride.passengers,
                     }}
-                    showDialogRideUpdate={showDialogRideUpdate}
-                    setShowDialogRideUpdate={setShowDialogRideUpdate}
+                    showRideUpdateDialog={showRideUpdateDialog}
+                    setShowRideUpdateDialog={setShowRideUpdateDialog}
                 />
-                <DialogRideDelete
-                    rideId={ride._id}
-                    showDialogRideDelete={showDialogRideDelete}
-                    setShowDialogRideDelete={setShowDialogRideDelete}
+                <RideDeleteDialog
+                    rideId={rideId}
+                    showRideDeleteDialog={showRideDeleteDialog}
+                    setShowRideDeleteDialog={setShowRideDeleteDialog}
                 />
+                {/* <LoginDialog
+                    showLoginDialog={showLoginDialog}
+                    setShowLoginDialog={setShowLoginDialog}
+                    actionAfterLogin={handleRideBookingRequest}
+                /> */}
             </CardContent>
         </Card>
     );

@@ -28,8 +28,12 @@ const createRide = (req, res) => {
 const updateRide = (req, res) => {
     const rideId = req.params.id;
     const updateData = req.body;
+    const newPassenger = req.body.newPassenger;
 
-    Ride.updateOne({ _id: rideId }, updateData)
+    Ride.updateOne(
+        { _id: rideId },
+        newPassenger ? { $addToSet: { passengers: newPassenger } } : updateData
+    )
         .then(() => res.status(200).json({ message: "Trajet mis à jour." }))
         .catch((error) => {
             console.log(error);

@@ -59,11 +59,11 @@ const RideInputLocation = ({ type, location, setLocation }) => {
     return (
         <Box sx={{ flexGrow: "1", display: "flex", flexDirection: "column" }}>
             <FormControl required fullWidth margin="dense">
-                <InputLabel htmlFor="outlined-adornment-location">
+                <InputLabel htmlFor={`outlined-adornment-location-${type}`}>
                     {locationTexts[type].label}
                 </InputLabel>
                 <OutlinedInput
-                    id="outlined-adornment-location"
+                    id={`outlined-adornment-location-${type}`}
                     type="text"
                     startAdornment={
                         <InputAdornment position="start">

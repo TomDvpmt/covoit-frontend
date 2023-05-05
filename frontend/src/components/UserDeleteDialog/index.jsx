@@ -21,12 +21,12 @@ import {
 
 import PropTypes from "prop-types";
 
-const DialogUserDelete = ({
+const UserDeleteDialog = ({
     userId,
     showDeleteDialog,
     setShowDeleteDialog,
 }) => {
-    DialogUserDelete.propTypes = {
+    UserDeleteDialog.propTypes = {
         userId: PropTypes.string.isRequired,
         showDeleteDialog: PropTypes.bool.isRequired,
         setShowDeleteDialog: PropTypes.func.isRequired,
@@ -87,4 +87,4 @@ const DialogUserDelete = ({
     );
 };
 
-export default DialogUserDelete;
+export default UserDeleteDialog;

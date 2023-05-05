@@ -17,13 +17,13 @@ import { Box, Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 
 import PropTypes from "prop-types";
 
-const DialogRideCreate = ({
-    showDialogRideCreate,
-    setShowDialogRideCreate,
+const RideCreateDialog = ({
+    showRideCreateDialog,
+    setShowRideCreateDialog,
 }) => {
-    DialogRideCreate.propTypes = {
-        showDialogRideCreate: PropTypes.bool.isRequired,
-        setShowDialogRideCreate: PropTypes.func.isRequired,
+    RideCreateDialog.propTypes = {
+        showRideCreateDialog: PropTypes.bool.isRequired,
+        setShowRideCreateDialog: PropTypes.func.isRequired,
     };
 
     const token = sessionStorage.getItem("token");
@@ -69,7 +69,7 @@ const DialogRideCreate = ({
             setDepartureDate(Date.now());
             setSeats(1);
             setPrice(0);
-            setShowDialogRideCreate(false);
+            setShowRideCreateDialog(false);
         } catch (error) {
             console.log(error);
             dispatch(setCreateRideErrorMessage(error.message));
@@ -77,7 +77,7 @@ const DialogRideCreate = ({
     };
 
     return (
-        <Dialog open={showDialogRideCreate}>
+        <Dialog open={showRideCreateDialog}>
             <DialogTitle>Ajouter un trajet</DialogTitle>
             <DialogContent>
                 <Box component="form" onSubmit={handleSubmit}>
@@ -130,7 +130,7 @@ const DialogRideCreate = ({
                             type="button"
                             variant="text"
                             color="primary"
-                            onClick={() => setShowDialogRideCreate(false)}>
+                            onClick={() => setShowRideCreateDialog(false)}>
                             Annuler
                         </Button>
                     </Box>
@@ -143,4 +143,4 @@ const DialogRideCreate = ({
     );
 };
 
-export default DialogRideCreate;
+export default RideCreateDialog;

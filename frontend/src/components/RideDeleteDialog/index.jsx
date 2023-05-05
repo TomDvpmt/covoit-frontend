@@ -19,15 +19,15 @@ import {
 
 import PropTypes from "prop-types";
 
-const DialogRideDelete = ({
+const RideDeleteDialog = ({
     rideId,
-    showDialogRideDelete,
-    setShowDialogRideDelete,
+    showRideDeleteDialog,
+    setShowRideDeleteDialog,
 }) => {
-    DialogRideDelete.propTypes = {
+    RideDeleteDialog.propTypes = {
         rideId: PropTypes.string.isRequired,
-        showDialogRideDelete: PropTypes.bool.isRequired,
-        setShowDialogRideDelete: PropTypes.func.isRequired,
+        showRideDeleteDialog: PropTypes.bool.isRequired,
+        setShowRideDeleteDialog: PropTypes.func.isRequired,
     };
 
     const token = sessionStorage.getItem("token");
@@ -46,7 +46,7 @@ const DialogRideDelete = ({
                 const data = await response.json();
                 throw new Error(data.message);
             }
-            setShowDialogRideDelete(false);
+            setShowRideDeleteDialog(false);
         } catch (error) {
             console.error(error);
             dispatch(setDeleteRideErrorMessage(error.message));
@@ -54,11 +54,11 @@ const DialogRideDelete = ({
     };
 
     const handleNo = () => {
-        setShowDialogRideDelete(false);
+        setShowRideDeleteDialog(false);
     };
 
     return (
-        <Dialog open={showDialogRideDelete}>
+        <Dialog open={showRideDeleteDialog}>
             <DialogTitle>
                 Êtes-vous sûr de vouloir supprimer le trajet ?
             </DialogTitle>
@@ -88,4 +88,4 @@ const DialogRideDelete = ({
     );
 };
 
-export default DialogRideDelete;
+export default RideDeleteDialog;

@@ -15,7 +15,7 @@ import {
 } from "../../features/error/errorSlice";
 
 import RidesList from "../../components/RidesList";
-import DialogRideCreate from "../../components/DialogRideCreate";
+import RideCreateDialog from "../../components/RideCreateDialog";
 import ErrorMessage from "../../components/ErrorMessage";
 
 import { Box, Typography, Button } from "@mui/material";
@@ -31,11 +31,11 @@ const MyRides = () => {
         selectMyRidesPassengerErrorMessage
     );
 
-    const [showDialogRideCreate, setShowDialogRideCreate] = useState(false);
-    const [showDialogRideDelete, setShowDialogRideDelete] = useState(false);
+    const [showRideCreateDialog, setShowRideCreateDialog] = useState(false);
+    const [showRideDeleteDialog, setShowRideDeleteDialog] = useState(false);
 
-    const handleShowDialogRideCreate = () => {
-        setShowDialogRideCreate((show) => !show);
+    const handleShowRideCreateDialog = () => {
+        setShowRideCreateDialog((show) => !show);
     };
 
     useEffect(() => {
@@ -75,7 +75,7 @@ const MyRides = () => {
                         )
                     );
                 });
-    }, [token, userId, showDialogRideCreate, showDialogRideDelete]);
+    }, [token, userId, showRideCreateDialog, showRideDeleteDialog]);
 
     return (
         <>
@@ -92,17 +92,17 @@ const MyRides = () => {
                 <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                     <Button
                         variant={
-                            showDialogRideCreate ? "outlined" : "contained"
+                            showRideCreateDialog ? "outlined" : "contained"
                         }
                         color="secondary"
-                        onClick={handleShowDialogRideCreate}
+                        onClick={handleShowRideCreateDialog}
                         sx={{ m: ".5rem 0" }}>
                         Ajouter un trajet
                     </Button>
                 </Box>
-                <DialogRideCreate
-                    showDialogRideCreate={showDialogRideCreate}
-                    setShowDialogRideCreate={setShowDialogRideCreate}
+                <RideCreateDialog
+                    showRideCreateDialog={showRideCreateDialog}
+                    setShowRideCreateDialog={setShowRideCreateDialog}
                 />
             </Box>
             <Box component="section">

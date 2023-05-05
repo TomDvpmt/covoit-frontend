@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/create", auth, createRide);
 router.post("/", getRides);
-router.put("/:id", auth, checkDriver, updateRide);
+router.put("/:id", auth, updateRide);
 router.delete("/:id", auth, checkDriver, deleteRide);
 
 module.exports = router;

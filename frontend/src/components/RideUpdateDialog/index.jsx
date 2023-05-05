@@ -15,15 +15,15 @@ import { Dialog, DialogTitle, Box, Button, DialogContent } from "@mui/material";
 
 import PropTypes from "prop-types";
 
-const DialogRideUpdate = ({
+const RideUpdateDialog = ({
     prevRideData,
-    showDialogRideUpdate,
-    setShowDialogRideUpdate,
+    showRideUpdateDialog,
+    setShowRideUpdateDialog,
 }) => {
-    DialogRideUpdate.propTypes = {
+    RideUpdateDialog.propTypes = {
         prevRideData: PropTypes.object.isRequired,
-        showDialogRideUpdate: PropTypes.bool.isRequired,
-        setShowDialogRideUpdate: PropTypes.func.isRequired,
+        showRideUpdateDialog: PropTypes.bool.isRequired,
+        setShowRideUpdateDialog: PropTypes.func.isRequired,
     };
     const token = sessionStorage.getItem("token");
     const dispatch = useDispatch();
@@ -44,7 +44,7 @@ const DialogRideUpdate = ({
             newDepartureDate === prevDepartureDate &&
             newTotalSeats === prevTotalSeats
         ) {
-            setShowDialogRideUpdate(false);
+            setShowRideUpdateDialog(false);
             return;
         }
 
@@ -85,7 +85,7 @@ const DialogRideUpdate = ({
                 throw new Error(data.message);
             }
             dispatch(updateDriverRide({ id: rideId, updateData }));
-            setShowDialogRideUpdate(false);
+            setShowRideUpdateDialog(false);
         } catch (error) {
             console.error(error);
             dispatch(setUpdateRideErrorMessage(error.message));
@@ -93,7 +93,7 @@ const DialogRideUpdate = ({
     };
 
     return (
-        <Dialog open={showDialogRideUpdate}>
+        <Dialog open={showRideUpdateDialog}>
             <DialogTitle>Mise à jour du trajet</DialogTitle>
             <DialogContent>
                 <Box component="form" onSubmit={handleSubmit}>
@@ -123,7 +123,7 @@ const DialogRideUpdate = ({
                             type="button"
                             variant="text"
                             sx={{ m: ".5rem 0" }}
-                            onClick={() => setShowDialogRideUpdate(false)}>
+                            onClick={() => setShowRideUpdateDialog(false)}>
                             Annuler
                         </Button>
                     </Box>
@@ -136,4 +136,4 @@ const DialogRideUpdate = ({
     );
 };
 
-export default DialogRideUpdate;
+export default RideUpdateDialog;
