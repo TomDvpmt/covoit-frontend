@@ -33,7 +33,7 @@ const updateRide = (req, res) => {
         .then(() => res.status(200).json({ message: "Trajet mis à jour." }))
         .catch((error) => {
             console.log(error);
-            res.status(400).json({
+            return res.status(400).json({
                 message: "Impossible de mettre à jour le trajet.",
             });
         });
@@ -46,7 +46,7 @@ const deleteRide = (req, res) => {
         .then(() => res.status(200).json({ message: "Trajet supprimé." }))
         .catch((error) => {
             console.log(error);
-            res.status(400).json({
+            return res.status(400).json({
                 message: "Impossible de supprimer le trajet.",
             });
         });

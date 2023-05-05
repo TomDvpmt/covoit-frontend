@@ -1,7 +1,12 @@
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setUserData, logOut } from "../../features/user/userSlice";
+import {
+    selectGlobalErrorMessage,
+    setGlobalErrorMessage,
+} from "../../features/error/errorSlice";
 
 import { getOneUser } from "../../utils/user";
 
@@ -9,13 +14,15 @@ import Header from "../../layout/Header";
 import NavBar from "../NavBar";
 import PageHeading from "../PageHeading";
 import Footer from "../../layout/Footer";
+import ErrorMessage from "../../components/ErrorMessage"; // replace with ErrorBoundary
 
+import theme from "../../styles/theme";
 import { Box } from "@mui/material";
-import { useEffect } from "react";
 
 const PageWrapper = () => {
     const token = sessionStorage.getItem("token");
     const dispatch = useDispatch();
+    const globalErrorMessage = useSelector(selectGlobalErrorMessage);
 
     useEffect(() => {
         if (!token) {
@@ -34,7 +41,10 @@ const PageWrapper = () => {
                     })
                 )
             )
-            .catch((error) => console.error(error));
+            .catch((error) => {
+                console.error(error);
+                dispatch(setGlobalErrorMessage(error.message));
+            });
     }, [dispatch, token]);
 
     return (
@@ -46,10 +56,22 @@ const PageWrapper = () => {
             }}>
             <Header />
             <NavBar />
-            <Box component="main" sx={{ flexGrow: "1", p: ".5rem" }}>
-                <PageHeading />
-                <Outlet />
-            </Box>
+            {globalErrorMessage ? (
+                <ErrorMessage errorMessage={globalErrorMessage} />
+            ) : (
+                <Box
+                    component="main"
+                    sx={{
+                        alignSelf: "center",
+                        flexGrow: "1",
+                        width: "100%",
+                        maxWidth: theme.maxWidth.main,
+                        p: ".5rem .5rem 3rem",
+                    }}>
+                    <PageHeading />
+                    <Outlet />
+                </Box>
+            )}
 
             <Footer />
         </Box>

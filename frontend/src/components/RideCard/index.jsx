@@ -1,49 +1,67 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
 
 import { selectUserId } from "../../features/user/userSlice";
 
-import UpdateRideForm from "../forms/UpdateRideForm";
-import DeleteRideDialog from "../DeleteRideDialog";
+import { getOneUser } from "../../utils/user";
+
+import DialogRideUpdate from "../DialogRideUpdate";
+import DialogRideDelete from "../DialogRideDelete";
 
 import {
     Card,
     CardHeader,
     CardContent,
-    CardActions,
     Button,
     Typography,
     IconButton,
+    Box,
+    Link,
 } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import {
+    Edit,
+    Delete,
+    AirlineSeatReclineExtra,
+    TrendingFlat,
+    PeopleAlt,
+    PeopleAltOutlined,
+} from "@mui/icons-material";
+import theme from "../../styles/theme";
 
 import PropTypes from "prop-types";
 
 import dayjs from "dayjs";
 
-const RideCard = ({ ride, type }) => {
+const RideCard = ({ ride }) => {
     RideCard.propTypes = {
         ride: PropTypes.object.isRequired,
-        type: PropTypes.string.isRequired,
     };
 
     const userId = useSelector(selectUserId);
 
+    const [driver, setDriver] = useState({});
     const [formatedDate, setFormatedDate] = useState("");
-    const [showUpdateRideForm, setShowUpdateRideForm] = useState(false);
-    const [showDeleteRideDialog, setShowDeleteRideDialog] = useState(false);
+    const [showDialogRideUpdate, setShowDialogRideUpdate] = useState(false);
+    const [showDialogRideDelete, setShowDialogRideDelete] = useState(false);
 
     const handleBookRide = () => {
         // if not logged in, dialog (se connecter / créer un compte / annuler)
     };
 
     const handleEditRide = () => {
-        setShowUpdateRideForm(true);
+        setShowDialogRideUpdate(true);
     };
 
     const handleDeleteRide = () => {
-        setShowDeleteRideDialog(true);
+        setShowDialogRideDelete(true);
     };
+
+    useEffect(() => {
+        getOneUser(ride.driverId)
+            .then((driverData) => setDriver(driverData))
+            .catch((error) => console.log(error));
+    }, [ride]);
 
     useEffect(() => {
         const date = dayjs(ride.departureDate);
@@ -56,52 +74,142 @@ const RideCard = ({ ride, type }) => {
     }, [ride]);
 
     return (
-        <Card>
+        <Card sx={{ flexGrow: "1" }}>
             <CardHeader
-                title={`${ride.departure} => ${ride.destination}`}
+                title={
+                    <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: ".5rem",
+                        }}>
+                        {ride.departure}
+                        <TrendingFlat />
+                        {ride.destination}
+                    </Box>
+                }
+                titleTypographyProps={{
+                    alignItems: "center",
+                    color: theme.palette.primary.main,
+                }}
                 subheader={formatedDate}
-                // subheaderTypographyProps={{ fontWeight: "700" }}
+                action={
+                    <>
+                        {ride.driverId === userId && (
+                            <>
+                                <IconButton
+                                    color="secondary"
+                                    onClick={handleEditRide}
+                                    id={ride._id}>
+                                    <Edit />
+                                </IconButton>
+                                <IconButton
+                                    color="secondary"
+                                    onClick={handleDeleteRide}
+                                    id={ride._id}>
+                                    <Delete />
+                                </IconButton>
+                            </>
+                        )}
+                        {ride.driverId !== userId && (
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={handleBookRide}>
+                                Réserver
+                            </Button>
+                        )}
+                    </>
+                }
             />
-            <CardContent>
-                <Typography paragraph>
-                    <Typography component="span" fontWeight="700">
-                        Places disponibles :{" "}
+            <CardContent
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end",
+                }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: ".5rem",
+                    }}>
+                    {driver._id !== userId && (
+                        <Typography
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "1rem",
+                            }}>
+                            <AirlineSeatReclineExtra />
+
+                            <Typography
+                                component="span"
+                                fontWeight="700"
+                                color="primary">
+                                Conducteur :{" "}
+                            </Typography>
+                            {driver && (
+                                <Link
+                                    component={RouterLink}
+                                    to={`/users/${driver._id}`}>{`${
+                                    driver.firstName
+                                }${
+                                    driver.firstName && driver.lastName
+                                        ? " "
+                                        : ""
+                                }${driver.lastName}`}</Link>
+                            )}
+                        </Typography>
+                    )}
+
+                    <Typography
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "1rem",
+                        }}>
+                        <PeopleAlt />
+                        <Typography
+                            component="span"
+                            fontWeight="700"
+                            color="primary">
+                            Passagers :{" "}
+                        </Typography>
+                        <Typography component="span">
+                            {ride.passengers.length}
+                        </Typography>
                     </Typography>
-                    <Typography component="span">
-                        {ride.totalSeats - ride.passengers.length}
+                    <Typography
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "1rem",
+                        }}>
+                        <PeopleAltOutlined />
+                        <Typography
+                            component="span"
+                            fontWeight="700"
+                            color="primary">
+                            Places disponibles :{" "}
+                        </Typography>
+                        <Typography component="span">
+                            {ride.totalSeats - ride.passengers.length}
+                        </Typography>
                     </Typography>
-                </Typography>
-                <Typography paragraph>
-                    <Typography component="span" fontWeight="700">
-                        Prix :{" "}
+                </Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                    }}>
+                    <Typography component="span" variant="h4">
+                        {ride.price} €
                     </Typography>
-                    <Typography component="span">{ride.price} €</Typography>
-                </Typography>
-                <Typography paragraph>
-                    <Typography component="span" fontWeight="700">
-                        Passagers :{" "}
-                    </Typography>
-                    <Typography component="span">
-                        {ride.passengers.length}
-                    </Typography>
-                </Typography>
-            </CardContent>
-            <CardActions>
-                {ride.driverId !== userId && (
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={handleBookRide}>
-                        Réserver
-                    </Button>
-                )}
-                <IconButton onClick={handleEditRide} id={ride._id}>
-                    <Edit />
-                </IconButton>
-                <IconButton onClick={handleDeleteRide} id={ride._id}>
-                    <Delete />
-                </IconButton>
-                <UpdateRideForm
+                    <Typography>par passager</Typography>
+                </Box>
+                <DialogRideUpdate
                     prevRideData={{
                         id: ride._id,
                         departure: ride.departure,
@@ -110,15 +218,15 @@ const RideCard = ({ ride, type }) => {
                         totalSeats: ride.totalSeats,
                         passengers: ride.passengers,
                     }}
-                    showUpdateRideForm={showUpdateRideForm}
-                    setShowUpdateRideForm={setShowUpdateRideForm}
+                    showDialogRideUpdate={showDialogRideUpdate}
+                    setShowDialogRideUpdate={setShowDialogRideUpdate}
                 />
-                <DeleteRideDialog
+                <DialogRideDelete
                     rideId={ride._id}
-                    showDeleteRideDialog={showDeleteRideDialog}
-                    setShowDeleteRideDialog={setShowDeleteRideDialog}
+                    showDialogRideDelete={showDialogRideDelete}
+                    setShowDialogRideDelete={setShowDialogRideDelete}
                 />
-            </CardActions>
+            </CardContent>
         </Card>
     );
 };

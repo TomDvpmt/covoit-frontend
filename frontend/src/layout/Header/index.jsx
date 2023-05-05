@@ -8,7 +8,6 @@ const Header = () => {
         <Box component="header">
             <Box
                 sx={{
-                    bgcolor: "#f5f5f5",
                     padding: "2rem",
                     display: "flex",
                     alignItems: "center",

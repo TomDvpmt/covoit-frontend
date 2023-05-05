@@ -13,6 +13,7 @@ theme = createTheme(
             primary: {
                 // blue
                 main: "#034A5E",
+                lightest: "#BCE2ED",
             },
             secondary: {
                 // green
@@ -30,6 +31,9 @@ theme = createTheme(
             warning: {
                 // orange-red
                 main: "#EB3E23",
+            },
+            background: {
+                default: "#f5f5f5",
             },
         },
         typography: {
@@ -53,7 +57,17 @@ theme = createTheme(
                 },
             },
         },
+        components: {
+            MuiInputBase: {
+                styleOverrides: {
+                    root: {
+                        backgroundColor: "white",
+                    },
+                },
+            },
+        },
         maxWidth: {
+            nav: "1200px",
             main: "1200px",
             form: "450px",
         },

@@ -51,69 +51,84 @@ const Home = () => {
     };
 
     return (
-        <Box>
-            <Box component="form" onSubmit={handleSubmit}>
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: ".5rem",
-                    }}>
+        <>
+            <Box component="section">
+                <Box component="form" onSubmit={handleSubmit}>
                     <Box
                         sx={{
                             display: "flex",
-                            flexWrap: "wrap",
+                            flexDirection: "column",
                             gap: ".5rem",
                         }}>
-                        <RideInputLocation
-                            type="departure"
-                            location={departure}
-                            setLocation={setDeparture}
-                        />
-                        <RideInputLocation
-                            type="destination"
-                            location={destination}
-                            setLocation={setDestination}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: ".5rem",
+                            }}>
+                            <RideInputLocation
+                                type="departure"
+                                location={departure}
+                                setLocation={setDeparture}
+                            />
+                            <RideInputLocation
+                                type="destination"
+                                location={destination}
+                                setLocation={setDestination}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: ".5rem",
+                            }}>
+                            <RideInputDepartureDate
+                                departureDate={departureDate}
+                                setDepartureDate={setDepartureDate}
+                            />
+                            <RideInputSeats
+                                type="passengers"
+                                seats={seats}
+                                setSeats={setSeats}
+                            />
+                        </Box>
+                        <RideInputPrice
+                            type="max"
+                            price={price}
+                            setPrice={setPrice}
                         />
                     </Box>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: ".5rem",
-                        }}>
-                        <RideInputDepartureDate
-                            departureDate={departureDate}
-                            setDepartureDate={setDepartureDate}
-                        />
-                        <RideInputSeats
-                            type="passengers"
-                            seats={seats}
-                            setSeats={setSeats}
-                        />
-                    </Box>
-                    <RideInputPrice
-                        type="max"
-                        price={price}
-                        setPrice={setPrice}
-                    />
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{ mt: "1rem" }}>
+                        Chercher
+                    </Button>
                 </Box>
-                <Button type="submit" variant="contained">
-                    Chercher
-                </Button>
             </Box>
             {showResults && (
-                <>
-                    <Typography
-                        variant="h2"
-                        component="h2"
-                        sx={{ m: "2rem 0 1rem" }}>
-                        Résultats
-                    </Typography>
-                    <RidesList type="query" rides={queryRides} />
-                </>
+                <Box component="section">
+                    {queryRides?.length > 0 ? (
+                        <>
+                            <Typography
+                                variant="h2"
+                                component="h2"
+                                sx={{ m: "2rem 0 1rem" }}>
+                                {`${queryRides.length} résultat${
+                                    queryRides.length > 1 ? "s" : ""
+                                } :`}
+                            </Typography>
+                            <RidesList type="query" rides={queryRides} />
+                        </>
+                    ) : (
+                        <Typography mt="2rem">
+                            Aucun résultat pour cette recherche.
+                        </Typography>
+                    )}
+                </Box>
             )}
-        </Box>
+        </>
     );
 };
 

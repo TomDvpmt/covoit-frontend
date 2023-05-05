@@ -27,9 +27,14 @@ const NavBar = () => {
         <AppBar
             component="nav"
             position="static"
-            sx={{ bgcolor: theme.palette.primary }}>
+            sx={{
+                bgcolor: theme.palette.primary,
+                alignItems: "center",
+            }}>
             <Toolbar
                 sx={{
+                    width: "100%",
+                    maxWidth: theme.maxWidth.nav,
                     justifyContent:
                         isLoggedIn && page === "home"
                             ? "flex-end"

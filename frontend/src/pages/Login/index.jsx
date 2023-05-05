@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setUserData } from "../../features/user/userSlice";
+import {
+    selectLoginErrorMessage,
+    setLoginErrorMessage,
+} from "../../features/error/errorSlice";
 
 import UserInputEmail from "../../components/form-inputs/UserInputEmail";
 import UserInputPassword from "../../components/form-inputs/UserInputPassword";
@@ -18,7 +22,9 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [errorMessage, setErrorMessage] = useState("");
+    // const [errorMessage, setErrorMessage] = useState("");
+
+    const errorMessage = useSelector(selectLoginErrorMessage);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -40,7 +46,10 @@ const Login = () => {
                 if (!response.ok) {
                     response
                         .json()
-                        .then((data) => setErrorMessage(data.message));
+                        // .then((data) => setErrorMessage(data.message));
+                        .then((data) =>
+                            dispatch(setLoginErrorMessage(data.message))
+                        );
                     return;
                 }
                 response.json().then((data) => {
@@ -60,7 +69,7 @@ const Login = () => {
             })
             .catch((error) => {
                 console.error(error);
-                setErrorMessage("Connexion impossible.");
+                // setErrorMessage("Connexion impossible.");
             });
     };
 

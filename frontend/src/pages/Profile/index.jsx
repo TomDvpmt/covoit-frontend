@@ -7,20 +7,23 @@ import {
     setUserFirstName,
     setUserLastName,
     setUserPhone,
-} from "../../features/user/userSlice";
-import {
     selectUserId,
     selectUserEmail,
     selectUserFirstName,
     selectUserLastName,
     selectUserPhone,
 } from "../../features/user/userSlice";
+import {
+    setUpdateUserErrorMessage,
+    selectUpdateUserErrorMessage,
+    setDeleteUserErrorMessage,
+} from "../../features/error/errorSlice";
 
 import UserInputEmail from "../../components/form-inputs/UserInputEmail";
 import UserInputFirstName from "../../components/form-inputs/UserInputFirstName";
 import UserInputLastName from "../../components/form-inputs/UserInputLastName";
 import UserInputPhone from "../../components/form-inputs/UserInputPhone";
-import DeleteAccountDialog from "../../components/DeleteAccountDialog";
+import DialogUserDelete from "../../components/DialogUserDelete";
 import ValidationMessage from "../../components/ValidationMessage";
 import ErrorMessage from "../../components/ErrorMessage";
 
@@ -33,7 +36,9 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Collapse,
+    Dialog,
+    DialogContent,
+    DialogTitle,
 } from "@mui/material";
 
 import theme from "../../styles/theme";
@@ -57,10 +62,12 @@ const Profile = () => {
     const [newFirstName, setNewFirstName] = useState("");
     const [newLastName, setNewLastName] = useState("");
     const [newPhone, setNewPhone] = useState("");
-    const [showUpdateForm, setShowUpdateForm] = useState(false);
-    const [showDialog, setShowDialog] = useState(false);
+
+    const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [validationMessage, setValidationMessage] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
+
+    const updateUserErrorMessage = useSelector(selectUpdateUserErrorMessage);
 
     const leftCellStyle = {
         width: "45%",
@@ -73,16 +80,16 @@ const Profile = () => {
         setNewFirstName(prevFirstName);
         setNewLastName(prevLastName);
         setNewPhone(prevPhone);
-        setErrorMessage("");
         setValidationMessage("");
-        setShowUpdateForm((showUpdateForm) => !showUpdateForm);
+        dispatch(setUpdateUserErrorMessage(""));
+        setShowUpdateDialog((showUpdateDialog) => !showUpdateDialog);
     };
 
     const handleDelete = () => {
-        setErrorMessage("");
         setValidationMessage("");
-        setShowUpdateForm(false);
-        setShowDialog(true);
+        dispatch(setDeleteUserErrorMessage(""));
+        setShowUpdateDialog(false);
+        setShowDeleteDialog(true);
     };
 
     const handleSubmit = async (e) => {
@@ -94,12 +101,12 @@ const Profile = () => {
             newLastName === prevLastName &&
             newPhone === prevPhone
         ) {
-            setShowUpdateForm(false);
+            setShowUpdateDialog(false);
             return;
         }
 
         try {
-            fetch(`/API/users/${userId}`, {
+            const response = await fetch(`/API/users/${userId}`, {
                 method: "PUT",
                 headers: {
                     authorization: `BEARER ${token}`,
@@ -112,14 +119,20 @@ const Profile = () => {
                     phone: newPhone,
                 }),
             });
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message);
+            }
+
             dispatch(setUserEmail(newEmail));
             dispatch(setUserFirstName(newFirstName));
             dispatch(setUserLastName(newLastName));
             dispatch(setUserPhone(newPhone));
-            setShowUpdateForm(false);
+            setShowUpdateDialog(false);
             setValidationMessage(true);
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            dispatch(setUpdateUserErrorMessage(error.message));
         }
     };
 
@@ -133,7 +146,6 @@ const Profile = () => {
                 {validationMessage && (
                     <ValidationMessage text="Profil mis à jour." />
                 )}
-                {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
                 <TableContainer component={Paper}>
                     <Table size="small">
                         <TableBody>
@@ -169,57 +181,66 @@ const Profile = () => {
                         justifyContent: "flex-end",
                     }}>
                     <Button
-                        variant={showUpdateForm ? "outlined" : "contained"}
+                        variant={showUpdateDialog ? "outlined" : "contained"}
                         onClick={handleUpdateUser}
                         color="secondary">
                         Modifier
                     </Button>
                     <Button
-                        color="warning"
                         sx={{ textTransform: "initial" }}
                         onClick={handleDelete}>
                         Supprimer le compte
                     </Button>
-                    {showDialog && (
-                        <DeleteAccountDialog
+                    {showDeleteDialog && (
+                        <DialogUserDelete
                             userId={userId}
-                            showDialog={showDialog}
-                            setShowDialog={setShowDialog}
-                            setErrorMessage={setErrorMessage}
+                            showDeleteDialog={showDeleteDialog}
+                            setShowDeleteDialog={setShowDeleteDialog}
                         />
                     )}
                 </Box>
             </Box>
-            <Collapse in={showUpdateForm}>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    maxWidth={theme.maxWidth.form}
-                    margin="auto">
+            <Dialog open={showUpdateDialog}>
+                <DialogTitle>
+                    Mise à jour des informations du compte
+                </DialogTitle>
+                <DialogContent>
                     <UserInputEmail email={newEmail} setEmail={setNewEmail} />
-
                     <UserInputFirstName
                         firstName={newFirstName}
                         setFirstName={setNewFirstName}
                     />
-
                     <UserInputLastName
                         lastName={newLastName}
                         setLastName={setNewLastName}
                     />
-
                     <UserInputPhone phone={newPhone} setPhone={setNewPhone} />
-
-                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            gap: ".5rem",
+                        }}>
                         <Button
-                            type="submit"
+                            type="button"
                             variant="contained"
-                            color="secondary">
+                            color="secondary"
+                            onClick={handleSubmit}>
                             Enregistrer
                         </Button>
+                        <Button
+                            type="button"
+                            variant="text"
+                            color="secondary"
+                            onClick={() => setShowUpdateDialog(false)}>
+                            Annuler
+                        </Button>
                     </Box>
-                </Box>
-            </Collapse>
+                    {updateUserErrorMessage && (
+                        <ErrorMessage errorMessage={updateUserErrorMessage} />
+                    )}
+                </DialogContent>
+            </Dialog>
         </>
     );
 };

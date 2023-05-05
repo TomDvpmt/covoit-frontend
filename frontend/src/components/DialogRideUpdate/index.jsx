@@ -1,29 +1,33 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { updateDriverRide } from "../../../features/user/userSlice";
+import { updateDriverRide } from "../../features/user/userSlice";
+import {
+    setUpdateRideErrorMessage,
+    selectUpdateRideErrorMessage,
+} from "../../features/error/errorSlice";
 
-import RideInputDepartureDate from "../../form-inputs/RideInputDepartureDate";
-import RideInputSeats from "../../form-inputs/RideInputSeats";
+import RideInputDepartureDate from "../form-inputs/RideInputDepartureDate";
+import RideInputSeats from "../form-inputs/RideInputSeats";
+import ErrorMessage from "../ErrorMessage";
 
 import { Dialog, DialogTitle, Box, Button, DialogContent } from "@mui/material";
 
 import PropTypes from "prop-types";
 
-const UpdateRideForm = ({
+const DialogRideUpdate = ({
     prevRideData,
-    showUpdateRideForm,
-    setShowUpdateRideForm,
-    // setErrorMessage,
+    showDialogRideUpdate,
+    setShowDialogRideUpdate,
 }) => {
-    UpdateRideForm.propTypes = {
+    DialogRideUpdate.propTypes = {
         prevRideData: PropTypes.object.isRequired,
-        showUpdateRideForm: PropTypes.bool.isRequired,
-        setShowUpdateRideForm: PropTypes.func.isRequired,
-        // setErrorMessage: PropTypes.func.isRequired,
+        showDialogRideUpdate: PropTypes.bool.isRequired,
+        setShowDialogRideUpdate: PropTypes.func.isRequired,
     };
     const token = sessionStorage.getItem("token");
     const dispatch = useDispatch();
+    const updateErrorMessage = useSelector(selectUpdateRideErrorMessage);
 
     const rideId = prevRideData.id;
     const prevDepartureDate = prevRideData.departureDate;
@@ -33,30 +37,32 @@ const UpdateRideForm = ({
     const [newDepartureDate, setNewDepartureDate] = useState(prevDepartureDate);
     const [newTotalSeats, setNewTotalSeats] = useState(prevTotalSeats);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (
             newDepartureDate === prevDepartureDate &&
             newTotalSeats === prevTotalSeats
         ) {
-            setShowUpdateRideForm(false);
+            setShowDialogRideUpdate(false);
             return;
         }
 
         if (newDepartureDate < Date.now()) {
-            setShowUpdateRideForm(false);
-            // setErrorMessage(
-            //     "La date est dépassée, veuillez en choisir une autre."
-            // );
+            dispatch(
+                setUpdateRideErrorMessage(
+                    "La date est dépassée, veuillez en choisir une autre."
+                )
+            );
             return;
         }
 
         if (newTotalSeats < passengers.length) {
-            setShowUpdateRideForm(false);
-            // setErrorMessage(
-            //     "Modification impossible : il y a plus de passagers que de places disponibles."
-            // );
+            dispatch(
+                setUpdateRideErrorMessage(
+                    "Modification impossible : il y a plus de passagers que de places disponibles."
+                )
+            );
             return;
         }
 
@@ -65,24 +71,29 @@ const UpdateRideForm = ({
             totalSeats: newTotalSeats,
         };
 
-        fetch(`/API/rides/${rideId}`, {
-            method: "PUT",
-            headers: {
-                Authorization: `BEARER ${token}`,
-                "content-type": "application/json",
-            },
-            body: JSON.stringify(updateData),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                dispatch(updateDriverRide({ id: rideId, updateData }));
-                setShowUpdateRideForm(false);
-            })
-            .catch((error) => console.error(error));
+        try {
+            const response = await fetch(`/API/rides/${rideId}`, {
+                method: "PUT",
+                headers: {
+                    Authorization: `BEARER ${token}`,
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(updateData),
+            });
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message);
+            }
+            dispatch(updateDriverRide({ id: rideId, updateData }));
+            setShowDialogRideUpdate(false);
+        } catch (error) {
+            console.error(error);
+            dispatch(setUpdateRideErrorMessage(error.message));
+        }
     };
 
     return (
-        <Dialog open={showUpdateRideForm}>
+        <Dialog open={showDialogRideUpdate}>
             <DialogTitle>Mise à jour du trajet</DialogTitle>
             <DialogContent>
                 <Box component="form" onSubmit={handleSubmit}>
@@ -104,21 +115,25 @@ const UpdateRideForm = ({
                         <Button
                             type="submit"
                             variant="contained"
+                            color="secondary"
                             sx={{ m: ".5rem 0" }}>
                             Valider
                         </Button>
                         <Button
                             type="button"
-                            variant="outlined"
+                            variant="text"
                             sx={{ m: ".5rem 0" }}
-                            onClick={() => setShowUpdateRideForm(false)}>
+                            onClick={() => setShowDialogRideUpdate(false)}>
                             Annuler
                         </Button>
                     </Box>
                 </Box>
+                {updateErrorMessage && (
+                    <ErrorMessage errorMessage={updateErrorMessage} />
+                )}
             </DialogContent>
         </Dialog>
     );
 };
 
-export default UpdateRideForm;
+export default DialogRideUpdate;

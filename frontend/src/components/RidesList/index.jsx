@@ -1,6 +1,6 @@
 import RideCard from "../RideCard";
 
-import { Paper, Box } from "@mui/material";
+import { Box } from "@mui/material";
 
 import PropTypes from "prop-types";
 
@@ -10,13 +10,11 @@ const RidesList = ({ type, rides }) => {
         rides: PropTypes.array.isRequired,
     };
     return (
-        <Paper elevation={4}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                {rides.map((ride, index) => (
-                    <RideCard key={index} ride={ride} type={type} />
-                ))}
-            </Box>
-        </Paper>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+            {rides?.map((ride, index) => (
+                <RideCard key={index} ride={ride} type={type} />
+            ))}
+        </Box>
     );
 };
 

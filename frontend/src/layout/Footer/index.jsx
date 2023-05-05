@@ -1,10 +1,16 @@
 import { Box } from "@mui/material";
 
+import theme from "../../styles/theme";
+
 const Footer = () => {
     return (
         <Box
             component="footer"
-            sx={{ mt: "3rem", bgcolor: "#f5f5f5", minHeight: "100px" }}>
+            sx={{
+                bgcolor: theme.palette.primary.main,
+                minHeight: "100px",
+                color: "white",
+            }}>
             Footer
         </Box>
     );

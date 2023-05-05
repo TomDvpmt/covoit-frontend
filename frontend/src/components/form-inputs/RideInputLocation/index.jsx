@@ -80,7 +80,7 @@ const RideInputLocation = ({ type, location, setLocation }) => {
             {showCitiesMenu && (
                 <Box
                     sx={{
-                        bgcolor: "#f5f5f5",
+                        bgcolor: "white",
                         p: ".3rem",
                         display: "flex",
                         flexDirection: "column",

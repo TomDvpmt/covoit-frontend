@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { logIn, setUserData } from "../../features/user/userSlice";
+import {
+    selectRegisterErrorMessage,
+    setRegisterErrorMessage,
+    resetErrorMessages,
+} from "../../features/error/errorSlice";
 
 import UserInputEmail from "../../components/form-inputs/UserInputEmail";
 import UserInputPassword from "../../components/form-inputs/UserInputPassword";
@@ -20,6 +25,8 @@ const Register = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const errorMessage = useSelector(selectRegisterErrorMessage);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -27,15 +34,17 @@ const Register = () => {
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
 
-    const [errorMessage, setErrorMessage] = useState("");
-
     const handleSubmit = async (e) => {
-        setErrorMessage("");
+        dispatch(resetErrorMessages());
 
         e.preventDefault();
 
         if (password !== passwordConfirm) {
-            setErrorMessage("Les mots de passe ne correspondent pas.");
+            dispatch(
+                setRegisterErrorMessage(
+                    "Les mots de passe ne correspondent pas."
+                )
+            );
             return;
         }
 
@@ -56,58 +65,60 @@ const Register = () => {
                 }),
             });
             if (!response.ok) {
-                response.json().then((data) => setErrorMessage(data.message));
+                response
+                    .json()
+                    .then((data) =>
+                        dispatch(setRegisterErrorMessage(data.message))
+                    );
                 return;
             }
             const data = await response.json();
             console.log(data);
         } catch (error) {
-            setErrorMessage("Impossible de créer le compte.");
+            dispatch(setRegisterErrorMessage("Impossible de créer le compte."));
             return;
         }
 
         // Auto log in after register
-        try {
-            fetch("API/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        response
-                            .json()
-                            .then((data) => setErrorMessage(data.message));
-                        return;
-                    }
-                    response.json().then((data) => {
-                        sessionStorage.setItem("token", data.token);
-                        dispatch(logIn());
-                        dispatch(
-                            setUserData({
-                                id: data.id,
-                                email: data.email,
-                                firstName: data.firstName,
-                                lastName: data.lastName,
-                                phone: data.phone,
-                            })
+
+        fetch("API/users/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                password,
+            }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    response
+                        .json()
+                        .then((data) =>
+                            dispatch(setRegisterErrorMessage(data.message))
                         );
-                    });
-                    navigate("/");
-                })
-                .catch((error) => {
-                    console.error(error);
-                    setErrorMessage("Connexion impossible.");
+                    return;
+                }
+                response.json().then((data) => {
+                    sessionStorage.setItem("token", data.token);
+                    dispatch(logIn());
+                    dispatch(
+                        setUserData({
+                            id: data.id,
+                            email: data.email,
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            phone: data.phone,
+                        })
+                    );
                 });
-        } catch (error) {
-            setErrorMessage("Connexion impossible.");
-            return;
-        }
+                navigate("/");
+            })
+            .catch((error) => {
+                console.error(error);
+                dispatch(setRegisterErrorMessage(error.message)); // to be tested
+            });
     };
 
     return (

@@ -6,9 +6,16 @@ import {
     selectUserId,
     setDriverRides,
 } from "../../features/user/userSlice";
+import {
+    setMyRidesDriverErrorMessage,
+    setMyRidesPassengerErrorMessage,
+    resetErrorMessages,
+    selectMyRidesDriverErrorMessage,
+    selectMyRidesPassengerErrorMessage,
+} from "../../features/error/errorSlice";
 
 import RidesList from "../../components/RidesList";
-import CreateRideForm from "../../components/forms/CreateRideForm";
+import DialogRideCreate from "../../components/DialogRideCreate";
 import ErrorMessage from "../../components/ErrorMessage";
 
 import { Box, Typography, Button } from "@mui/material";
@@ -16,20 +23,24 @@ import { Box, Typography, Button } from "@mui/material";
 const MyRides = () => {
     const token = sessionStorage.getItem("token");
     const userId = useSelector(selectUserId);
+    const dispatch = useDispatch();
 
     const driverRides = useSelector(selectDriverRides);
-    const dispatch = useDispatch();
-    // const [driverRides, setDriverRides] = useState([]);
+    const driverErrorMessage = useSelector(selectMyRidesDriverErrorMessage);
+    const passengerErrorMessage = useSelector(
+        selectMyRidesPassengerErrorMessage
+    );
 
-    const [showCreateRideForm, setShowCreateRideForm] = useState(false);
-    const [showDeleteRideDialog, setShowDeleteRideDialog] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [showDialogRideCreate, setShowDialogRideCreate] = useState(false);
+    const [showDialogRideDelete, setShowDialogRideDelete] = useState(false);
 
-    const handleShowCreateRideForm = () => {
-        setShowCreateRideForm((show) => !show);
+    const handleShowDialogRideCreate = () => {
+        setShowDialogRideCreate((show) => !show);
     };
 
     useEffect(() => {
+        dispatch(resetErrorMessages());
+
         userId &&
             fetch("/API/rides/", {
                 method: "POST",
@@ -41,37 +52,66 @@ const MyRides = () => {
                     filters: { driverId: userId },
                 }),
             })
-                .then((response) => response.json())
+                .then((response) => {
+                    if (!response.ok) {
+                        response
+                            .json()
+                            .then((data) =>
+                                dispatch(
+                                    setMyRidesDriverErrorMessage(data.message)
+                                )
+                            );
+                    }
+                    return response.json();
+                })
                 .then((data) => {
                     dispatch(setDriverRides(data.results));
-                    // setDriverRides(data.results);
                 })
-                .catch((error) => console.error(error));
-    }, [token, userId, showCreateRideForm, showDeleteRideDialog]);
+                .catch((error) => {
+                    console.error(error);
+                    dispatch(
+                        setMyRidesDriverErrorMessage(
+                            "Impossible d'afficher les trajets."
+                        )
+                    );
+                });
+    }, [token, userId, showDialogRideCreate, showDialogRideDelete]);
 
     return (
         <>
-            {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
             <Box component="section">
                 <Typography component="h2" variant="h2">
                     Comme conducteur
                 </Typography>
-                {userId && <RidesList type="driver" rides={driverRides} />}
-                <Button
-                    variant={showCreateRideForm ? "outlined" : "contained"}
-                    onClick={handleShowCreateRideForm}
-                    sx={{ m: ".5rem 0" }}>
-                    Ajouter un trajet
-                </Button>
-                <CreateRideForm
-                    showCreateRideForm={showCreateRideForm}
-                    setShowCreateRideForm={setShowCreateRideForm}
+                {userId && driverRides && (
+                    <RidesList type="driver" rides={driverRides} />
+                )}
+                {driverErrorMessage && (
+                    <ErrorMessage errorMessage={driverErrorMessage} />
+                )}
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                        variant={
+                            showDialogRideCreate ? "outlined" : "contained"
+                        }
+                        color="secondary"
+                        onClick={handleShowDialogRideCreate}
+                        sx={{ m: ".5rem 0" }}>
+                        Ajouter un trajet
+                    </Button>
+                </Box>
+                <DialogRideCreate
+                    showDialogRideCreate={showDialogRideCreate}
+                    setShowDialogRideCreate={setShowDialogRideCreate}
                 />
             </Box>
             <Box component="section">
                 <Typography component="h2" variant="h2">
                     Comme passager
                 </Typography>
+                {passengerErrorMessage && (
+                    <ErrorMessage errorMessage={passengerErrorMessage} />
+                )}
             </Box>
         </>
     );

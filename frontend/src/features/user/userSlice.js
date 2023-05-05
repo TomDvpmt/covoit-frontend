@@ -39,9 +39,9 @@ export const userSlice = createSlice({
             const rideId = action.payload.id;
             const updateData = action.payload.updateData;
             state.rides.driver.find(
-                (ride) => (ride._id = rideId)
+                (ride) => ride._id === rideId
             ).departureDate = updateData.departureDate;
-            state.rides.driver.find((ride) => (ride._id = rideId)).totalSeats =
+            state.rides.driver.find((ride) => ride._id === rideId).totalSeats =
                 updateData.totalSeats;
         },
         logOut: () => initialState,

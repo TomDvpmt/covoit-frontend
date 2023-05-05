@@ -89,8 +89,8 @@ const register = async (req, res, next) => {
 
 const getOneUser = (req, res) => {
     const authId = req.auth.id;
-    const paramsId = parseInt(req.params.id);
-    const userId = paramsId === 0 ? authId : paramsId;
+    const paramsId = req.params.id;
+    const userId = paramsId == 0 ? authId : paramsId;
 
     User.findOne({ _id: userId })
         .then((data) => res.status(200).json(data))
@@ -111,7 +111,7 @@ const updateUser = (req, res) => {
         .catch((error) => {
             console.error(error);
             res.status(400).json({
-                message: "Impossible de modifier l'utilisateur",
+                message: "Impossible de modifier l'utilisateur.",
             });
         });
 };
@@ -119,9 +119,6 @@ const updateUser = (req, res) => {
 const deleteUser = (req, res) => {
     const paramId = req.params.id;
     const authId = req.auth.id;
-
-    console.log(authId);
-    console.log(paramId);
 
     if (paramId !== authId) {
         res.status(401).json({ message: "Non autorisé." });
@@ -132,6 +129,9 @@ const deleteUser = (req, res) => {
         .then(() => res.status(200).json({ message: "Utilisateur supprimé." }))
         .catch((error) => {
             console.error(error);
+            res.status(400).json({
+                message: "Impossible de supprimer le compte.",
+            });
         });
 };
 
