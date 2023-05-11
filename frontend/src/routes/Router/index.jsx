@@ -6,8 +6,9 @@ import Home from "../../pages/Home";
 import Login from "../../pages/Login";
 import Register from "../../pages/Register";
 import Profile from "../../pages/Profile";
-import Inbox from "../../pages/Inbox";
-import InboxMessage from "../../pages/InboxMessage";
+// import Inbox from "../../pages/Inbox";
+// import InboxMessage from "../../pages/InboxMessage";
+import BookingRequests from "../../pages/BookingRequests";
 import MyRides from "../../pages/MyRides";
 import Ride from "../../pages/Ride";
 import Error404 from "../../pages/Error404";
@@ -56,20 +57,29 @@ const Router = () => {
                     ),
                 },
                 {
-                    path: "/inbox",
+                    path: "/bookingrequests/",
                     element: (
                         <>
-                            <SetPage page="inbox" />
-                            <Inbox />
+                            <SetPage page="bookingRequests" />
+                            <BookingRequests />
                         </>
                     ),
-                    children: [
-                        {
-                            path: "/inbox/:id",
-                            element: <InboxMessage />,
-                        },
-                    ],
                 },
+                // {
+                //     path: "/inbox",
+                //     element: (
+                //         <>
+                //             <SetPage page="inbox" />
+                //             <Inbox />
+                //         </>
+                //     ),
+                //     children: [
+                //         {
+                //             path: "/inbox/:id",
+                //             element: <InboxMessage />,
+                //         },
+                //     ],
+                // },
                 {
                     path: "/myrides/",
                     element: (

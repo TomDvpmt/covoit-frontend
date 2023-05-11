@@ -2,14 +2,16 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
-    selectDriverRides,
-    selectUserId,
     setDriverRides,
+    setPassengerRides,
+    selectDriverRides,
+    selectPassengerRides,
+    selectUserId,
 } from "../../features/user/userSlice";
 import {
+    resetErrorMessages,
     setMyRidesDriverErrorMessage,
     setMyRidesPassengerErrorMessage,
-    resetErrorMessages,
     selectMyRidesDriverErrorMessage,
     selectMyRidesPassengerErrorMessage,
 } from "../../features/error/errorSlice";
@@ -19,6 +21,7 @@ import RideCreateDialog from "../../components/RideCreateDialog";
 import ErrorMessage from "../../components/ErrorMessage";
 
 import { Box, Typography, Button } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 
 const MyRides = () => {
     const token = sessionStorage.getItem("token");
@@ -27,6 +30,8 @@ const MyRides = () => {
 
     const driverRides = useSelector(selectDriverRides);
     const driverErrorMessage = useSelector(selectMyRidesDriverErrorMessage);
+
+    const passengerRides = useSelector(selectPassengerRides);
     const passengerErrorMessage = useSelector(
         selectMyRidesPassengerErrorMessage
     );
@@ -38,6 +43,7 @@ const MyRides = () => {
         setShowRideCreateDialog((show) => !show);
     };
 
+    // Get rides as a driver
     useEffect(() => {
         dispatch(resetErrorMessages());
 
@@ -77,6 +83,48 @@ const MyRides = () => {
                 });
     }, [token, userId, showRideCreateDialog, showRideDeleteDialog]);
 
+    // Get rides as a passenger
+    useEffect(() => {
+        dispatch(resetErrorMessages());
+
+        userId &&
+            fetch("/API/rides/", {
+                method: "POST",
+                headers: {
+                    Authorization: `BEARER ${token}`,
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    filters: { passengers: { $in: [userId] } },
+                }),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        response
+                            .json()
+                            .then((data) =>
+                                dispatch(
+                                    setMyRidesPassengerErrorMessage(
+                                        data.message
+                                    )
+                                )
+                            );
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    dispatch(setPassengerRides(data.results));
+                })
+                .catch((error) => {
+                    console.error(error);
+                    dispatch(
+                        setMyRidesPassengerErrorMessage(
+                            "Impossible d'afficher les trajets."
+                        )
+                    );
+                });
+    }, [token, userId]);
+
     return (
         <>
             <Box component="section">
@@ -109,6 +157,9 @@ const MyRides = () => {
                 <Typography component="h2" variant="h2">
                     Comme passager
                 </Typography>
+                {userId && passengerRides && (
+                    <RidesList type="passenger" rides={passengerRides} />
+                )}
                 {passengerErrorMessage && (
                     <ErrorMessage errorMessage={passengerErrorMessage} />
                 )}

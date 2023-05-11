@@ -42,7 +42,7 @@ const getOneBookingRequest = (req, res) => {
 };
 
 const updateBookingRequest = (req, res) => {
-    const requestId = req.body.requestId;
+    const requestId = req.params.id;
     const newRequestStatus = req.body.newRequestStatus;
 
     BookingRequest.updateOne({ _id: requestId }, { status: newRequestStatus })

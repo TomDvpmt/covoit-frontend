@@ -11,7 +11,12 @@ import {
     IconButton,
     Avatar,
 } from "@mui/material";
-import { Settings, Logout, DirectionsCar } from "@mui/icons-material";
+import {
+    Settings,
+    Logout,
+    DirectionsCar,
+    MailOutline,
+} from "@mui/icons-material";
 
 const MenuUser = () => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -30,6 +35,11 @@ const MenuUser = () => {
     const handleMyRides = () => {
         handleClose();
         navigate("/myrides");
+    };
+
+    const handleRequests = () => {
+        handleClose();
+        navigate("/bookingrequests");
     };
 
     const handleProfile = () => {
@@ -56,6 +66,12 @@ const MenuUser = () => {
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}>
+                <MenuItem onClick={handleRequests}>
+                    <ListItemIcon>
+                        <MailOutline />
+                    </ListItemIcon>
+                    Demandes de réservation
+                </MenuItem>
                 <MenuItem onClick={handleMyRides}>
                     <ListItemIcon>
                         <DirectionsCar />

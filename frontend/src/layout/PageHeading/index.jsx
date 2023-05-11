@@ -13,6 +13,7 @@ const PageHeading = () => {
         profile: "Mes informations",
         home: "Trouver un trajet",
         myrides: "Mes trajets",
+        bookingRequests: "Demandes de réservation",
         trip: "",
         error404: "Page introuvable.",
     };

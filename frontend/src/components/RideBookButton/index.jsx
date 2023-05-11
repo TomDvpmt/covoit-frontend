@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import {
+    selectUserFirstName,
+    selectUserLastName,
     selectUserId,
     selectUserIsLoggedIn,
 } from "../../features/user/userSlice";
@@ -25,6 +27,8 @@ const RideBookButton = ({ ride }) => {
     const token = sessionStorage.getItem("token");
     const isLoggedIn = useSelector(selectUserIsLoggedIn);
     const userId = useSelector(selectUserId);
+    const userFirstName = useSelector(selectUserFirstName);
+    const userLastName = useSelector(selectUserLastName);
 
     const rideId = ride._id;
     const driverId = ride.driverId;
@@ -32,6 +36,7 @@ const RideBookButton = ({ ride }) => {
 
     const [showLoginDialog, setShowLoginDialog] = useState(false);
     const [bookingRequestStatus, setBookingRequestStatus] = useState(""); // use Redux state instead (in state.user.rides.passenger)
+    const [bookButtonLabel, setBookButtonLabel] = useState("");
 
     // Get the card's booking request status for this user
     useEffect(() => {
@@ -80,29 +85,47 @@ const RideBookButton = ({ ride }) => {
                 },
                 body: JSON.stringify({
                     authorId: userId,
+                    authorFirstName: userFirstName,
+                    authorLastName: userLastName,
                     recipientId: driverId,
                     rideId: rideId,
+                    departure: ride.departure,
+                    destination: ride.destination,
+                    departureDate: ride.departureDate,
                 }),
             });
+            setBookingRequestStatus("pending");
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.message);
             }
-            // trigger card re-rendering
         } catch (error) {
             console.error(error);
             setBookRideErrorMessage(error.message);
         }
     };
 
+    useEffect(() => {
+        switch (bookingRequestStatus) {
+            case "pending":
+                setBookButtonLabel("En attente de réponse...");
+                break;
+            case "accepted":
+                setBookButtonLabel("Réservé !");
+                break;
+            case "rejected":
+                setBookButtonLabel("Demande rejetée");
+                break;
+            default:
+                setBookButtonLabel("Indisponible");
+        }
+    }, [bookingRequestStatus]);
+
     return (
         <>
             {bookingRequestStatus ? (
                 <Button variant="contained" disabled>
-                    {bookingRequestStatus === "pending" &&
-                        "En attente de réponse..."}
-                    {bookingRequestStatus === "accepted" && "Réservé !"}
-                    {bookingRequestStatus === "rejected" && "Demande rejetée"}
+                    {bookButtonLabel}
                 </Button>
             ) : (
                 <Button

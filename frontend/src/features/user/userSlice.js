@@ -44,6 +44,9 @@ export const userSlice = createSlice({
             state.rides.driver.find((ride) => ride._id === rideId).totalSeats =
                 updateData.totalSeats;
         },
+        setPassengerRides: (state, action) => {
+            state.rides.passenger = action.payload;
+        },
         logOut: () => initialState,
     },
 });
@@ -58,6 +61,7 @@ export const {
     setUserPhone,
     setDriverRides,
     updateDriverRide,
+    setPassengerRides,
 } = userSlice.actions;
 
 export const selectUserIsLoggedIn = (state) => state.user.isLoggedIn;
@@ -67,5 +71,6 @@ export const selectUserFirstName = (state) => state.user.data.firstName;
 export const selectUserLastName = (state) => state.user.data.lastName;
 export const selectUserPhone = (state) => state.user.data.phone;
 export const selectDriverRides = (state) => state.user.rides.driver;
+export const selectPassengerRides = (state) => state.user.rides.passenger;
 
 export default userSlice.reducer;

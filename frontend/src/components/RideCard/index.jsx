@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 
 import { selectUserId } from "../../features/user/userSlice";
 
 import { getOneUser } from "../../utils/user";
+import { getFormatedDate } from "../../utils/helpers";
 
 import RideBookButton from "../RideBookButton";
 import RideUpdateDialog from "../RideUpdateDialog";
@@ -40,7 +41,6 @@ const RideCard = ({ ride }) => {
 
     const rideId = ride._id;
     const driverId = ride.driverId;
-    const dispatch = useDispatch();
 
     const userId = useSelector(selectUserId);
 
@@ -48,32 +48,6 @@ const RideCard = ({ ride }) => {
     const [formatedDate, setFormatedDate] = useState("");
     const [showRideUpdateDialog, setShowRideUpdateDialog] = useState(false);
     const [showRideDeleteDialog, setShowRideDeleteDialog] = useState(false);
-
-    // Accept request :
-    // try {
-    //     const token = sessionStorage.getItem("token");
-
-    //     const updateData = {
-    //         newPassenger: userId,
-    //     };
-
-    //     const response = await fetch(`/API/rides/${rideId}`, {
-    //         method: "PUT",
-    //         headers: {
-    //             Authorization: `BEARER ${token}`,
-    //             "content-type": "application/json",
-    //         },
-    //         body: JSON.stringify(updateData),
-    //     });
-    //     if (!response.ok) {
-    //         const data = await response.json();
-    //         throw new Error(data.message);
-    //     }
-    // } catch (error) {
-    //     console.error(error);
-    //     dispatch(setBookRideErrorMessage(error.message));
-    // }
-    // };
 
     const handleEditRide = () => {
         setShowRideUpdateDialog(true);
@@ -87,16 +61,11 @@ const RideCard = ({ ride }) => {
         getOneUser(driverId)
             .then((driverData) => setDriver(driverData))
             .catch((error) => console.log(error));
-    }, [ride]);
+    }, [ride, driverId]);
 
     useEffect(() => {
         const date = dayjs(ride.departureDate);
-        const day = `${date.$D < 10 ? 0 : ""}${date.$D}/${
-            date.$M + 1 < 10 ? 0 : ""
-        }${date.$M + 1}/${date.$y}`;
-        const time = `${date.$H}h${date.$m < 10 ? 0 : ""}${date.$m}`;
-
-        setFormatedDate(`Départ le ${day} à ${time}`);
+        setFormatedDate(getFormatedDate(date));
     }, [ride]);
 
     return (

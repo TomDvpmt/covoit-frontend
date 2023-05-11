@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     global: "",
+    home: "",
     login: "",
     register: "",
-    home: "",
     myRides: {
         driver: "",
         passenger: "",
@@ -15,6 +15,7 @@ const initialState = {
     createRide: "",
     updateRide: "",
     deleteRide: "",
+    updateBookingRequest: "",
 };
 
 const errorSlice = createSlice({
@@ -24,21 +25,30 @@ const errorSlice = createSlice({
         setGlobalErrorMessage: (state, action) => {
             state.global = action.payload;
         },
+        resetErrorMessages: () => initialState,
+
+        // Page : Home
+        setHomeErrorMessage: (state, action) => {
+            state.home = action.payload;
+        },
+
+        // Pages : Login / register
         setLoginErrorMessage: (state, action) => {
             state.login = action.payload;
         },
         setRegisterErrorMessage: (state, action) => {
             state.register = action.payload;
         },
-        setHomeErrorMessage: (state, action) => {
-            state.home = action.payload;
-        },
+
+        // Page : MyRides
         setMyRidesDriverErrorMessage: (state, action) => {
             state.myRides.driver = action.payload;
         },
         setMyRidesPassengerErrorMessage: (state, action) => {
             state.myRides.passenger = action.payload;
         },
+
+        // Page : Profile
         setDisplayProfileErrorMessage: (state, action) => {
             state.displayProfile = action.payload;
         },
@@ -48,6 +58,13 @@ const errorSlice = createSlice({
         setDeleteUserErrorMessage: (state, action) => {
             state.deleteUser = action.payload;
         },
+
+        // Page : BookingRequests
+        setBookingRequestErrorMessage: (state, action) => {
+            state.updateBookingRequest = action.payload;
+        },
+
+        // ride
         setBookRideErrorMessage: (state, action) => {
             state.bookRide = action.payload;
         },
@@ -60,7 +77,6 @@ const errorSlice = createSlice({
         setDeleteRideErrorMessage: (state, action) => {
             state.deleteRide = action.payload;
         },
-        resetErrorMessages: () => initialState,
     },
 });
 
@@ -78,6 +94,7 @@ export const {
     setCreateRideErrorMessage,
     setUpdateRideErrorMessage,
     setDeleteRideErrorMessage,
+    setBookingRequestErrorMessage,
     resetErrorMessages,
 } = errorSlice.actions;
 
@@ -97,5 +114,7 @@ export const selectBookRideErrorMessage = (state) => state.error.bookRide;
 export const selectCreateRideErrorMessage = (state) => state.error.createRide;
 export const selectUpdateRideErrorMessage = (state) => state.error.updateRide;
 export const selectDeleteRideErrorMessage = (state) => state.error.deleteRide;
+export const selectBookingRequestErrorMessage = (state) =>
+    state.error.updateBookingRequest;
 
 export default errorSlice.reducer;
