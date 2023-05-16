@@ -44,6 +44,7 @@ const Login = () => {
                 throw new Error(data.message);
             }
             sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("userId", data.id);
             dispatch(
                 setUserData({
                     id: data.id,

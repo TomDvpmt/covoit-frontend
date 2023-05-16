@@ -21,7 +21,6 @@ import RideCreateDialog from "../../components/RideCreateDialog";
 import ErrorMessage from "../../components/ErrorMessage";
 
 import { Box, Typography, Button } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
 
 const MyRides = () => {
     const token = sessionStorage.getItem("token");
@@ -37,7 +36,6 @@ const MyRides = () => {
     );
 
     const [showRideCreateDialog, setShowRideCreateDialog] = useState(false);
-    const [showRideDeleteDialog, setShowRideDeleteDialog] = useState(false);
 
     const handleShowRideCreateDialog = () => {
         setShowRideCreateDialog((show) => !show);
@@ -81,7 +79,7 @@ const MyRides = () => {
                         )
                     );
                 });
-    }, [token, userId, showRideCreateDialog, showRideDeleteDialog]);
+    }, [token, userId, showRideCreateDialog]);
 
     // Get rides as a passenger
     useEffect(() => {

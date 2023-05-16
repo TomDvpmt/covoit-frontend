@@ -44,6 +44,12 @@ export const userSlice = createSlice({
             state.rides.driver.find((ride) => ride._id === rideId).totalSeats =
                 updateData.totalSeats;
         },
+        deleteDriverRide: (state, action) => {
+            const rideId = action.payload;
+            state.rides.driver = state.rides.driver.filter(
+                (ride) => ride._id !== rideId
+            );
+        },
         setPassengerRides: (state, action) => {
             state.rides.passenger = action.payload;
         },
@@ -61,6 +67,7 @@ export const {
     setUserPhone,
     setDriverRides,
     updateDriverRide,
+    deleteDriverRide,
     setPassengerRides,
 } = userSlice.actions;
 

@@ -73,7 +73,7 @@ const Register = () => {
                 return;
             }
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             dispatch(setRegisterErrorMessage("Impossible de créer le compte."));
             return;

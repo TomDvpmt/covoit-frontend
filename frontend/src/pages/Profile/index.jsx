@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 import {
     setUserEmail,
@@ -52,11 +52,18 @@ const Profile = () => {
         !token && navigate("/login");
     }, [token, navigate]);
 
+    const profileUser = useLoaderData();
     const userId = useSelector(selectUserId);
-    const prevEmail = useSelector(selectUserEmail);
-    const prevFirstName = useSelector(selectUserFirstName);
-    const prevLastName = useSelector(selectUserLastName);
-    const prevPhone = useSelector(selectUserPhone);
+    const isOwnProfile = profileUser._id === userId;
+
+    const prevProfileEmail = profileUser.email;
+    const prevProfileFirstName = profileUser.firstName;
+    const prevProfileLastName = profileUser.lastName;
+    const prevProfilePhone = profileUser.phone;
+    const prevUserEmail = useSelector(selectUserEmail);
+    const prevUserFirstName = useSelector(selectUserFirstName);
+    const prevUserLastName = useSelector(selectUserLastName);
+    const prevUserPhone = useSelector(selectUserPhone);
 
     const [newEmail, setNewEmail] = useState("");
     const [newFirstName, setNewFirstName] = useState("");
@@ -76,10 +83,10 @@ const Profile = () => {
     };
 
     const handleUpdateUser = () => {
-        setNewEmail(prevEmail);
-        setNewFirstName(prevFirstName);
-        setNewLastName(prevLastName);
-        setNewPhone(prevPhone);
+        setNewEmail(prevUserEmail);
+        setNewFirstName(prevUserFirstName);
+        setNewLastName(prevUserLastName);
+        setNewPhone(prevUserPhone);
         setValidationMessage("");
         dispatch(setUpdateUserErrorMessage(""));
         setShowUpdateDialog((showUpdateDialog) => !showUpdateDialog);
@@ -96,10 +103,10 @@ const Profile = () => {
         e.preventDefault();
 
         if (
-            newEmail === prevEmail &&
-            newFirstName === prevFirstName &&
-            newLastName === prevLastName &&
-            newPhone === prevPhone
+            newEmail === prevUserEmail &&
+            newFirstName === prevUserFirstName &&
+            newLastName === prevUserLastName &&
+            newPhone === prevUserPhone
         ) {
             setShowUpdateDialog(false);
             return;
@@ -153,52 +160,72 @@ const Profile = () => {
                                 <TableCell sx={leftCellStyle}>
                                     Adresse e-mail :
                                 </TableCell>
-                                <TableCell>{prevEmail}</TableCell>
+                                <TableCell>
+                                    {isOwnProfile
+                                        ? prevUserEmail
+                                        : prevProfileEmail}
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell sx={leftCellStyle}>
                                     Prénom :
                                 </TableCell>
-                                <TableCell>{prevFirstName}</TableCell>
+                                <TableCell>
+                                    {isOwnProfile
+                                        ? prevUserFirstName
+                                        : prevProfileFirstName}
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell sx={leftCellStyle}>Nom :</TableCell>
-                                <TableCell>{prevLastName}</TableCell>
+                                <TableCell>
+                                    {isOwnProfile
+                                        ? prevUserLastName
+                                        : prevProfileLastName}
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell sx={leftCellStyle}>
                                     Numéro de téléphone :
                                 </TableCell>
-                                <TableCell>{prevPhone}</TableCell>
+                                <TableCell>
+                                    {isOwnProfile
+                                        ? prevUserPhone
+                                        : prevProfilePhone}
+                                </TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Box
-                    sx={{
-                        mt: ".5rem",
-                        display: "flex",
-                        justifyContent: "flex-end",
-                    }}>
-                    <Button
-                        variant={showUpdateDialog ? "outlined" : "contained"}
-                        onClick={handleUpdateUser}
-                        color="secondary">
-                        Modifier
-                    </Button>
-                    <Button
-                        sx={{ textTransform: "initial" }}
-                        onClick={handleDelete}>
-                        Supprimer le compte
-                    </Button>
-                    {showDeleteDialog && (
-                        <UserDeleteDialog
-                            userId={userId}
-                            showDeleteDialog={showDeleteDialog}
-                            setShowDeleteDialog={setShowDeleteDialog}
-                        />
-                    )}
-                </Box>
+                {profileUser._id === userId && (
+                    <Box
+                        sx={{
+                            mt: ".5rem",
+                            display: "flex",
+                            justifyContent: "flex-end",
+                        }}>
+                        <Button
+                            variant={
+                                showUpdateDialog ? "outlined" : "contained"
+                            }
+                            onClick={handleUpdateUser}
+                            color="secondary">
+                            Modifier
+                        </Button>
+                        <Button
+                            sx={{ textTransform: "initial" }}
+                            onClick={handleDelete}>
+                            Supprimer le compte
+                        </Button>
+                        {showDeleteDialog && (
+                            <UserDeleteDialog
+                                userId={userId}
+                                showDeleteDialog={showDeleteDialog}
+                                setShowDeleteDialog={setShowDeleteDialog}
+                            />
+                        )}
+                    </Box>
+                )}
             </Box>
             <Dialog open={showUpdateDialog}>
                 <DialogTitle>

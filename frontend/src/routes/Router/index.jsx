@@ -6,13 +6,12 @@ import Home from "../../pages/Home";
 import Login from "../../pages/Login";
 import Register from "../../pages/Register";
 import Profile from "../../pages/Profile";
-// import Inbox from "../../pages/Inbox";
-// import InboxMessage from "../../pages/InboxMessage";
 import BookingRequests from "../../pages/BookingRequests";
 import MyRides from "../../pages/MyRides";
 import Ride from "../../pages/Ride";
 import Error404 from "../../pages/Error404";
 import ErrorBoundary from "../../components/ErrorBoundary";
+import { getOneUser } from "../../utils/user";
 
 const Router = () => {
     const router = createBrowserRouter([
@@ -48,13 +47,16 @@ const Router = () => {
                     ),
                 },
                 {
-                    path: "/profile/",
+                    path: "/users/:id",
                     element: (
                         <>
                             <SetPage page="profile" />
                             <Profile />
                         </>
                     ),
+                    loader: async ({ params }) => {
+                        return await getOneUser(params.id);
+                    },
                 },
                 {
                     path: "/bookingrequests/",
@@ -65,21 +67,6 @@ const Router = () => {
                         </>
                     ),
                 },
-                // {
-                //     path: "/inbox",
-                //     element: (
-                //         <>
-                //             <SetPage page="inbox" />
-                //             <Inbox />
-                //         </>
-                //     ),
-                //     children: [
-                //         {
-                //             path: "/inbox/:id",
-                //             element: <InboxMessage />,
-                //         },
-                //     ],
-                // },
                 {
                     path: "/myrides/",
                     element: (

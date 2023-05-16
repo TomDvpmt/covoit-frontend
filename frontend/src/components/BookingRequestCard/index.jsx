@@ -55,7 +55,7 @@ const BookingRequestCard = ({ request, formatedDate }) => {
                     Authorization: `BEARER ${token}`,
                     "content-type": "application/json",
                 },
-                body: JSON.stringify({ newPassenger: request.authorId }),
+                body: JSON.stringify({ newPassenger: request.senderId }),
             });
             if (!response.ok) {
                 const data = await response.json();
@@ -96,24 +96,28 @@ const BookingRequestCard = ({ request, formatedDate }) => {
     useEffect(() => {
         switch (requestStatus) {
             case "pending":
-                setBookingCardButtons(
-                    <>
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            onClick={handleAccept}>
-                            Accepter
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="warning"
-                            size="small"
-                            onClick={handleRefuse}>
-                            Refuser
-                        </Button>
-                    </>
-                );
+                userId === request.driverId
+                    ? setBookingCardButtons(
+                          <>
+                              <Button
+                                  variant="contained"
+                                  color="secondary"
+                                  size="small"
+                                  onClick={handleAccept}>
+                                  Accepter
+                              </Button>
+                              <Button
+                                  variant="contained"
+                                  color="warning"
+                                  size="small"
+                                  onClick={handleRefuse}>
+                                  Refuser
+                              </Button>
+                          </>
+                      )
+                    : setBookingCardButtons(
+                          <Typography>Demande en cours...</Typography>
+                      );
                 break;
             case "accepted":
                 setBookingCardButtons(
@@ -137,8 +141,8 @@ const BookingRequestCard = ({ request, formatedDate }) => {
     }, [requestStatus]);
 
     useEffect(() => {
-        if (userId === request.authorId) {
-            getOneUser(request.recipientId)
+        if (userId === request.senderId) {
+            getOneUser(request.driverId)
                 .then((driver) =>
                     setPersonLink(
                         <>
@@ -155,14 +159,14 @@ const BookingRequestCard = ({ request, formatedDate }) => {
                 )
                 .catch((error) => console.log(error));
         }
-        if (userId === request.recipientId) {
+        if (userId === request.driverId) {
             setPersonLink(
                 <>
                     <Typography fontSize=".9rem">Passager : </Typography>
                     <Link
                         component={RouterLink}
-                        to={`/users/${request.authorId}`}>
-                        {`${request.authorFirstName} ${request.authorLastName}`}
+                        to={`/users/${request.senderId}`}>
+                        {`${request.senderFirstName} ${request.senderLastName}`}
                     </Link>
                 </>
             );
@@ -203,10 +207,6 @@ const BookingRequestCard = ({ request, formatedDate }) => {
             </Box>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
                 {personLink}
-                {/* <Typography fontSize=".9rem">Passager : </Typography>
-                <Link component={RouterLink} to={`/users/${request.authorId}`}>
-                    {`${request.authorFirstName} ${request.authorLastName}`}
-                </Link> */}
             </Box>
             <Box sx={{ display: "flex", gap: ".5rem" }}>
                 {bookingCardButtons}

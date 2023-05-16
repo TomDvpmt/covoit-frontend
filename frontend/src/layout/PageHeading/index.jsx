@@ -10,7 +10,7 @@ const PageHeading = () => {
     const pageHeadings = {
         login: "Connexion",
         register: "Créer un compte",
-        profile: "Mes informations",
+        profile: "Profil",
         home: "Trouver un trajet",
         myrides: "Mes trajets",
         bookingRequests: "Demandes de réservation",

@@ -17,6 +17,7 @@ const BookingRequests = () => {
     const [incomingBookingRequests, setIncomingBookingRequests] = useState([]);
     const [sentBookingRequests, setSentBookingRequests] = useState([]);
 
+    // Get incoming & sent booking requests for current user
     useEffect(() => {
         fetch("/API/bookingRequests", {
             headers: {
@@ -27,7 +28,7 @@ const BookingRequests = () => {
             .then((data) => {
                 setIncomingBookingRequests(
                     data
-                        .filter((request) => request.recipientId === userId)
+                        .filter((request) => request.driverId === userId)
                         .map((request) => {
                             const date = dayjs(request.departureDate);
                             const formatedDate = getFormatedDate(date);
@@ -43,7 +44,7 @@ const BookingRequests = () => {
                 );
                 setSentBookingRequests(
                     data
-                        .filter((request) => request.authorId === userId)
+                        .filter((request) => request.senderId === userId)
                         .map((request) => {
                             const date = dayjs(request.departureDate);
                             const formatedDate = getFormatedDate(date);

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import RideCard from "../RideCard";
 
 import { Box } from "@mui/material";
@@ -9,6 +11,7 @@ const RidesList = ({ type, rides }) => {
         type: PropTypes.string.isRequired,
         rides: PropTypes.array.isRequired,
     };
+
     return (
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
             {rides?.map((ride, index) => (

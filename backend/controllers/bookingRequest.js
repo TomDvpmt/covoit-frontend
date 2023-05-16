@@ -1,7 +1,22 @@
 const BookingRequest = require("../models/BookingRequest");
+const { sendDemandToDriver } = require("../utils/mailing");
 
 const createBookingRequest = (req, res) => {
     BookingRequest.create(req.body)
+        .then(() => {
+            const requestAuthorName = `${req.body.senderFirstName} ${req.body.senderLastName}`;
+            sendDemandToDriver({
+                driverEmail: req.body.driverEmail,
+                requestAuthorName,
+                departure: req.body.departure,
+                destination: req.body.destination,
+                formatedDate: req.body.departureDate,
+            })
+                .then((data) => console.log("data : ", data))
+                .catch((error) => {
+                    console.error(error);
+                });
+        })
         .then(() =>
             res.status(201).json({ message: "Demande de réservation créée." })
         )
@@ -17,7 +32,7 @@ const getAllBookingRequest = (req, res) => {
     const userId = req.auth.id;
 
     BookingRequest.find({
-        $or: [{ authorId: userId }, { recipientId: userId }],
+        $or: [{ senderId: userId }, { driverId: userId }],
     })
         .then((data) => res.status(200).json(data))
         .catch((error) => {

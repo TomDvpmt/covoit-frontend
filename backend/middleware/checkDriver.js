@@ -3,7 +3,6 @@ const Ride = require("../models/Ride");
 const checkDriver = async (req, res, next) => {
     const userId = req.auth.id;
     const rideId = req.params.id;
-
     try {
         const ride = await Ride.findOne({ _id: rideId });
         if (ride.driverId !== userId) {

@@ -2,7 +2,11 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setUserData, logOut } from "../../features/user/userSlice";
+import {
+    setUserData,
+    logOut,
+    selectUserId,
+} from "../../features/user/userSlice";
 import {
     selectGlobalErrorMessage,
     setGlobalErrorMessage,
@@ -21,15 +25,16 @@ import { Box } from "@mui/material";
 
 const PageWrapper = () => {
     const token = sessionStorage.getItem("token");
+    const userId = sessionStorage.getItem("userId");
     const dispatch = useDispatch();
     const globalErrorMessage = useSelector(selectGlobalErrorMessage);
 
     useEffect(() => {
-        if (!token) {
+        if (!userId || !token) {
             dispatch(logOut());
             return;
         }
-        getOneUser(0)
+        getOneUser(userId)
             .then((data) =>
                 dispatch(
                     setUserData({

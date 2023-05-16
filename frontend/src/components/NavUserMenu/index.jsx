@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { logOut } from "../../features/user/userSlice";
+import { logOut, selectUserId } from "../../features/user/userSlice";
 
 import {
     Menu,
@@ -19,6 +19,8 @@ import {
 } from "@mui/icons-material";
 
 const MenuUser = () => {
+    const userId = useSelector(selectUserId);
+
     const [anchorEl, setAnchorEl] = useState(null);
 
     const dispatch = useDispatch();
@@ -44,12 +46,13 @@ const MenuUser = () => {
 
     const handleProfile = () => {
         handleClose();
-        navigate("/profile");
+        navigate(`/users/${userId}`);
     };
 
     const handleLogOut = (e) => {
         setAnchorEl(null);
         sessionStorage.removeItem("token");
+        sessionStorage.removeItem("userId");
         dispatch(logOut());
         navigate("/login");
     };

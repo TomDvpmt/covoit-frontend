@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import RideInputLocation from "../../components/form-inputs/RideInputLocation";
 import RideInputDepartureDate from "../../components/form-inputs/RideInputDepartureDate";
-import RideInputSeats from "../../components/form-inputs/RideInputSeats";
+// import RideInputSeats from "../../components/form-inputs/RideInputSeats";
 import RideInputPrice from "../../components/form-inputs/RideInputPrice";
 import RidesList from "../../components/RidesList";
 
@@ -12,7 +12,7 @@ const Home = () => {
     const [departure, setDeparture] = useState("");
     const [destination, setDestination] = useState("");
     const [departureDate, setDepartureDate] = useState(Date.now());
-    const [seats, setSeats] = useState(1);
+    // const [seats, setSeats] = useState(1);
     const [price, setPrice] = useState(0);
     const [showResults, setShowResults] = useState(false);
     const [queryRides, setQueryRides] = useState([]);
@@ -34,7 +34,7 @@ const Home = () => {
                         $lte: departureDate + 24 * 60 * 60 * 1000, // less than 24h after
                     },
                     totalSeats: {
-                        $gte: seats,
+                        $gte: 1, // at least 1 seat available
                     },
                     price: {
                         $lte: price,
@@ -87,11 +87,11 @@ const Home = () => {
                                 departureDate={departureDate}
                                 setDepartureDate={setDepartureDate}
                             />
-                            <RideInputSeats
+                            {/* <RideInputSeats
                                 type="passengers"
                                 seats={seats}
                                 setSeats={setSeats}
-                            />
+                            /> */}
                         </Box>
                         <RideInputPrice
                             type="max"

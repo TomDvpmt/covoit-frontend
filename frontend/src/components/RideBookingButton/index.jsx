@@ -2,15 +2,18 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import {
-    selectUserFirstName,
-    selectUserLastName,
     selectUserId,
     selectUserIsLoggedIn,
+    selectUserEmail,
+    selectUserFirstName,
+    selectUserLastName,
 } from "../../features/user/userSlice";
 import {
     setBookRideErrorMessage,
     selectBookRideErrorMessage,
 } from "../../features/error/errorSlice";
+
+import { getOneUser } from "../../utils/user";
 
 import LoginDialog from "../LoginDialog";
 import ErrorMessage from "../ErrorMessage";
@@ -19,8 +22,8 @@ import { Button } from "@mui/material";
 
 import PropTypes from "prop-types";
 
-const RideBookButton = ({ ride }) => {
-    RideBookButton.propTypes = {
+const RideBookingButton = ({ ride }) => {
+    RideBookingButton.propTypes = {
         ride: PropTypes.object.isRequired,
     };
 
@@ -29,6 +32,7 @@ const RideBookButton = ({ ride }) => {
     const userId = useSelector(selectUserId);
     const userFirstName = useSelector(selectUserFirstName);
     const userLastName = useSelector(selectUserLastName);
+    const userEmail = useSelector(selectUserEmail);
 
     const rideId = ride._id;
     const driverId = ride.driverId;
@@ -37,8 +41,22 @@ const RideBookButton = ({ ride }) => {
     const [showLoginDialog, setShowLoginDialog] = useState(false);
     const [bookingRequestStatus, setBookingRequestStatus] = useState(""); // use Redux state instead (in state.user.rides.passenger)
     const [bookButtonLabel, setBookButtonLabel] = useState("");
+    const [driverFirstName, setDriverFirstName] = useState("");
+    const [driverLastName, setDriverLastName] = useState("");
+    const [driverEmail, setDriverEmail] = useState("");
 
-    // Get the card's booking request status for this user
+    // Get the ride's driver info
+    useEffect(() => {
+        getOneUser(driverId)
+            .then((driver) => {
+                setDriverFirstName(driver.firstName);
+                setDriverLastName(driver.lastName);
+                setDriverEmail(driver.email);
+            })
+            .catch((error) => console.error(error));
+    }, [driverId]);
+
+    // Get the ride's booking request status for this user
     useEffect(() => {
         //LOADER TO BE ADDED
 
@@ -53,13 +71,15 @@ const RideBookButton = ({ ride }) => {
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                authorId: userId,
+                senderId: userId,
                 rideId: rideId,
             }),
         })
             .then((response) => response.json())
-            .then((bookingRequest) =>
-                setBookingRequestStatus(bookingRequest.status)
+            .then(
+                (bookingRequest) =>
+                    bookingRequest &&
+                    setBookingRequestStatus(bookingRequest.status)
             )
             .catch((error) => {
                 console.error(error);
@@ -84,11 +104,15 @@ const RideBookButton = ({ ride }) => {
                     "content-type": "application/json",
                 },
                 body: JSON.stringify({
-                    authorId: userId,
-                    authorFirstName: userFirstName,
-                    authorLastName: userLastName,
-                    recipientId: driverId,
-                    rideId: rideId,
+                    senderId: userId,
+                    senderFirstName: userFirstName,
+                    senderLastName: userLastName,
+                    senderEmail: userEmail,
+                    driverId,
+                    driverFirstName,
+                    driverLastName,
+                    driverEmail,
+                    rideId,
                     departure: ride.departure,
                     destination: ride.destination,
                     departureDate: ride.departureDate,
@@ -105,6 +129,7 @@ const RideBookButton = ({ ride }) => {
         }
     };
 
+    // Display new booking status if it changes
     useEffect(() => {
         switch (bookingRequestStatus) {
             case "pending":
@@ -147,4 +172,4 @@ const RideBookButton = ({ ride }) => {
     );
 };
 
-export default RideBookButton;
+export default RideBookingButton;

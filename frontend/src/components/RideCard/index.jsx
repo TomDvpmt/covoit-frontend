@@ -7,7 +7,7 @@ import { selectUserId } from "../../features/user/userSlice";
 import { getOneUser } from "../../utils/user";
 import { getFormatedDate } from "../../utils/helpers";
 
-import RideBookButton from "../RideBookButton";
+import RideBookingButton from "../RideBookingButton";
 import RideUpdateDialog from "../RideUpdateDialog";
 import RideDeleteDialog from "../RideDeleteDialog";
 
@@ -56,6 +56,10 @@ const RideCard = ({ ride }) => {
     const handleDeleteRide = () => {
         setShowRideDeleteDialog(true);
     };
+
+    // const handlePersonClick = (e) => {
+    //     e.preventDefault(); // link disabled for now
+    // };
 
     useEffect(() => {
         getOneUser(driverId)
@@ -106,7 +110,9 @@ const RideCard = ({ ride }) => {
                                 </IconButton>
                             </>
                         )}
-                        {driverId !== userId && <RideBookButton ride={ride} />}
+                        {driverId !== userId && (
+                            <RideBookingButton ride={ride} />
+                        )}
                     </>
                 }
             />
@@ -140,9 +146,9 @@ const RideCard = ({ ride }) => {
                             {driver && (
                                 <Link
                                     component={RouterLink}
-                                    to={`/users/${driver._id}`}>{`${
-                                    driver.firstName
-                                }${
+                                    to={`/users/${driver._id}`}
+                                    // onClick={handlePersonClick}
+                                >{`${driver.firstName}${
                                     driver.firstName && driver.lastName
                                         ? " "
                                         : ""
@@ -214,11 +220,6 @@ const RideCard = ({ ride }) => {
                     showRideDeleteDialog={showRideDeleteDialog}
                     setShowRideDeleteDialog={setShowRideDeleteDialog}
                 />
-                {/* <LoginDialog
-                    showLoginDialog={showLoginDialog}
-                    setShowLoginDialog={setShowLoginDialog}
-                    actionAfterLogin={handleRideBookingRequest}
-                /> */}
             </CardContent>
         </Card>
     );

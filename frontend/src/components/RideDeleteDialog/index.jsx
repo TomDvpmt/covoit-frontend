@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 
+import { deleteDriverRide } from "../../features/user/userSlice";
 import {
     setDeleteRideErrorMessage,
     selectDeleteRideErrorMessage,
@@ -46,6 +47,7 @@ const RideDeleteDialog = ({
                 const data = await response.json();
                 throw new Error(data.message);
             }
+            dispatch(deleteDriverRide(rideId));
             setShowRideDeleteDialog(false);
         } catch (error) {
             console.error(error);

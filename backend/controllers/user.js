@@ -88,11 +88,7 @@ const register = async (req, res, next) => {
 };
 
 const getOneUser = (req, res) => {
-    const authId = req.auth.id;
-    const paramsId = req.params.id;
-    const userId = paramsId == 0 ? authId : paramsId;
-
-    User.findOne({ _id: userId })
+    User.findOne({ _id: req.params.id })
         .then((data) => res.status(200).json(data))
         .catch((error) => {
             console.error(error);
