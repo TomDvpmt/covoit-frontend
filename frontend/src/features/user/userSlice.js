@@ -35,6 +35,11 @@ export const userSlice = createSlice({
         setDriverRides: (state, action) => {
             state.rides.driver = action.payload;
         },
+        addDriverRide: (state, action) => {
+            state.rides.driver = [...state.rides.driver, action.payload].sort(
+                (a, b) => a.departureDate - b.departureDate
+            );
+        },
         updateDriverRide: (state, action) => {
             const rideId = action.payload.id;
             const updateData = action.payload.updateData;
@@ -66,6 +71,7 @@ export const {
     setUserLastName,
     setUserPhone,
     setDriverRides,
+    addDriverRide,
     updateDriverRide,
     deleteDriverRide,
     setPassengerRides,

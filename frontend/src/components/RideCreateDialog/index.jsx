@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { selectUserId } from "../../features/user/userSlice";
+import { addDriverRide, selectUserId } from "../../features/user/userSlice";
+import { selectPageLocation } from "../../features/page/pageSlice";
 import {
     setCreateRideErrorMessage,
     selectCreateRideErrorMessage,
@@ -28,6 +30,8 @@ const RideCreateDialog = ({
 
     const token = sessionStorage.getItem("token");
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const page = useSelector(selectPageLocation);
     const userId = useSelector(selectUserId);
     const createRideErrorMessage = useSelector(selectCreateRideErrorMessage);
 
@@ -37,9 +41,28 @@ const RideCreateDialog = ({
     const [seats, setSeats] = useState(1);
     const [price, setPrice] = useState(0);
 
-    const handleSubmit = async (e) => {
+    useEffect(() => {
         dispatch(setCreateRideErrorMessage(""));
+    }, [showRideCreateDialog]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        dispatch(setCreateRideErrorMessage(""));
+
+        if (!departure || !destination) {
+            dispatch(
+                setCreateRideErrorMessage("Merci de remplir tous les champs.")
+            );
+            return;
+        }
+        if (price == 0) {
+            dispatch(
+                setCreateRideErrorMessage(
+                    "Le prix du trajet ne peut pas être nul."
+                )
+            );
+            return;
+        }
 
         const data = {
             driverId: userId,
@@ -64,12 +87,14 @@ const RideCreateDialog = ({
                 const data = await response.json();
                 throw new Error(data.message);
             }
+            dispatch(addDriverRide(data));
             setDeparture("");
             setDestination("");
             setDepartureDate(Date.now());
             setSeats(1);
             setPrice(0);
             setShowRideCreateDialog(false);
+            page !== "myrides" && navigate("/myrides");
         } catch (error) {
             console.log(error);
             dispatch(setCreateRideErrorMessage(error.message));

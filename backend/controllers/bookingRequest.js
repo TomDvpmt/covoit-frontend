@@ -1,8 +1,8 @@
 const BookingRequest = require("../models/BookingRequest");
 const {
-    sendRequestMailToDriver,
-    sendAcceptRequestMailToCandidate,
-    sendRejectRequestMailToCandidate,
+    sendPendingRequestMailToDriver,
+    sendAcceptedRequestMailToCandidate,
+    sendRejectedRequestMailToCandidate,
 } = require("../utils/mailing");
 
 const createBookingRequest = (req, res) => {
@@ -16,7 +16,7 @@ const createBookingRequest = (req, res) => {
             const formatedTime = `${hours < 10 ? 0 : ""}${hours}h${
                 minutes < 10 ? 0 : ""
             }${minutes}`;
-            sendRequestMailToDriver({
+            sendPendingRequestMailToDriver({
                 driverEmail: req.body.driverEmail,
                 candidateName,
                 departure: req.body.departure,
@@ -75,7 +75,7 @@ const updateBookingRequest = (req, res) => {
     BookingRequest.updateOne({ _id: requestId }, { status: newRequestStatus })
         .then(() => {
             if (newRequestStatus === "accepted") {
-                sendAcceptRequestMailToCandidate({
+                sendAcceptedRequestMailToCandidate({
                     candidateEmail: req.body.candidateEmail,
                     driverName: req.body.driverName,
                     departure: req.body.departure,
@@ -86,7 +86,7 @@ const updateBookingRequest = (req, res) => {
                     .catch((error) => console.error(error));
             }
             if (newRequestStatus === "rejected") {
-                sendRejectRequestMailToCandidate({
+                sendRejectedRequestMailToCandidate({
                     candidateEmail: req.body.candidateEmail,
                     driverName: req.body.driverName,
                     departure: req.body.departure,

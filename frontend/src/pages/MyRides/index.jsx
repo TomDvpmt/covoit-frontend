@@ -69,7 +69,14 @@ const MyRides = () => {
                     return response.json();
                 })
                 .then((data) => {
-                    dispatch(setDriverRides(data.results));
+                    dispatch(
+                        setDriverRides(
+                            data.results.length > 0 &&
+                                data.results.sort(
+                                    (a, b) => a.departureDate - b.departureDate
+                                )
+                        )
+                    );
                 })
                 .catch((error) => {
                     console.error(error);
@@ -111,7 +118,14 @@ const MyRides = () => {
                     return response.json();
                 })
                 .then((data) => {
-                    dispatch(setPassengerRides(data.results));
+                    dispatch(
+                        setPassengerRides(
+                            data.results.length > 0 &&
+                                data.results.sort(
+                                    (a, b) => a.departureDate - b.departureDate
+                                )
+                        )
+                    );
                 })
                 .catch((error) => {
                     console.error(error);

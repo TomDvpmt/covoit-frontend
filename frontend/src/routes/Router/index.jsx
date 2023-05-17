@@ -57,6 +57,7 @@ const Router = () => {
                     loader: async ({ params }) => {
                         return await getOneUser(params.id);
                     },
+                    errorElement: <ErrorBoundary />,
                 },
                 {
                     path: "/bookingrequests/",

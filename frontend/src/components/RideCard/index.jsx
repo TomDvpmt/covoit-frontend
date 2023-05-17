@@ -199,6 +199,7 @@ const RideCard = ({ ride }) => {
                     </Typography>
                     <Typography>par passager</Typography>
                 </Box>
+
                 <RideUpdateDialog
                     prevRideData={{
                         id: rideId,

@@ -14,7 +14,7 @@ const RidesList = ({ type, rides }) => {
 
     return (
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-            {rides?.map((ride, index) => (
+            {rides.map((ride, index) => (
                 <RideCard key={index} ride={ride} type={type} />
             ))}
         </Box>

@@ -26,7 +26,7 @@ const RideDeleteDialog = ({
     setShowRideDeleteDialog,
 }) => {
     RideDeleteDialog.propTypes = {
-        rideId: PropTypes.string.isRequired,
+        rideId: PropTypes.string,
         showRideDeleteDialog: PropTypes.bool.isRequired,
         setShowRideDeleteDialog: PropTypes.func.isRequired,
     };

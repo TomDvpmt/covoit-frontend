@@ -1,6 +1,6 @@
 const transporter = require("../config/mailing");
 
-const sendRequestMailToDriver = async (ride) => {
+const sendPendingRequestMailToDriver = async (ride) => {
     const messageInfo = await transporter.sendMail({
         from: process.env.MAILING_ADDRESS,
         to: ride.driverEmail,
@@ -14,7 +14,7 @@ const sendRequestMailToDriver = async (ride) => {
     return messageInfo;
 };
 
-const sendAcceptRequestMailToCandidate = async (ride) => {
+const sendAcceptedRequestMailToCandidate = async (ride) => {
     const messageInfo = await transporter.sendMail({
         from: process.env.MAILING_ADDRESS,
         to: ride.candidateEmail,
@@ -28,7 +28,7 @@ const sendAcceptRequestMailToCandidate = async (ride) => {
     return messageInfo;
 };
 
-const sendRejectRequestMailToCandidate = async (ride) => {
+const sendRejectedRequestMailToCandidate = async (ride) => {
     const messageInfo = await transporter.sendMail({
         from: process.env.MAILING_ADDRESS,
         to: ride.candidateEmail,
@@ -43,7 +43,7 @@ const sendRejectRequestMailToCandidate = async (ride) => {
 };
 
 module.exports = {
-    sendRequestMailToDriver,
-    sendAcceptRequestMailToCandidate,
-    sendRejectRequestMailToCandidate,
+    sendPendingRequestMailToDriver,
+    sendAcceptedRequestMailToCandidate,
+    sendRejectedRequestMailToCandidate,
 };

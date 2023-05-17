@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { logOut, selectUserId } from "../../features/user/userSlice";
 
+import RideCreateDialog from "../RideCreateDialog";
+
 import {
     Menu,
     MenuItem,
@@ -12,16 +14,19 @@ import {
     Avatar,
 } from "@mui/material";
 import {
+    AddCircleRounded,
     Settings,
     Logout,
     DirectionsCar,
-    MailOutline,
+    ContactSupportRounded,
 } from "@mui/icons-material";
 
 const MenuUser = () => {
     const userId = useSelector(selectUserId);
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const [showMenuRideCreateDialog, setShowMenuRideCreateDialog] =
+        useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -34,14 +39,19 @@ const MenuUser = () => {
         setAnchorEl(null);
     };
 
-    const handleMyRides = () => {
+    const handleAddRide = () => {
         handleClose();
-        navigate("/myrides");
+        setShowMenuRideCreateDialog(true);
     };
 
     const handleRequests = () => {
         handleClose();
         navigate("/bookingrequests");
+    };
+
+    const handleMyRides = () => {
+        handleClose();
+        navigate("/myrides");
     };
 
     const handleProfile = () => {
@@ -69,9 +79,15 @@ const MenuUser = () => {
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}>
+                <MenuItem onClick={handleAddRide}>
+                    <ListItemIcon>
+                        <AddCircleRounded color="secondary" />
+                    </ListItemIcon>
+                    Créer un trajet
+                </MenuItem>
                 <MenuItem onClick={handleRequests}>
                     <ListItemIcon>
-                        <MailOutline />
+                        <ContactSupportRounded />
                     </ListItemIcon>
                     Demandes de réservation
                 </MenuItem>
@@ -95,6 +111,10 @@ const MenuUser = () => {
                     Déconnexion
                 </MenuItem>
             </Menu>
+            <RideCreateDialog
+                showRideCreateDialog={showMenuRideCreateDialog}
+                setShowRideCreateDialog={setShowMenuRideCreateDialog}
+            />
         </>
     );
 };
