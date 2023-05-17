@@ -157,7 +157,7 @@ const MyRides = () => {
                         color="secondary"
                         onClick={handleShowRideCreateDialog}
                         sx={{ m: ".5rem 0" }}>
-                        Ajouter un trajet
+                        Créer un trajet
                     </Button>
                 </Box>
                 <RideCreateDialog

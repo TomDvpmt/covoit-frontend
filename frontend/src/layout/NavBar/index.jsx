@@ -90,7 +90,21 @@ const NavBar = () => {
                         alignItems: "center",
                         gap: ".5rem",
                     }}>
-                    {isLoggedIn && <Typography>{firstName}</Typography>}
+                    {isLoggedIn && (
+                        <Typography
+                            sx={{
+                                maxWidth: {
+                                    xs: "150px",
+                                    sm: "300px",
+                                    md: "initial",
+                                },
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                            }}>
+                            {firstName}
+                        </Typography>
+                    )}
                     {isLoggedIn && <NavUserMenu />}
                 </Box>
             </Toolbar>

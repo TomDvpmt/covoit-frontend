@@ -1,6 +1,28 @@
-import { Box } from "@mui/material";
+import {
+    Box,
+    Table,
+    TableBody,
+    TableRow,
+    TableCell,
+    Link,
+    Typography,
+} from "@mui/material";
 
 import theme from "../../styles/theme";
+
+const cellStyle = {
+    border: "none",
+    padding: ".2rem .5rem",
+    color: "inherit",
+    "& > *": {
+        color: "white",
+    },
+};
+
+const leftCellStyle = {
+    fontWeight: "700",
+    textAlign: "right",
+};
 
 const Footer = () => {
     return (
@@ -8,9 +30,54 @@ const Footer = () => {
             component="footer"
             sx={{
                 bgcolor: theme.palette.primary.main,
-                minHeight: "100px",
+                minHeight: "150px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "space-evenly",
                 color: "white",
-            }}></Box>
+            }}>
+            <Table
+                sx={{
+                    maxWidth: "max-content",
+                    "& td": cellStyle,
+                }}>
+                <TableBody>
+                    <TableRow>
+                        <TableCell sx={{ ...cellStyle, ...leftCellStyle }}>
+                            API externe utilisée :{" "}
+                        </TableCell>
+                        <TableCell>
+                            <Link
+                                href="https://geo.api.gouv.fr/decoupage-administratif/communes"
+                                target="_blank"
+                                rel="noopener"
+                                underline="hover">
+                                geo.api.gouv.fr
+                            </Link>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ ...cellStyle, ...leftCellStyle }}>
+                            Code source :{" "}
+                        </TableCell>
+                        <TableCell>
+                            <Link
+                                href="https://github.com/TomDvpmt/Covoit"
+                                target="_blank"
+                                rel="noopener"
+                                underline="hover">
+                                github.com/TomDvpmt/Covoit
+                            </Link>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+            <Typography fontSize=".9rem" fontStyle="italic">
+                Projet réalisé durant la formation "Développeur Web"
+                d'OpenClassrooms (2023)
+            </Typography>
+        </Box>
     );
 };
 

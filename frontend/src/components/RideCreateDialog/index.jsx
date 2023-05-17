@@ -103,7 +103,7 @@ const RideCreateDialog = ({
 
     return (
         <Dialog open={showRideCreateDialog}>
-            <DialogTitle>Ajouter un trajet</DialogTitle>
+            <DialogTitle>Créer un trajet</DialogTitle>
             <DialogContent>
                 <Box component="form" onSubmit={handleSubmit}>
                     <Box
