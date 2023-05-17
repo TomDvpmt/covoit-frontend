@@ -1,24 +1,43 @@
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+    setHomeErrorMessage,
+    selectHomeErrorMessage,
+} from "../../features/error/errorSlice";
 
 import RideInputLocation from "../../components/form-inputs/RideInputLocation";
 import RideInputDepartureDate from "../../components/form-inputs/RideInputDepartureDate";
-// import RideInputSeats from "../../components/form-inputs/RideInputSeats";
 import RideInputPrice from "../../components/form-inputs/RideInputPrice";
 import RidesList from "../../components/RidesList";
+import ErrorMessage from "../../components/ErrorMessage";
 
 import { Box, Typography, Button } from "@mui/material";
 
 const Home = () => {
+    const dispatch = useDispatch();
+    const homeErrorMessage = useSelector(selectHomeErrorMessage);
+
     const [departure, setDeparture] = useState("");
     const [destination, setDestination] = useState("");
     const [departureDate, setDepartureDate] = useState(Date.now());
-    // const [seats, setSeats] = useState(1);
     const [price, setPrice] = useState(0);
     const [showResults, setShowResults] = useState(false);
     const [queryRides, setQueryRides] = useState([]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setQueryRides([]);
+        dispatch(setHomeErrorMessage(""));
+
+        if (departure === destination) {
+            dispatch(
+                setHomeErrorMessage(
+                    "Le départ et la destination ne peuvent être identiques."
+                )
+            );
+            return;
+        }
 
         fetch("/API/rides/", {
             method: "POST",
@@ -33,9 +52,6 @@ const Home = () => {
                         $gte: departureDate - 24 * 60 * 60 * 1000, // more than 24h before
                         $lte: departureDate + 24 * 60 * 60 * 1000, // less than 24h after
                     },
-                    totalSeats: {
-                        $gte: 1, // at least 1 seat available
-                    },
                     price: {
                         $lte: price,
                     },
@@ -44,7 +60,11 @@ const Home = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                setQueryRides(data.results);
+                setQueryRides(
+                    data.results.filter(
+                        (result) => result.totalSeats > result.passengers.length
+                    )
+                );
                 setShowResults(true);
             })
             .catch((error) => console.error(error));
@@ -87,17 +107,15 @@ const Home = () => {
                                 departureDate={departureDate}
                                 setDepartureDate={setDepartureDate}
                             />
-                            {/* <RideInputSeats
-                                type="passengers"
-                                seats={seats}
-                                setSeats={setSeats}
-                            /> */}
+                            <RideInputPrice
+                                type="max"
+                                price={price}
+                                setPrice={setPrice}
+                            />
                         </Box>
-                        <RideInputPrice
-                            type="max"
-                            price={price}
-                            setPrice={setPrice}
-                        />
+                        {homeErrorMessage && (
+                            <ErrorMessage errorMessage={homeErrorMessage} />
+                        )}
                     </Box>
                     <Button
                         type="submit"

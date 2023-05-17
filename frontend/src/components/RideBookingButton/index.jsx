@@ -71,7 +71,7 @@ const RideBookingButton = ({ ride }) => {
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                senderId: userId,
+                candidateId: userId,
                 rideId: rideId,
             }),
         })
@@ -104,10 +104,10 @@ const RideBookingButton = ({ ride }) => {
                     "content-type": "application/json",
                 },
                 body: JSON.stringify({
-                    senderId: userId,
-                    senderFirstName: userFirstName,
-                    senderLastName: userLastName,
-                    senderEmail: userEmail,
+                    candidateId: userId,
+                    candidateFirstName: userFirstName,
+                    candidateLastName: userLastName,
+                    candidateEmail: userEmail,
                     driverId,
                     driverFirstName,
                     driverLastName,

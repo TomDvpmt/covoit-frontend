@@ -17,7 +17,7 @@ const RideInputPrice = ({ type, price, setPrice }) => {
 
     const priceTexts = {
         fixed: {
-            label: "Prix",
+            label: "Prix / passager",
         },
         max: {
             label: "Prix maximum / passager",
@@ -29,7 +29,7 @@ const RideInputPrice = ({ type, price, setPrice }) => {
     };
 
     return (
-        <FormControl required margin="dense" sx={{ maxWidth: "max-content" }}>
+        <FormControl required margin="dense" sx={{ flexGrow: "1" }}>
             <InputLabel htmlFor="outlined-adornment-price">
                 {priceTexts[type].label}
             </InputLabel>

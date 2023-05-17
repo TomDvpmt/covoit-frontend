@@ -1,18 +1,29 @@
 const BookingRequest = require("../models/BookingRequest");
-const { sendDemandToDriver } = require("../utils/mailing");
+const {
+    sendRequestMailToDriver,
+    sendAcceptRequestMailToCandidate,
+    sendRejectRequestMailToCandidate,
+} = require("../utils/mailing");
 
 const createBookingRequest = (req, res) => {
     BookingRequest.create(req.body)
         .then(() => {
-            const requestAuthorName = `${req.body.senderFirstName} ${req.body.senderLastName}`;
-            sendDemandToDriver({
+            const candidateName = `${req.body.candidateFirstName} ${req.body.candidateLastName}`;
+            const date = new Date(req.body.departureDate);
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            const formatedDay = date.toLocaleDateString("fr");
+            const formatedTime = `${hours < 10 ? 0 : ""}${hours}h${
+                minutes < 10 ? 0 : ""
+            }${minutes}`;
+            sendRequestMailToDriver({
                 driverEmail: req.body.driverEmail,
-                requestAuthorName,
+                candidateName,
                 departure: req.body.departure,
                 destination: req.body.destination,
-                formatedDate: req.body.departureDate,
+                formatedDate: `${formatedDay} à ${formatedTime}`,
             })
-                .then((data) => console.log("data : ", data))
+                .then((mailinfo) => console.log("mailinfo : ", mailinfo))
                 .catch((error) => {
                     console.error(error);
                 });
@@ -32,7 +43,7 @@ const getAllBookingRequest = (req, res) => {
     const userId = req.auth.id;
 
     BookingRequest.find({
-        $or: [{ senderId: userId }, { driverId: userId }],
+        $or: [{ candidateId: userId }, { driverId: userId }],
     })
         .then((data) => res.status(200).json(data))
         .catch((error) => {
@@ -59,8 +70,33 @@ const getOneBookingRequest = (req, res) => {
 const updateBookingRequest = (req, res) => {
     const requestId = req.params.id;
     const newRequestStatus = req.body.newRequestStatus;
+    // const candidateName = `${req.body.candidateFirstName} ${req.body.candidateLastName}`;
 
     BookingRequest.updateOne({ _id: requestId }, { status: newRequestStatus })
+        .then(() => {
+            if (newRequestStatus === "accepted") {
+                sendAcceptRequestMailToCandidate({
+                    candidateEmail: req.body.candidateEmail,
+                    driverName: req.body.driverName,
+                    departure: req.body.departure,
+                    destination: req.body.destination,
+                    formatedDate: req.body.formatedDate,
+                })
+                    .then((mailInfo) => console.log(mailInfo))
+                    .catch((error) => console.error(error));
+            }
+            if (newRequestStatus === "rejected") {
+                sendRejectRequestMailToCandidate({
+                    candidateEmail: req.body.candidateEmail,
+                    driverName: req.body.driverName,
+                    departure: req.body.departure,
+                    destination: req.body.destination,
+                    formatedDate: req.body.formatedDate,
+                })
+                    .then((mailInfo) => console.log(mailInfo))
+                    .catch((error) => console.error(error));
+            }
+        })
         .then(() =>
             res
                 .status(200)

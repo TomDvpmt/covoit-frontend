@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 const bookingRequestSchema = mongoose.Schema({
     rideId: { type: String },
-    senderId: { type: String },
-    senderFirstName: { type: String },
-    senderLastName: { type: String },
-    senderEmail: { type: String },
+    candidateId: { type: String },
+    candidateFirstName: { type: String },
+    candidateLastName: { type: String },
+    candidateEmail: { type: String },
     driverId: { type: String },
     driverFirstName: { type: String },
     driverLastName: { type: String },

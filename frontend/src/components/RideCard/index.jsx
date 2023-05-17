@@ -57,10 +57,6 @@ const RideCard = ({ ride }) => {
         setShowRideDeleteDialog(true);
     };
 
-    // const handlePersonClick = (e) => {
-    //     e.preventDefault(); // link disabled for now
-    // };
-
     useEffect(() => {
         getOneUser(driverId)
             .then((driverData) => setDriver(driverData))
@@ -91,7 +87,7 @@ const RideCard = ({ ride }) => {
                     alignItems: "center",
                     color: theme.palette.primary.main,
                 }}
-                subheader={formatedDate}
+                subheader={`Départ le ${formatedDate}`}
                 action={
                     <>
                         {driverId === userId && (
@@ -146,9 +142,9 @@ const RideCard = ({ ride }) => {
                             {driver && (
                                 <Link
                                     component={RouterLink}
-                                    to={`/users/${driver._id}`}
-                                    // onClick={handlePersonClick}
-                                >{`${driver.firstName}${
+                                    to={`/users/${driver._id}`}>{`${
+                                    driver.firstName
+                                }${
                                     driver.firstName && driver.lastName
                                         ? " "
                                         : ""

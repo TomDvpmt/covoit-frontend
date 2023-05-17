@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { selectUserId } from "../../features/user/userSlice";
+import {
+    selectUserFirstName,
+    selectUserId,
+    selectUserLastName,
+} from "../../features/user/userSlice";
 
 import { getOneUser } from "../../utils/user";
 
@@ -19,6 +23,8 @@ const BookingRequestCard = ({ request, formatedDate }) => {
 
     const token = sessionStorage.getItem("token");
     const userId = useSelector(selectUserId);
+    const userFirstName = useSelector(selectUserFirstName);
+    const userLastName = useSelector(selectUserLastName);
 
     const [requestStatus, setRequestStatus] = useState(request.status);
     const [personLink, setPersonLink] = useState(null);
@@ -35,7 +41,16 @@ const BookingRequestCard = ({ request, formatedDate }) => {
                         authorization: `BEARER ${token}`,
                         "content-type": "application/json",
                     },
-                    body: JSON.stringify({ newRequestStatus: "accepted" }),
+                    body: JSON.stringify({
+                        newRequestStatus: "accepted",
+                        driverName: `${userFirstName}${
+                            userFirstName && userLastName ? " " : ""
+                        }${userLastName}`,
+                        candidateEmail: request.candidateEmail,
+                        departure: request.departure,
+                        destination: request.destination,
+                        formatedDate,
+                    }),
                 }
             );
 
@@ -55,7 +70,7 @@ const BookingRequestCard = ({ request, formatedDate }) => {
                     Authorization: `BEARER ${token}`,
                     "content-type": "application/json",
                 },
-                body: JSON.stringify({ newPassenger: request.senderId }),
+                body: JSON.stringify({ newPassenger: request.candidateId }),
             });
             if (!response.ok) {
                 const data = await response.json();
@@ -79,7 +94,16 @@ const BookingRequestCard = ({ request, formatedDate }) => {
                         authorization: `BEARER ${token}`,
                         "content-type": "application/json",
                     },
-                    body: JSON.stringify({ newRequestStatus: "rejected" }),
+                    body: JSON.stringify({
+                        newRequestStatus: "rejected",
+                        driverName: `${userFirstName}${
+                            userFirstName && userLastName ? " " : ""
+                        }${userLastName}`,
+                        candidateEmail: request.candidateEmail,
+                        departure: request.departure,
+                        destination: request.destination,
+                        formatedDate,
+                    }),
                 }
             );
 
@@ -141,7 +165,7 @@ const BookingRequestCard = ({ request, formatedDate }) => {
     }, [requestStatus]);
 
     useEffect(() => {
-        if (userId === request.senderId) {
+        if (userId === request.candidateId) {
             getOneUser(request.driverId)
                 .then((driver) =>
                     setPersonLink(
@@ -165,8 +189,8 @@ const BookingRequestCard = ({ request, formatedDate }) => {
                     <Typography fontSize=".9rem">Passager : </Typography>
                     <Link
                         component={RouterLink}
-                        to={`/users/${request.senderId}`}>
-                        {`${request.senderFirstName} ${request.senderLastName}`}
+                        to={`/users/${request.candidateId}`}>
+                        {`${request.candidateFirstName} ${request.candidateLastName}`}
                     </Link>
                 </>
             );
@@ -202,7 +226,7 @@ const BookingRequestCard = ({ request, formatedDate }) => {
                     </Typography>
                 </Box>
                 <Typography sx={{ fontSize: ".9rem" }}>
-                    {formatedDate}
+                    {`Départ le ${formatedDate}`}
                 </Typography>
             </Box>
             <Box sx={{ display: "flex", flexDirection: "column" }}>

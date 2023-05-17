@@ -44,7 +44,7 @@ const BookingRequests = () => {
                 );
                 setSentBookingRequests(
                     data
-                        .filter((request) => request.senderId === userId)
+                        .filter((request) => request.candidateId === userId)
                         .map((request) => {
                             const date = dayjs(request.departureDate);
                             const formatedDate = getFormatedDate(date);

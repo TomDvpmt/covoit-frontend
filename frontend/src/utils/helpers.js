@@ -4,5 +4,5 @@ export const getFormatedDate = (date) => {
     }${date.$M + 1}/${date.$y}`;
     const time = `${date.$H}h${date.$m < 10 ? 0 : ""}${date.$m}`;
 
-    return `Départ le ${day} à ${time}`;
+    return `${day} à ${time}`;
 };
