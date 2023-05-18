@@ -8,7 +8,8 @@ import Register from "../../pages/Register";
 import Profile from "../../pages/Profile";
 import BookingRequests from "../../pages/BookingRequests";
 import MyRides from "../../pages/MyRides";
-import Ride from "../../pages/Ride";
+import Conversations from "../../pages/Conversations";
+import Conversation from "../../components/Conversation";
 import Error404 from "../../pages/Error404";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { getOneUser } from "../../utils/user";
@@ -78,14 +79,25 @@ const Router = () => {
                     ),
                 },
                 {
-                    path: "/trip",
+                    path: "/conversations/",
                     element: (
                         <>
-                            <SetPage page="trip" />
-                            <Ride />
+                            <SetPage page="conversations" />
+                            <Conversations />
                         </>
                     ),
                 },
+
+                {
+                    path: "/conversations/:conversationId",
+                    element: (
+                        <>
+                            <SetPage page="conversation" />
+                            <Conversation />
+                        </>
+                    ),
+                },
+
                 {
                     path: "*",
                     element: (

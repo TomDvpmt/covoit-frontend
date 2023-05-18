@@ -1,8 +1,10 @@
 const transporter = require("../config/mailing");
 
+const sender = `Covoit <${process.env.MAILING_ADDRESS}>`;
+
 const sendPendingRequestMailToDriver = async (ride) => {
     const messageInfo = await transporter.sendMail({
-        from: process.env.MAILING_ADDRESS,
+        from: sender,
         to: ride.driverEmail,
         subject: "Demande de trajet",
         html: `
@@ -16,7 +18,7 @@ const sendPendingRequestMailToDriver = async (ride) => {
 
 const sendAcceptedRequestMailToCandidate = async (ride) => {
     const messageInfo = await transporter.sendMail({
-        from: process.env.MAILING_ADDRESS,
+        from: sender,
         to: ride.candidateEmail,
         subject: "Demande de trajet acceptée !",
         html: `
@@ -30,7 +32,7 @@ const sendAcceptedRequestMailToCandidate = async (ride) => {
 
 const sendRejectedRequestMailToCandidate = async (ride) => {
     const messageInfo = await transporter.sendMail({
-        from: process.env.MAILING_ADDRESS,
+        from: sender,
         to: ride.candidateEmail,
         subject: "Demande de trajet rejetée",
         html: `

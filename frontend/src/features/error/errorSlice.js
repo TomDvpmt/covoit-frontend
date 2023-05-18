@@ -12,10 +12,13 @@ const initialState = {
     displayProfile: "",
     updateUser: "",
     deleteUser: "",
+    updateBookingRequest: "",
+    bookRide: "",
     createRide: "",
     updateRide: "",
     deleteRide: "",
-    updateBookingRequest: "",
+    sendMessage: "",
+    getConversation: "",
 };
 
 const errorSlice = createSlice({
@@ -77,6 +80,16 @@ const errorSlice = createSlice({
         setDeleteRideErrorMessage: (state, action) => {
             state.deleteRide = action.payload;
         },
+
+        // Contact dialog
+        setMessageCreateErrorMessage: (state, action) => {
+            state.sendMessage = action.payload;
+        },
+
+        // Conversation
+        setConversationErrorMessage: (state, action) => {
+            state.getConversation = action.payload;
+        },
     },
 });
 
@@ -90,11 +103,13 @@ export const {
     setDisplayProfileErrorMessage,
     setUpdateUserErrorMessage,
     setDeleteUserErrorMessage,
+    setBookingRequestErrorMessage,
     setBookRideErrorMessage,
     setCreateRideErrorMessage,
     setUpdateRideErrorMessage,
     setDeleteRideErrorMessage,
-    setBookingRequestErrorMessage,
+    setMessageCreateErrorMessage,
+    setConversationErrorMessage,
     resetErrorMessages,
 } = errorSlice.actions;
 
@@ -110,11 +125,15 @@ export const selectDisplayProfileErrorMessage = (state) =>
     state.error.displayProfile;
 export const selectUpdateUserErrorMessage = (state) => state.error.updateUser;
 export const selectDeleteUserErrorMessage = (state) => state.error.deleteUser;
+export const selectBookingRequestErrorMessage = (state) =>
+    state.error.updateBookingRequest;
 export const selectBookRideErrorMessage = (state) => state.error.bookRide;
 export const selectCreateRideErrorMessage = (state) => state.error.createRide;
 export const selectUpdateRideErrorMessage = (state) => state.error.updateRide;
 export const selectDeleteRideErrorMessage = (state) => state.error.deleteRide;
-export const selectBookingRequestErrorMessage = (state) =>
-    state.error.updateBookingRequest;
+export const selectMessageCreateErrorMessage = (state) =>
+    state.error.sendMessage;
+export const selectConversationErrorMessage = (state) =>
+    state.error.getConversation;
 
 export default errorSlice.reducer;

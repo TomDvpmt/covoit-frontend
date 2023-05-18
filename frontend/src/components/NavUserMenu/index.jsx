@@ -19,6 +19,7 @@ import {
     Logout,
     DirectionsCar,
     ContactSupportRounded,
+    QuestionAnswer,
 } from "@mui/icons-material";
 
 const MenuUser = () => {
@@ -52,6 +53,11 @@ const MenuUser = () => {
     const handleMyRides = () => {
         handleClose();
         navigate("/myrides");
+    };
+
+    const handleMyConversations = () => {
+        handleClose();
+        navigate("/conversations");
     };
 
     const handleProfile = () => {
@@ -96,6 +102,12 @@ const MenuUser = () => {
                         <DirectionsCar />
                     </ListItemIcon>
                     Mes trajets
+                </MenuItem>
+                <MenuItem onClick={handleMyConversations}>
+                    <ListItemIcon>
+                        <QuestionAnswer />
+                    </ListItemIcon>
+                    Mes conversations
                 </MenuItem>
                 <MenuItem onClick={handleProfile}>
                     <ListItemIcon>

@@ -25,6 +25,7 @@ import UserInputLastName from "../../components/form-inputs/UserInputLastName";
 import UserInputPhone from "../../components/form-inputs/UserInputPhone";
 import UserDeleteDialog from "../../components/UserDeleteDialog";
 import ValidationMessage from "../../components/ValidationMessage";
+import MessageCreateDialog from "../../components/MessageCreateDialog";
 import ErrorMessage from "../../components/ErrorMessage";
 
 import {
@@ -53,13 +54,12 @@ const Profile = () => {
     }, [token, navigate]);
 
     const profileUser = useLoaderData();
+    const profileUserId = profileUser._id;
     const userId = useSelector(selectUserId);
-    const isOwnProfile = profileUser._id === userId;
+    const isOwnProfile = profileUserId === userId;
 
-    const prevProfileEmail = profileUser.email;
-    const prevProfileFirstName = profileUser.firstName;
-    const prevProfileLastName = profileUser.lastName;
-    const prevProfilePhone = profileUser.phone;
+    const profileFirstName = profileUser.firstName;
+    const profileLastName = profileUser.lastName;
     const prevUserEmail = useSelector(selectUserEmail);
     const prevUserFirstName = useSelector(selectUserFirstName);
     const prevUserLastName = useSelector(selectUserLastName);
@@ -70,8 +70,12 @@ const Profile = () => {
     const [newLastName, setNewLastName] = useState("");
     const [newPhone, setNewPhone] = useState("");
 
+    const [conversationId, setConversationId] = useState("");
+
     const [showUpdateDialog, setShowUpdateDialog] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [showMessageCreateDialog, setShowMessageCreateDialog] =
+        useState(false);
     const [validationMessage, setValidationMessage] = useState("");
 
     const updateUserErrorMessage = useSelector(selectUpdateUserErrorMessage);
@@ -81,6 +85,22 @@ const Profile = () => {
         textAlign: "right",
         fontWeight: "700",
     };
+
+    useEffect(() => {
+        fetch(`/API/conversations/`, {
+            headers: {
+                Authorization: `BEARER ${token}`,
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                const conversation = data.find((conversation) =>
+                    conversation.users.includes(profileUserId)
+                );
+                setConversationId(conversation._id);
+            })
+            .catch((error) => console.log(error));
+    }, []);
 
     const handleUpdateUser = () => {
         setNewEmail(prevUserEmail);
@@ -99,7 +119,15 @@ const Profile = () => {
         setShowDeleteDialog(true);
     };
 
-    const handleSubmit = async (e) => {
+    const handleMessageCreate = () => {
+        setShowMessageCreateDialog(true);
+    };
+
+    const handleSeeConversation = () => {
+        navigate(`/conversations/${conversationId}`);
+    };
+
+    const handleUpdateSubmit = async (e) => {
         e.preventDefault();
 
         if (
@@ -156,16 +184,14 @@ const Profile = () => {
                 <TableContainer component={Paper}>
                     <Table size="small">
                         <TableBody>
-                            <TableRow>
-                                <TableCell sx={leftCellStyle}>
-                                    Adresse e-mail :
-                                </TableCell>
-                                <TableCell>
-                                    {isOwnProfile
-                                        ? prevUserEmail
-                                        : prevProfileEmail}
-                                </TableCell>
-                            </TableRow>
+                            {isOwnProfile && (
+                                <TableRow>
+                                    <TableCell sx={leftCellStyle}>
+                                        Adresse e-mail :
+                                    </TableCell>
+                                    <TableCell>{prevUserEmail}</TableCell>
+                                </TableRow>
+                            )}
                             <TableRow>
                                 <TableCell sx={leftCellStyle}>
                                     Prénom :
@@ -173,7 +199,7 @@ const Profile = () => {
                                 <TableCell>
                                     {isOwnProfile
                                         ? prevUserFirstName
-                                        : prevProfileFirstName}
+                                        : profileFirstName}
                                 </TableCell>
                             </TableRow>
                             <TableRow>
@@ -181,23 +207,21 @@ const Profile = () => {
                                 <TableCell>
                                     {isOwnProfile
                                         ? prevUserLastName
-                                        : prevProfileLastName}
+                                        : profileLastName}
                                 </TableCell>
                             </TableRow>
-                            <TableRow>
-                                <TableCell sx={leftCellStyle}>
-                                    Numéro de téléphone :
-                                </TableCell>
-                                <TableCell>
-                                    {isOwnProfile
-                                        ? prevUserPhone
-                                        : prevProfilePhone}
-                                </TableCell>
-                            </TableRow>
+                            {isOwnProfile && (
+                                <TableRow>
+                                    <TableCell sx={leftCellStyle}>
+                                        Numéro de téléphone :
+                                    </TableCell>
+                                    <TableCell>{prevUserPhone}</TableCell>
+                                </TableRow>
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {profileUser._id === userId && (
+                {isOwnProfile ? (
                     <Box
                         sx={{
                             mt: ".5rem",
@@ -224,6 +248,21 @@ const Profile = () => {
                                 setShowDeleteDialog={setShowDeleteDialog}
                             />
                         )}
+                    </Box>
+                ) : (
+                    <Box mt="1rem">
+                        <Button
+                            variant="contained"
+                            onClick={
+                                conversationId
+                                    ? handleSeeConversation
+                                    : handleMessageCreate
+                            }
+                            color="secondary">
+                            {conversationId
+                                ? "Voir la conversation"
+                                : "Envoyer un message"}
+                        </Button>
                     </Box>
                 )}
             </Box>
@@ -252,7 +291,7 @@ const Profile = () => {
                             type="button"
                             variant="contained"
                             color="secondary"
-                            onClick={handleSubmit}>
+                            onClick={handleUpdateSubmit}>
                             Enregistrer
                         </Button>
                         <Button
@@ -268,6 +307,13 @@ const Profile = () => {
                     )}
                 </DialogContent>
             </Dialog>
+            <MessageCreateDialog
+                showMessageCreateDialog={showMessageCreateDialog}
+                setShowMessageCreateDialog={setShowMessageCreateDialog}
+                profileFirstName={profileFirstName}
+                profileLastName={profileLastName}
+                recipientId={profileUserId}
+            />
         </>
     );
 };

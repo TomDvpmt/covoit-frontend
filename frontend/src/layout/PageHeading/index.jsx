@@ -14,14 +14,18 @@ const PageHeading = () => {
         home: "Trouver un trajet",
         myrides: "Mes trajets",
         bookingRequests: "Demandes de réservation",
-        trip: "",
+        conversations: "Mes conversations",
         error404: "Page introuvable.",
     };
 
     return (
-        <Typography component="h1" variant="h1" align="center">
-            {pageHeadings[page]}
-        </Typography>
+        <>
+            {page !== "conversation" && (
+                <Typography component="h1" variant="h1" align="center">
+                    {pageHeadings[page]}
+                </Typography>
+            )}
+        </>
     );
 };
 

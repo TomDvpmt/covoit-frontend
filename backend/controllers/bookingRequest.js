@@ -22,11 +22,7 @@ const createBookingRequest = (req, res) => {
                 departure: req.body.departure,
                 destination: req.body.destination,
                 formatedDate: `${formatedDay} à ${formatedTime}`,
-            })
-                .then((mailinfo) => console.log("mailinfo : ", mailinfo))
-                .catch((error) => {
-                    console.error(error);
-                });
+            });
         })
         .then(() =>
             res.status(201).json({ message: "Demande de réservation créée." })
@@ -70,7 +66,6 @@ const getOneBookingRequest = (req, res) => {
 const updateBookingRequest = (req, res) => {
     const requestId = req.params.id;
     const newRequestStatus = req.body.newRequestStatus;
-    // const candidateName = `${req.body.candidateFirstName} ${req.body.candidateLastName}`;
 
     BookingRequest.updateOne({ _id: requestId }, { status: newRequestStatus })
         .then(() => {
@@ -81,9 +76,7 @@ const updateBookingRequest = (req, res) => {
                     departure: req.body.departure,
                     destination: req.body.destination,
                     formatedDate: req.body.formatedDate,
-                })
-                    .then((mailInfo) => console.log(mailInfo))
-                    .catch((error) => console.error(error));
+                });
             }
             if (newRequestStatus === "rejected") {
                 sendRejectedRequestMailToCandidate({
@@ -92,9 +85,7 @@ const updateBookingRequest = (req, res) => {
                     departure: req.body.departure,
                     destination: req.body.destination,
                     formatedDate: req.body.formatedDate,
-                })
-                    .then((mailInfo) => console.log(mailInfo))
-                    .catch((error) => console.error(error));
+                });
             }
         })
         .then(() =>
