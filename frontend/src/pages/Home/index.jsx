@@ -5,6 +5,7 @@ import {
     setHomeErrorMessage,
     selectHomeErrorMessage,
 } from "../../features/error/errorSlice";
+import { selectAllCities } from "../../features/cities/citiesSlice";
 
 import RideInputLocation from "../../components/form-inputs/RideInputLocation";
 import RideInputDepartureDate from "../../components/form-inputs/RideInputDepartureDate";
@@ -17,6 +18,7 @@ import { Box, Typography, Button } from "@mui/material";
 const Home = () => {
     const dispatch = useDispatch();
     const homeErrorMessage = useSelector(selectHomeErrorMessage);
+    const allCities = useSelector(selectAllCities);
 
     const [departure, setDeparture] = useState("");
     const [destination, setDestination] = useState("");
@@ -90,11 +92,13 @@ const Home = () => {
                                 type="departure"
                                 location={departure}
                                 setLocation={setDeparture}
+                                allCities={allCities}
                             />
                             <RideInputLocation
                                 type="destination"
                                 location={destination}
                                 setLocation={setDestination}
+                                allCities={allCities}
                             />
                         </Box>
                         <Box

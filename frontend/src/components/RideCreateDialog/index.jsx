@@ -8,6 +8,7 @@ import {
     setCreateRideErrorMessage,
     selectCreateRideErrorMessage,
 } from "../../features/error/errorSlice";
+import { selectAllCities } from "../../features/cities/citiesSlice";
 
 import RideInputLocation from "../form-inputs/RideInputLocation";
 import RideInputDepartureDate from "../form-inputs/RideInputDepartureDate";
@@ -34,6 +35,7 @@ const RideCreateDialog = ({
     const page = useSelector(selectPageLocation);
     const userId = useSelector(selectUserId);
     const createRideErrorMessage = useSelector(selectCreateRideErrorMessage);
+    const allCities = useSelector(selectAllCities);
 
     const [departure, setDeparture] = useState("");
     const [destination, setDestination] = useState("");
@@ -117,11 +119,13 @@ const RideCreateDialog = ({
                             type="departure"
                             location={departure}
                             setLocation={setDeparture}
+                            allCities={allCities}
                         />
                         <RideInputLocation
                             type="destination"
                             location={destination}
                             setLocation={setDestination}
+                            allCities={allCities}
                         />
                         <RideInputDepartureDate
                             departureDate={departureDate}

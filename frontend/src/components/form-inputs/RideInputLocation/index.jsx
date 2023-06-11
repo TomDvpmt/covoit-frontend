@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import Loader from "../../Loader";
+
 import {
     FormControl,
     InputAdornment,
@@ -13,11 +15,12 @@ import theme from "../../../styles/theme";
 
 import PropTypes from "prop-types";
 
-const RideInputLocation = ({ type, location, setLocation }) => {
+const RideInputLocation = ({ type, location, setLocation, allCities }) => {
     RideInputLocation.propTypes = {
         type: PropTypes.string.isRequired,
         location: PropTypes.string.isRequired,
         setLocation: PropTypes.func.isRequired,
+        allCities: PropTypes.array.isRequired,
     };
 
     const locationTexts = {
@@ -39,12 +42,22 @@ const RideInputLocation = ({ type, location, setLocation }) => {
 
         const query = e.target.value;
 
-        fetch(
-            `https://geo.api.gouv.fr/communes?nom=${query}&boost=population&limit=5`
-        )
-            .then((response) => response.json())
-            .then((data) => setCities(data.map((city) => city.nom)))
-            .catch((error) => console.log(error));
+        // fetch(
+        //     `https://geo.api.gouv.fr/communes?nom=${query}&boost=population&limit=5`
+        // )
+        //     .then((response) => response.json())
+        //     .then((data) => setCities(data.map((city) => city.nom)))
+        //     .catch((error) => console.log(error));
+
+        if (query.length <= 1) {
+            setShowCitiesMenu(false);
+            return;
+        }
+
+        const filteredCities = allCities
+            .filter((city) => city.slice(0, query.length) === query)
+            .slice(0, 5);
+        setCities(filteredCities);
     };
 
     const handleCitySelect = (e) => {
