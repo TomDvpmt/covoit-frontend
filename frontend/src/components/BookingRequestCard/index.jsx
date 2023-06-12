@@ -204,8 +204,13 @@ const BookingRequestCard = ({ request, formatedDate }) => {
                 border: "1px solid black",
                 padding: ".5rem",
                 display: "flex",
-                alignItems: "center",
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { sm: "center" },
                 justifyContent: "space-between",
+                gap: {
+                    xs: "2rem",
+                    sm: "0",
+                },
             }}>
             <Box>
                 <Box

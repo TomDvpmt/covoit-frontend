@@ -75,6 +75,35 @@ const Home = () => {
 
     return (
         <>
+            <Box
+                component="section"
+                m="3rem auto"
+                p=".5rem"
+                maxWidth="600px"
+                sx={{ border: `1px solid ${theme.palette.primary.main}` }}>
+                <Typography
+                    component="h2"
+                    m="2rem 0"
+                    align="center"
+                    fontSize="1.2rem"
+                    fontWeight="700">
+                    Aide pour tester l'application
+                </Typography>
+                <Typography>Trajets existants : </Typography>
+                <Box component="ul">
+                    <Typography component="li">
+                        {"Paris => Strasbourg le 31/12/2023 à 16h00 pour 10€"}
+                    </Typography>
+                    <Typography component="li">
+                        {
+                            "Brest => Clermont-Ferrand le 31/12/2023 à 16h00 pour 10€"
+                        }
+                    </Typography>
+                    <Typography component="li">
+                        {"Bordeaux => Lyon le 31/12/2023 à 09h00 pour 15€"}
+                    </Typography>
+                </Box>
+            </Box>
             <Box component="section">
                 <Box component="form" onSubmit={handleSubmit}>
                     <Box
@@ -128,34 +157,6 @@ const Home = () => {
                         sx={{ mt: "1rem" }}>
                         Chercher
                     </Button>
-                </Box>
-            </Box>
-            <Box
-                m="3rem auto 0 auto"
-                p=".5rem"
-                maxWidth="600px"
-                sx={{ border: `1px solid ${theme.palette.primary.main}` }}>
-                <Typography
-                    component="h2"
-                    m="2rem 0"
-                    align="center"
-                    fontSize="1.2rem"
-                    fontWeight="700">
-                    Aide pour tester l'application
-                </Typography>
-                <Typography>Trajets existants : </Typography>
-                <Box component="ul">
-                    <Typography component="li">
-                        {"Paris => Strasbourg le 31/12/2023 à 16h00 pour 10€"}
-                    </Typography>
-                    <Typography component="li">
-                        {
-                            "Brest => Clermont-Ferrand le 31/12/2023 à 16h00 pour 10€"
-                        }
-                    </Typography>
-                    <Typography component="li">
-                        {"Bordeaux => Lyon le 31/12/2023 à 09h00 pour 15€"}
-                    </Typography>
                 </Box>
             </Box>
             {showResults && (

@@ -73,10 +73,10 @@ const Footer = () => {
                     </TableRow>
                 </TableBody>
             </Table>
-            <Typography fontSize=".9rem" fontStyle="italic">
+            {/* <Typography fontSize=".9rem" fontStyle="italic">
                 Projet réalisé durant la formation "Développeur Web"
                 d'OpenClassrooms (2023)
-            </Typography>
+            </Typography> */}
         </Box>
     );
 };

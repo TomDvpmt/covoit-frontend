@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
+import ConversationCard from "../../components/ConversationCard";
 import Loader from "../../components/Loader";
-import ConversationDeleteDialog from "../../components/ConversationDeleteDialog";
+// import ConversationDeleteDialog from "../../components/ConversationDeleteDialog";
 import ValidationMessage from "../../components/ValidationMessage";
 
 import { Box, Paper, IconButton, Link, Typography } from "@mui/material";
@@ -18,10 +19,6 @@ const Conversations = () => {
     const [showConversationDeleteDialog, setShowConversationDeleteDialog] =
         useState(false);
     const [validationMessage, setValidationMessage] = useState("");
-
-    const handleDelete = () => {
-        setShowConversationDeleteDialog(true);
-    };
 
     // Get conversations' data
     useEffect(() => {
@@ -45,8 +42,6 @@ const Conversations = () => {
     useEffect(() => {
         Promise.all(
             conversationsData?.map(async (conversation, index) => {
-                const conversationId = conversation._id;
-                const nbOfMessages = conversation.messages.length;
                 const interlocutorId = conversation.users.find(
                     (id) => id !== userId
                 );
@@ -58,49 +53,20 @@ const Conversations = () => {
                             data.firstName && data.lastName ? " " : ""
                         }${data.lastName}`;
                         return (
-                            <Box key={index} component="article">
-                                <Paper
-                                    sx={{
-                                        width: "500px",
-                                        padding: "1rem",
-                                        display: "grid",
-                                        gridTemplateColumns: "1fr 1fr 50px",
-                                        alignItems: "center",
-                                    }}>
-                                    <Link
-                                        component={RouterLink}
-                                        to={`/users/${interlocutorId}`}>
-                                        {interlocutorName}
-                                    </Link>
-                                    <Link
-                                        component={RouterLink}
-                                        to={`/conversations/${conversationId}`}>
-                                        {`${nbOfMessages} message${
-                                            nbOfMessages > 1 ? "s" : ""
-                                        }`}
-                                    </Link>
-                                    <IconButton
-                                        variant="text"
-                                        onClick={handleDelete}>
-                                        <Delete />
-                                    </IconButton>
-                                    <ConversationDeleteDialog
-                                        setConversationsData={
-                                            setConversationsData
-                                        }
-                                        conversationId={conversationId}
-                                        showConversationDeleteDialog={
-                                            showConversationDeleteDialog
-                                        }
-                                        setShowConversationDeleteDialog={
-                                            setShowConversationDeleteDialog
-                                        }
-                                        setValidationMessage={
-                                            setValidationMessage
-                                        }
-                                    />
-                                </Paper>
-                            </Box>
+                            <ConversationCard
+                                key={index}
+                                conversation={conversation}
+                                interlocutorName={interlocutorName}
+                                interlocutorId={interlocutorId}
+                                setConversationsData={setConversationsData}
+                                showConversationDeleteDialog={
+                                    showConversationDeleteDialog
+                                }
+                                setShowConversationDeleteDialog={
+                                    setShowConversationDeleteDialog
+                                }
+                                setValidationMessage={setValidationMessage}
+                            />
                         );
                     });
             })
@@ -115,6 +81,7 @@ const Conversations = () => {
                 <Loader />
             ) : (
                 <Box
+                    component="section"
                     sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -131,7 +98,14 @@ const Conversations = () => {
                             Aucune conversation à afficher.
                         </Typography>
                     ) : (
-                        conversations
+                        <Box
+                            width="100%"
+                            display="flex"
+                            flexDirection="column"
+                            alignItems="center"
+                            gap="1rem">
+                            {conversations}
+                        </Box>
                     )}
                 </Box>
             )}

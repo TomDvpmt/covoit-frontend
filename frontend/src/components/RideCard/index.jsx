@@ -69,7 +69,7 @@ const RideCard = ({ ride }) => {
     }, [ride]);
 
     return (
-        <Card sx={{ flexGrow: "1" }}>
+        <Card sx={{ flexGrow: "1", maxWidth: "700px" }}>
             <CardHeader
                 title={
                     <Box
@@ -86,6 +86,7 @@ const RideCard = ({ ride }) => {
                 titleTypographyProps={{
                     alignItems: "center",
                     color: theme.palette.primary.main,
+                    fontSize: { xs: "1.2rem" },
                 }}
                 subheader={`Départ le ${formatedDate}`}
                 action={
@@ -111,12 +112,40 @@ const RideCard = ({ ride }) => {
                         )}
                     </>
                 }
+                sx={{
+                    flexDirection:
+                        driverId === userId
+                            ? "row"
+                            : {
+                                  xs: "column",
+                                  sm: "row",
+                              },
+                    alignItems: {
+                        xs: "center",
+                        sm: "initial",
+                    },
+                    gap: {
+                        xs: "1.5rem",
+                        sm: "initial",
+                    },
+                    "& .MuiCardHeader-action": {
+                        alignSelf: "center",
+                    },
+                }}
             />
             <CardContent
                 sx={{
                     display: "flex",
+                    flexDirection: {
+                        xs: "column",
+                        sm: "row",
+                    },
                     justifyContent: "space-between",
-                    alignItems: "flex-end",
+                    alignItems: { xs: "center", sm: "flex-end" },
+                    gap: {
+                        xs: "2rem",
+                        sm: "0",
+                    },
                 }}>
                 <Box
                     sx={{
@@ -129,22 +158,24 @@ const RideCard = ({ ride }) => {
                             sx={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "1rem",
+                                gap: { xs: ".5rem", md: "1rem" },
                             }}>
                             <AirlineSeatReclineExtra />
 
                             <Typography
                                 component="span"
                                 fontWeight="700"
-                                color="primary">
+                                color="primary"
+                                fontSize={{ xs: ".9rem", md: "1rem" }}>
                                 Conducteur :{" "}
                             </Typography>
                             {driver && (
                                 <Link
                                     component={RouterLink}
-                                    to={`/users/${driver._id}`}>{`${
-                                    driver.firstName
-                                }${
+                                    to={`/users/${driver._id}`}
+                                    sx={{
+                                        fontSize: { xs: ".9rem", md: "1rem" },
+                                    }}>{`${driver.firstName}${
                                     driver.firstName && driver.lastName
                                         ? " "
                                         : ""
@@ -158,15 +189,19 @@ const RideCard = ({ ride }) => {
                             display: "flex",
                             alignItems: "center",
                             gap: "1rem",
+                            fontSize: { xs: ".9rem", md: "1rem" },
                         }}>
                         <PeopleAlt />
                         <Typography
                             component="span"
                             fontWeight="700"
-                            color="primary">
+                            color="primary"
+                            fontSize={{ xs: ".9rem", md: "1rem" }}>
                             Passagers :{" "}
                         </Typography>
-                        <Typography component="span">
+                        <Typography
+                            component="span"
+                            fontSize={{ xs: ".9rem", md: "1rem" }}>
                             {ride.passengers.length}
                         </Typography>
                     </Typography>
@@ -180,10 +215,13 @@ const RideCard = ({ ride }) => {
                         <Typography
                             component="span"
                             fontWeight="700"
-                            color="primary">
+                            color="primary"
+                            fontSize={{ xs: ".9rem", md: "1rem" }}>
                             Places disponibles :{" "}
                         </Typography>
-                        <Typography component="span">
+                        <Typography
+                            component="span"
+                            fontSize={{ xs: ".9rem", md: "1rem" }}>
                             {ride.totalSeats - ride.passengers.length}
                         </Typography>
                     </Typography>

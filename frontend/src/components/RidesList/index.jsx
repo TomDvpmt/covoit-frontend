@@ -13,7 +13,13 @@ const RidesList = ({ type, rides }) => {
     };
 
     return (
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+        <Box
+            sx={{
+                display: "flex",
+                justifyContent: "center",
+                flexWrap: "wrap",
+                gap: "1rem",
+            }}>
             {rides.map((ride, index) => (
                 <RideCard key={index} ride={ride} type={type} />
             ))}
