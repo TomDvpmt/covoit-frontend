@@ -27,7 +27,7 @@ const RideBookingButton = ({ ride }) => {
         ride: PropTypes.object.isRequired,
     };
 
-    const token = sessionStorage.getItem("token");
+    let token = sessionStorage.getItem("token");
     const isLoggedIn = useSelector(selectUserIsLoggedIn);
     const userId = useSelector(selectUserId);
     const userFirstName = useSelector(selectUserFirstName);
@@ -88,14 +88,13 @@ const RideBookingButton = ({ ride }) => {
     }, [token, isLoggedIn, userId, rideId]);
 
     // Create a booking request
-    const handleRideBookingRequest = async () => {
-        setBookRideErrorMessage("");
-
-        if (!isLoggedIn) {
-            setShowLoginDialog(true);
-            return;
-        }
-
+    const actionAfterLogin = async (
+        token,
+        userId,
+        userFirstName,
+        userLastName,
+        userEmail
+    ) => {
         try {
             const response = await fetch("/API/bookingRequests/create", {
                 method: "POST",
@@ -126,6 +125,22 @@ const RideBookingButton = ({ ride }) => {
         } catch (error) {
             console.error(error);
             setBookRideErrorMessage(error.message);
+        }
+    };
+
+    const handleRideBookingRequest = () => {
+        setBookRideErrorMessage("");
+
+        if (!isLoggedIn) {
+            setShowLoginDialog(true);
+        } else {
+            actionAfterLogin(
+                token,
+                userId,
+                userFirstName,
+                userLastName,
+                userEmail
+            );
         }
     };
 
@@ -166,7 +181,7 @@ const RideBookingButton = ({ ride }) => {
             <LoginDialog
                 showLoginDialog={showLoginDialog}
                 setShowLoginDialog={setShowLoginDialog}
-                actionAfterLogin={handleRideBookingRequest}
+                actionAfterLogin={actionAfterLogin}
             />
         </>
     );

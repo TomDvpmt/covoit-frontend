@@ -97,7 +97,7 @@ const Profile = () => {
                 const conversation = data.find((conversation) =>
                     conversation.users.includes(profileUserId)
                 );
-                setConversationId(conversation._id);
+                setConversationId(conversation?._id);
             })
             .catch((error) => console.log(error));
     }, []);

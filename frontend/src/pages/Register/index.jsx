@@ -73,7 +73,6 @@ const Register = () => {
                 return;
             }
             const data = await response.json();
-            // console.log(data);
         } catch (error) {
             dispatch(setRegisterErrorMessage("Impossible de créer le compte."));
             return;
@@ -145,7 +144,11 @@ const Register = () => {
             />
             <UserInputLastName lastName={lastName} setLastName={setLastName} />
             <UserInputPhone phone={phone} setPhone={setPhone} />
-            <Button type="submit" variant="contained" sx={{ mt: ".5rem" }}>
+            <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                sx={{ mt: ".5rem" }}>
                 Valider
             </Button>
         </Box>

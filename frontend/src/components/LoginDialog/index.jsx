@@ -70,8 +70,14 @@ const LoginDialog = ({
                     phone: data.phone,
                 })
             );
+            await actionAfterLogin(
+                data.token,
+                data.id,
+                data.firstName,
+                data.lastName,
+                data.email
+            );
             setShowLoginDialog(false);
-            // actionAfterLogin();
         } catch (error) {
             console.error(error);
             dispatch(setLoginErrorMessage(error.message));

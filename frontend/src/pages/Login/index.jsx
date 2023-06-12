@@ -28,16 +28,42 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (e.target.id !== "demo1" && e.target.id !== "demo2") {
+            if (email === "" || password === "") {
+                dispatch(
+                    setLoginErrorMessage(
+                        "Tous les champs doivent être remplis."
+                    )
+                );
+                return;
+            }
+        }
+
+        let loginData = {
+            email,
+            password,
+        };
+
+        if (e.target.id === "demo1") {
+            loginData = {
+                email: "demo_user@gmail.com",
+                password: "password",
+            };
+        }
+        if (e.target.id === "demo2") {
+            loginData = {
+                email: "demo2_user@gmail.com",
+                password: "password",
+            };
+        }
+
         try {
             const response = await fetch("API/users/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
+                body: JSON.stringify(loginData),
             });
             const data = await response.json();
             if (!response.ok) {
@@ -75,9 +101,26 @@ const Login = () => {
             {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
             <UserInputEmail email={email} setEmail={setEmail} />
             <UserInputPassword password={password} setPassword={setPassword} />
-            <Button type="submit" variant="contained" sx={{ mt: ".5rem" }}>
+            <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                sx={{ mt: ".5rem" }}>
                 Se connecter
             </Button>
+            <Box
+                alignSelf="center"
+                mt="3rem"
+                display="flex"
+                justifyContent="center"
+                gap="1rem">
+                <Button id="demo1" variant="contained" onClick={handleSubmit}>
+                    Demo user 1
+                </Button>
+                <Button id="demo2" variant="contained" onClick={handleSubmit}>
+                    Demo user 2
+                </Button>
+            </Box>
         </Box>
     );
 };
