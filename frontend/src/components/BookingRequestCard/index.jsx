@@ -10,6 +10,7 @@ import {
 
 import { getOneUser } from "../../utils/user";
 
+import theme from "../../styles/theme";
 import { Box, Typography, Button, Link } from "@mui/material";
 import { TrendingFlat, Check, Close } from "@mui/icons-material";
 
@@ -202,6 +203,8 @@ const BookingRequestCard = ({ request, formatedDate }) => {
             key={request._id}
             sx={{
                 border: "1px solid black",
+                width: "100%",
+                maxWidth: theme.maxWidth.bookingCard,
                 padding: ".5rem",
                 display: "flex",
                 flexDirection: { xs: "column", sm: "row" },

@@ -1,9 +1,12 @@
-import logo from "../../assets/img/car-sharing.png";
+import logo from "../../assets/img/covoit-logo-bicolor.png";
 
-import { Box, Typography } from "@mui/material";
+import theme from "../../styles/theme";
+import { Box, Link, useMediaQuery } from "@mui/material";
 import {} from "@mui/icons-material";
 
 const Header = () => {
+    const isSmallScreen = useMediaQuery(theme.breakpoints.up("sm"));
+
     return (
         <Box component="header">
             <Box
@@ -14,14 +17,13 @@ const Header = () => {
                     justifyContent: "center",
                     gap: "2rem",
                 }}>
-                <Box>
-                    <img src={logo} alt="Covoit" width="100" />
-                </Box>
-                <Typography
-                    component="span"
-                    sx={{ fontSize: "2rem", textTransform: "uppercase" }}>
-                    Covoit'
-                </Typography>
+                <Link href="/">
+                    <img
+                        src={logo}
+                        alt="Covoit"
+                        width={isSmallScreen ? "400" : "250"}
+                    />
+                </Link>
             </Box>
         </Box>
     );

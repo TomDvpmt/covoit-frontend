@@ -2,6 +2,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 import ConversationDeleteDialog from "../ConversationDeleteDialog";
 
+import theme from "../../styles/theme";
 import {
     Box,
     Paper,
@@ -29,7 +30,10 @@ const ConversationCard = ({
     };
 
     return (
-        <Box component="article" width="100%" maxWidth="700px">
+        <Box
+            component="article"
+            width="100%"
+            maxWidth={theme.maxWidth.conversationCard}>
             <Paper
                 sx={{
                     padding: "1rem",

@@ -98,6 +98,27 @@ const Login = () => {
                 flexDirection: "column",
                 alignItems: "flex-end",
             }}>
+            <Box
+                alignSelf="center"
+                mb="3rem"
+                display="flex"
+                justifyContent="center"
+                gap="1rem">
+                <Button
+                    id="demo1"
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleSubmit}>
+                    Utilisateur démo 1
+                </Button>
+                <Button
+                    id="demo2"
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleSubmit}>
+                    Utilisateur démo 2
+                </Button>
+            </Box>
             {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
             <UserInputEmail email={email} setEmail={setEmail} />
             <UserInputPassword password={password} setPassword={setPassword} />
@@ -108,19 +129,6 @@ const Login = () => {
                 sx={{ mt: ".5rem" }}>
                 Se connecter
             </Button>
-            <Box
-                alignSelf="center"
-                mt="3rem"
-                display="flex"
-                justifyContent="center"
-                gap="1rem">
-                <Button id="demo1" variant="contained" onClick={handleSubmit}>
-                    Demo user 1
-                </Button>
-                <Button id="demo2" variant="contained" onClick={handleSubmit}>
-                    Demo user 2
-                </Button>
-            </Box>
         </Box>
     );
 };

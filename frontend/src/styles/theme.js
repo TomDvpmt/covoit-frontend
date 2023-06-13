@@ -37,8 +37,9 @@ theme = createTheme(
             },
         },
         typography: {
-            fontFamily: "Lato, Helvetica Neue, Arial, sans-serif",
             h1: {
+                fontFamily: "Quicksand",
+                fontWeight: "700",
                 [theme.breakpoints.up("xs")]: {
                     margin: "5rem 0 3rem",
                     fontSize: "2rem",
@@ -58,6 +59,11 @@ theme = createTheme(
             },
         },
         components: {
+            MuiTypography: {
+                defaultProps: {
+                    fontFamily: "Raleway, Helvetica Neue, Arial, sans-serif",
+                },
+            },
             MuiInputBase: {
                 styleOverrides: {
                     root: {
@@ -70,6 +76,8 @@ theme = createTheme(
             nav: "1200px",
             main: "1200px",
             form: "450px",
+            bookingCard: "700px",
+            conversationCard: "700px",
         },
     },
     frFR

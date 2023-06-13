@@ -62,29 +62,27 @@ const BookingRequests = () => {
             .catch((error) => console.log(error));
     }, [userId, token]);
 
+    const requestsListStyle = {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "1rem",
+    };
+
     return (
         <>
             <Box component="section">
                 <Typography component="h2" variant="h2">
                     Demandes reçues
                 </Typography>
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "1rem",
-                    }}>
-                    {incomingBookingRequests}
-                </Box>
+                <Box sx={requestsListStyle}>{incomingBookingRequests}</Box>
             </Box>
             <Box component="section">
                 <Typography component="h2" variant="h2">
                     Demandes envoyées
                 </Typography>
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                {sentBookingRequests}
-            </Box>
+            <Box sx={requestsListStyle}>{sentBookingRequests}</Box>
         </>
     );
 };

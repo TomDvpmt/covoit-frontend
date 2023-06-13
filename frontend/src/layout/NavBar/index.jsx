@@ -47,7 +47,7 @@ const NavBar = () => {
                             xs: "none",
                             sm: "flex",
                         },
-                        gap: "1rem",
+                        gap: "2rem",
                     }}>
                     {page !== "home" && (
                         <Link
