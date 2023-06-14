@@ -11,5 +11,5 @@ export const store = configureStore({
         cities: citiesReducer,
         error: errorReducer,
     },
-    devTools: true,
+    devTools: false,
 });

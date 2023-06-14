@@ -49,6 +49,7 @@ const register = async (req, res, next) => {
                 message:
                     "Cette adresse e-mail est déjà utilisée, veuillez en choisir une autre.",
             });
+            return;
         }
 
         const salt = await bcrypt.genSalt(10);

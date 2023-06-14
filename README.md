@@ -1,4 +1,8 @@
+<center>
+
 ![Logo de Covoit'](/frontend/src/assets/img/covoit-logo-bicolor-on-white.png)
+
+</center>
 
 # Contexte
 
@@ -32,19 +36,35 @@ Le projet consistait à créer le back-end et le front-end de l'application, en 
 
 -   module de recherche de trajet avec API externe pour les noms de communes (geo.api.gouv.fr) :
 
+<center>
+
 ![Page d'accueil de Covoit'](/frontend/src/assets/img/captures/covoit-home.webp)
+
+</center>
 
 -   système de réservations :
 
+<center>
+
 ![Page de réservations de Covoit'](/frontend/src/assets/img/captures/covoit-booking.webp)
+
+</center>
 
 -   messagerie interne entre utilisateurs :
 
+<center>
+
 ![Page de conversation de Covoit'](/frontend/src/assets/img/captures/covoit-conversation.webp)
+
+</center>
 
 -   notifications par mail (Nodemailer) :
 
+<center>
+
 ![Mail de réservation de Covoit'](/frontend/src/assets/img/captures/covoit-mail.webp)
+
+</center>
 
 # Installation
 

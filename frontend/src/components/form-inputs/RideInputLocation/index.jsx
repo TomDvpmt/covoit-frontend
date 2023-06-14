@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-import Loader from "../../Loader";
-
 import {
     FormControl,
     InputAdornment,
@@ -41,13 +39,6 @@ const RideInputLocation = ({ type, location, setLocation, allCities }) => {
         setLocation(e.target.value);
 
         const query = e.target.value;
-
-        // fetch(
-        //     `https://geo.api.gouv.fr/communes?nom=${query}&boost=population&limit=5`
-        // )
-        //     .then((response) => response.json())
-        //     .then((data) => setCities(data.map((city) => city.nom)))
-        //     .catch((error) => console.log(error));
 
         if (query.length <= 1) {
             setShowCitiesMenu(false);

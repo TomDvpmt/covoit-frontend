@@ -5,7 +5,6 @@ import {
     TableRow,
     TableCell,
     Link,
-    Typography,
 } from "@mui/material";
 
 import theme from "../../styles/theme";

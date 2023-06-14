@@ -1,4 +1,10 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+    createBrowserRouter,
+    RouterProvider,
+    redirect,
+} from "react-router-dom";
+
+import { getOneUser } from "../../utils/user";
 
 import PageWrapper from "../../layout/PageWrapper";
 import SetPage from "../../layout/SetPage";
@@ -12,9 +18,16 @@ import Conversations from "../../pages/Conversations";
 import Conversation from "../../components/Conversation";
 import Error404 from "../../pages/Error404";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import { getOneUser } from "../../utils/user";
 
 const Router = () => {
+    const privateRouteLoader = () => {
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+            return redirect("/login");
+        }
+        return null;
+    };
+
     const router = createBrowserRouter([
         {
             element: <PageWrapper />,
@@ -56,6 +69,10 @@ const Router = () => {
                         </>
                     ),
                     loader: async ({ params }) => {
+                        const token = sessionStorage.getItem("token");
+                        if (!token) {
+                            return redirect("/login");
+                        }
                         return await getOneUser(params.id);
                     },
                     errorElement: <ErrorBoundary />,
@@ -68,6 +85,8 @@ const Router = () => {
                             <BookingRequests />
                         </>
                     ),
+                    loader: () => privateRouteLoader(),
+                    errorElement: <ErrorBoundary />,
                 },
                 {
                     path: "/myrides/",
@@ -77,6 +96,8 @@ const Router = () => {
                             <MyRides />
                         </>
                     ),
+                    loader: () => privateRouteLoader(),
+                    errorElement: <ErrorBoundary />,
                 },
                 {
                     path: "/conversations/",
@@ -86,6 +107,8 @@ const Router = () => {
                             <Conversations />
                         </>
                     ),
+                    loader: () => privateRouteLoader(),
+                    errorElement: <ErrorBoundary />,
                 },
 
                 {
@@ -96,6 +119,8 @@ const Router = () => {
                             <Conversation />
                         </>
                     ),
+                    loader: () => privateRouteLoader(),
+                    errorElement: <ErrorBoundary />,
                 },
 
                 {

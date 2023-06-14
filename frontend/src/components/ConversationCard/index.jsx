@@ -63,8 +63,10 @@ const ConversationCard = ({
                         flexDirection: { xs: "row", sm: "column", md: "row" },
                         gap: ".5rem",
                     }}>
-                    <Typography>Nombre de messages :</Typography>
-                    <Typography>{nbOfMessages}</Typography>
+                    <Typography component="span">
+                        Nombre de messages :
+                    </Typography>
+                    <Typography component="span">{nbOfMessages}</Typography>
                 </Typography>
                 <Box
                     mt={{ xs: "2rem", sm: "0" }}

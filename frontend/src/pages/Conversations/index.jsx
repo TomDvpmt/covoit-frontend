@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link as RouterLink } from "react-router-dom";
 
 import ConversationCard from "../../components/ConversationCard";
 import Loader from "../../components/Loader";
-// import ConversationDeleteDialog from "../../components/ConversationDeleteDialog";
 import ValidationMessage from "../../components/ValidationMessage";
 
-import { Box, Paper, IconButton, Link, Typography } from "@mui/material";
-import { Delete } from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
 
 const Conversations = () => {
     const token = sessionStorage.getItem("token");
@@ -73,7 +70,7 @@ const Conversations = () => {
         )
             .then((data) => setConversations(data))
             .catch((error) => console.log(error));
-    }, [conversationsData, showConversationDeleteDialog]);
+    }, [conversationsData, showConversationDeleteDialog, userId]);
 
     return (
         <>

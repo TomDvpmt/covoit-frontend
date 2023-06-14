@@ -1,10 +1,22 @@
-import { useSelector } from "react-redux";
-import { selectPageLocation } from "../../features/page/pageSlice";
+import { Link as RouterLink } from "react-router-dom";
+
+import { Box, Typography, Link } from "@mui/material";
 
 const ErrorBoundary = () => {
-    const page = useSelector(selectPageLocation);
-
-    return <div>ErrorBoundary</div>;
+    return (
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap="1rem">
+            <Typography variant="h2">
+                Aïe, quelque chose s'est mal passé.
+            </Typography>
+            <Link component={RouterLink} to="/">
+                Revenir à l'accueil
+            </Link>
+        </Box>
+    );
 };
 
 export default ErrorBoundary;

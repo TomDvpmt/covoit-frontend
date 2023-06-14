@@ -76,7 +76,6 @@ const Home = () => {
     return (
         <>
             <Box
-                display="none"
                 component="section"
                 m="3rem auto"
                 p=".5rem"
