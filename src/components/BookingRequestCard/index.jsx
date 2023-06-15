@@ -163,7 +163,7 @@ const BookingRequestCard = ({ request, formatedDate }) => {
             default:
                 setBookingCardButtons(null);
         }
-    }, [requestStatus]);
+    }, [requestStatus, userId, request.driverId]);
 
     useEffect(() => {
         if (userId === request.candidateId) {
