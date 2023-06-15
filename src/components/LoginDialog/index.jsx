@@ -48,7 +48,7 @@ const LoginDialog = ({
         e.preventDefault(e);
 
         try {
-            const response = await fetch(`${BASE_API_URL}API/users/login`, {
+            const response = await fetch(`${BASE_API_URL}/API/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

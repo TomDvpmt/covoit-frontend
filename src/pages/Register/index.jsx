@@ -53,7 +53,7 @@ const Register = () => {
         // Register
 
         try {
-            const response = await fetch(`${BASE_API_URL}API/users/register`, {
+            const response = await fetch(`${BASE_API_URL}/API/users/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const Register = () => {
 
         // Auto log in after register
 
-        fetch(`${BASE_API_URL}API/users/login`, {
+        fetch(`${BASE_API_URL}/API/users/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
