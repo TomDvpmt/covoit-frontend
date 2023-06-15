@@ -28,6 +28,8 @@ import ValidationMessage from "../../components/ValidationMessage";
 import MessageCreateDialog from "../../components/MessageCreateDialog";
 import ErrorMessage from "../../components/ErrorMessage";
 
+import BASE_API_URL from "../../utils/API";
+
 import {
     Box,
     Paper,
@@ -87,7 +89,7 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        fetch(`/API/conversations/`, {
+        fetch(`${BASE_API_URL}/API/conversations/`, {
             headers: {
                 Authorization: `BEARER ${token}`,
             },
@@ -141,19 +143,22 @@ const Profile = () => {
         }
 
         try {
-            const response = await fetch(`/API/users/${userId}`, {
-                method: "PUT",
-                headers: {
-                    authorization: `BEARER ${token}`,
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    email: newEmail,
-                    firstName: newFirstName,
-                    lastName: newLastName,
-                    phone: newPhone,
-                }),
-            });
+            const response = await fetch(
+                `${BASE_API_URL}/API/users/${userId}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        authorization: `BEARER ${token}`,
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email: newEmail,
+                        firstName: newFirstName,
+                        lastName: newLastName,
+                        phone: newPhone,
+                    }),
+                }
+            );
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.message);

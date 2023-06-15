@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import BASE_API_URL from "../../utils/API";
+
 import {
     selectUserFirstName,
     selectUserId,
@@ -35,7 +37,7 @@ const BookingRequestCard = ({ request, formatedDate }) => {
         // Update request status to "accepted"
         try {
             const response = await fetch(
-                `/API/bookingRequests/${request._id}`,
+                `${BASE_API_URL}/API/bookingRequests/${request._id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -65,14 +67,17 @@ const BookingRequestCard = ({ request, formatedDate }) => {
 
         // Add the request's author to ride's passengers list
         try {
-            const response = await fetch(`/API/rides/${request.rideId}`, {
-                method: "PUT",
-                headers: {
-                    Authorization: `BEARER ${token}`,
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify({ newPassenger: request.candidateId }),
-            });
+            const response = await fetch(
+                `${BASE_API_URL}/API/rides/${request.rideId}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `BEARER ${token}`,
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({ newPassenger: request.candidateId }),
+                }
+            );
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.message);
@@ -88,7 +93,7 @@ const BookingRequestCard = ({ request, formatedDate }) => {
         // Update request status to "rejected"
         try {
             const response = await fetch(
-                `/API/bookingRequests/${request._id}`,
+                `${BASE_API_URL}/API/bookingRequests/${request._id}`,
                 {
                     method: "PUT",
                     headers: {

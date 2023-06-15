@@ -2,12 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { logOut } from "../../features/user/userSlice";
-import {
-    setDeleteUserErrorMessage,
-    selectDeleteUserErrorMessage,
-} from "../../features/error/errorSlice";
+import { selectDeleteUserErrorMessage } from "../../features/error/errorSlice";
 
 import ErrorMessage from "../ErrorMessage";
+
+import BASE_API_URL from "../../utils/API";
 
 import {
     Dialog,
@@ -39,12 +38,15 @@ const UserDeleteDialog = ({
 
     const handleYes = async () => {
         try {
-            const response = await fetch(`/API/users/${userId}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `BEARER ${token}`,
-                },
-            });
+            const response = await fetch(
+                `${BASE_API_URL}/API/users/${userId}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `BEARER ${token}`,
+                    },
+                }
+            );
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.message);

@@ -16,6 +16,8 @@ import RideInputSeats from "../form-inputs/RideInputSeats";
 import RideInputPrice from "../form-inputs/RideInputPrice";
 import ErrorMessage from "../ErrorMessage";
 
+import BASE_API_URL from "../../utils/API";
+
 import { Box, Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 
 import PropTypes from "prop-types";
@@ -77,7 +79,7 @@ const RideCreateDialog = ({
         };
 
         try {
-            const response = await fetch("/API/rides/create", {
+            const response = await fetch(`${BASE_API_URL}/API/rides/create`, {
                 method: "POST",
                 headers: {
                     Authorization: `BEARER ${token}`,

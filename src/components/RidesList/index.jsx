@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import RideCard from "../RideCard";
 
 import { Box } from "@mui/material";

@@ -1,3 +1,5 @@
+import BASE_API_URL from "../../utils/API";
+
 import {
     Dialog,
     DialogActions,
@@ -29,7 +31,7 @@ const ConversationDeleteDialog = ({
     const handleYes = async () => {
         try {
             const response = await fetch(
-                `/API/conversations/${conversationId}`,
+                `${BASE_API_URL}/API/conversations/${conversationId}`,
                 {
                     method: "DELETE",
                     headers: {

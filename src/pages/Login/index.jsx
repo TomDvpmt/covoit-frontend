@@ -12,6 +12,8 @@ import UserInputEmail from "../../components/form-inputs/UserInputEmail";
 import UserInputPassword from "../../components/form-inputs/UserInputPassword";
 import ErrorMessage from "../../components/ErrorMessage";
 
+import BASE_API_URL from "../../utils/API";
+
 import { Box, Button } from "@mui/material";
 
 import theme from "../../styles/theme";
@@ -58,7 +60,7 @@ const Login = () => {
         }
 
         try {
-            const response = await fetch("API/users/login", {
+            const response = await fetch(`${BASE_API_URL}API/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

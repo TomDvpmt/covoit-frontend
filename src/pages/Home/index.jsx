@@ -13,6 +13,8 @@ import RideInputPrice from "../../components/form-inputs/RideInputPrice";
 import RidesList from "../../components/RidesList";
 import ErrorMessage from "../../components/ErrorMessage";
 
+import BASE_API_URL from "../../utils/API";
+
 import theme from "../../styles/theme";
 import { Box, Typography, Button } from "@mui/material";
 
@@ -42,7 +44,7 @@ const Home = () => {
             return;
         }
 
-        fetch("/API/rides/", {
+        fetch(`${BASE_API_URL}/API/rides/`, {
             method: "POST",
             headers: {
                 "content-type": "application/json",

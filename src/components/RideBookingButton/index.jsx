@@ -18,6 +18,8 @@ import { getOneUser } from "../../utils/user";
 import LoginDialog from "../LoginDialog";
 import ErrorMessage from "../ErrorMessage";
 
+import BASE_API_URL from "../../utils/API";
+
 import { Button } from "@mui/material";
 
 import PropTypes from "prop-types";
@@ -64,7 +66,7 @@ const RideBookingButton = ({ ride }) => {
             return;
         }
 
-        fetch("/API/bookingRequests/", {
+        fetch(`${BASE_API_URL}/API/bookingRequests/`, {
             method: "POST",
             headers: {
                 authorization: `BEARER ${token}`,
@@ -96,27 +98,30 @@ const RideBookingButton = ({ ride }) => {
         userEmail
     ) => {
         try {
-            const response = await fetch("/API/bookingRequests/create", {
-                method: "POST",
-                headers: {
-                    Authorization: `BEARER ${token}`,
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    candidateId: userId,
-                    candidateFirstName: userFirstName,
-                    candidateLastName: userLastName,
-                    candidateEmail: userEmail,
-                    driverId,
-                    driverFirstName,
-                    driverLastName,
-                    driverEmail,
-                    rideId,
-                    departure: ride.departure,
-                    destination: ride.destination,
-                    departureDate: ride.departureDate,
-                }),
-            });
+            const response = await fetch(
+                `${BASE_API_URL}/API/bookingRequests/create`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `BEARER ${token}`,
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        candidateId: userId,
+                        candidateFirstName: userFirstName,
+                        candidateLastName: userLastName,
+                        candidateEmail: userEmail,
+                        driverId,
+                        driverFirstName,
+                        driverLastName,
+                        driverEmail,
+                        rideId,
+                        departure: ride.departure,
+                        destination: ride.destination,
+                        departureDate: ride.departureDate,
+                    }),
+                }
+            );
             setBookingRequestStatus("pending");
             if (!response.ok) {
                 const data = await response.json();

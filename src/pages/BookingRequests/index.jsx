@@ -5,6 +5,7 @@ import { selectUserId } from "../../features/user/userSlice";
 
 import BookingRequestCard from "../../components/BookingRequestCard";
 
+import BASE_API_URL from "../../utils/API";
 import { getFormatedDate } from "../../utils/helpers";
 import dayjs from "dayjs";
 
@@ -19,7 +20,7 @@ const BookingRequests = () => {
 
     // Get incoming & sent booking requests for current user
     useEffect(() => {
-        fetch("/API/bookingRequests", {
+        fetch(`${BASE_API_URL}/API/bookingRequests`, {
             headers: {
                 Authorization: `BEARER ${token}`,
             },

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
+import BASE_API_URL from "../../utils/API";
+
 import { selectUserId } from "../../features/user/userSlice";
 import {
     setConversationErrorMessage,
@@ -34,7 +36,7 @@ const Conversation = () => {
     useEffect(() => {
         setIsLoading(true);
 
-        fetch(`/API/conversations/${conversationId}`, {
+        fetch(`${BASE_API_URL}/API/conversations/${conversationId}`, {
             headers: {
                 Authorization: `BEARER ${token}`,
             },
@@ -53,7 +55,7 @@ const Conversation = () => {
 
     useEffect(() => {
         interlocutorId &&
-            fetch(`/API/users/${interlocutorId}`)
+            fetch(`${BASE_API_URL}/API/users/${interlocutorId}`)
                 .then((response) => response.json())
                 .then((data) => {
                     const fullName = `${data.firstName}${
@@ -80,7 +82,7 @@ const Conversation = () => {
 
         try {
             const response = await fetch(
-                `/API/conversations/${conversationId}`,
+                `${BASE_API_URL}/API/conversations/${conversationId}`,
                 {
                     method: "PUT",
                     headers: {

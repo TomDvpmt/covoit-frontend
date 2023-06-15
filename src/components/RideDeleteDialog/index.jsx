@@ -8,6 +8,8 @@ import {
 
 import ErrorMessage from "../ErrorMessage";
 
+import BASE_API_URL from "../../utils/API";
+
 import {
     Dialog,
     DialogActions,
@@ -37,12 +39,15 @@ const RideDeleteDialog = ({
 
     const handleYes = async () => {
         try {
-            const response = await fetch(`/API/rides/${rideId}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `BEARER ${token}`,
-                },
-            });
+            const response = await fetch(
+                `${BASE_API_URL}/API/rides/${rideId}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `BEARER ${token}`,
+                    },
+                }
+            );
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.message);

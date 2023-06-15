@@ -20,6 +20,8 @@ import RidesList from "../../components/RidesList";
 import RideCreateDialog from "../../components/RideCreateDialog";
 import ErrorMessage from "../../components/ErrorMessage";
 
+import BASE_API_URL from "../../utils/API";
+
 import { Box, Typography, Button } from "@mui/material";
 
 const MyRides = () => {
@@ -46,7 +48,7 @@ const MyRides = () => {
         dispatch(resetErrorMessages());
 
         userId &&
-            fetch("/API/rides/", {
+            fetch(`${BASE_API_URL}/API/rides/`, {
                 method: "POST",
                 headers: {
                     Authorization: `BEARER ${token}`,
@@ -93,7 +95,7 @@ const MyRides = () => {
         dispatch(resetErrorMessages());
 
         userId &&
-            fetch("/API/rides/", {
+            fetch(`${BASE_API_URL}/API/rides/`, {
                 method: "POST",
                 headers: {
                     Authorization: `BEARER ${token}`,

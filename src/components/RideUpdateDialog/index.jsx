@@ -11,6 +11,8 @@ import RideInputDepartureDate from "../form-inputs/RideInputDepartureDate";
 import RideInputSeats from "../form-inputs/RideInputSeats";
 import ErrorMessage from "../ErrorMessage";
 
+import BASE_API_URL from "../../utils/API";
+
 import { Dialog, DialogTitle, Box, Button, DialogContent } from "@mui/material";
 
 import PropTypes from "prop-types";
@@ -72,14 +74,17 @@ const RideUpdateDialog = ({
         };
 
         try {
-            const response = await fetch(`/API/rides/${rideId}`, {
-                method: "PUT",
-                headers: {
-                    Authorization: `BEARER ${token}`,
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify(updateData),
-            });
+            const response = await fetch(
+                `${BASE_API_URL}/API/rides/${rideId}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `BEARER ${token}`,
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify(updateData),
+                }
+            );
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.message);

@@ -17,6 +17,8 @@ import UserInputLastName from "../../components/form-inputs/UserInputLastName";
 import UserInputPhone from "../../components/form-inputs/UserInputPhone";
 import ErrorMessage from "../../components/ErrorMessage";
 
+import BASE_API_URL from "../../utils/API";
+
 import { Box, Button } from "@mui/material";
 
 import theme from "../../styles/theme";
@@ -51,7 +53,7 @@ const Register = () => {
         // Register
 
         try {
-            const response = await fetch("API/users/register", {
+            const response = await fetch(`${BASE_API_URL}API/users/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -80,7 +82,7 @@ const Register = () => {
 
         // Auto log in after register
 
-        fetch("API/users/login", {
+        fetch(`${BASE_API_URL}API/users/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
