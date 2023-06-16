@@ -1,3 +1,5 @@
+import { removeErrorMessages } from "../../../utils/user";
+
 import { TextField } from "@mui/material";
 import PropTypes from "prop-types";
 
@@ -21,6 +23,7 @@ const UserInputFirstName = ({ firstName, setFirstName }) => {
             label="Prénom"
             value={firstName}
             onChange={handleChange}
+            onFocus={removeErrorMessages}
         />
     );
 };

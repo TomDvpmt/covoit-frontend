@@ -1,3 +1,5 @@
+import { removeErrorMessages } from "../../../utils/user";
+
 import { TextField } from "@mui/material";
 import PropTypes from "prop-types";
 
@@ -21,6 +23,7 @@ const UserInputPhone = ({ phone, setPhone }) => {
             label="Numéro de téléphone"
             value={phone}
             onChange={handleChange}
+            onFocus={removeErrorMessages}
         />
     );
 };

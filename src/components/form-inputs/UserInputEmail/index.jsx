@@ -1,3 +1,5 @@
+import { removeErrorMessages } from "../../../utils/user";
+
 import { TextField } from "@mui/material";
 
 import PropTypes from "prop-types";
@@ -14,7 +16,6 @@ const UserInputEmail = ({ email, setEmail }) => {
 
     return (
         <TextField
-            autoFocus
             required
             fullWidth
             margin="dense"
@@ -24,6 +25,7 @@ const UserInputEmail = ({ email, setEmail }) => {
             label="Adresse e-mail"
             value={email}
             onChange={handleChange}
+            onFocus={removeErrorMessages}
         />
     );
 };

@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { removeErrorMessages } from "../../../utils/user";
+
 import {
     FormControl,
     OutlinedInput,
@@ -45,6 +47,7 @@ const UserInputPasswordConfirm = ({ passwordConfirm, setPasswordConfirm }) => {
                 label="Confirmez votre mot de passe"
                 value={passwordConfirm}
                 onChange={handleChange}
+                onFocus={removeErrorMessages}
             />
         </FormControl>
     );

@@ -11,6 +11,7 @@ import {
 import UserInputEmail from "../../components/form-inputs/UserInputEmail";
 import UserInputPassword from "../../components/form-inputs/UserInputPassword";
 import ErrorMessage from "../../components/ErrorMessage";
+import Loader from "../../components/Loader";
 
 import BASE_API_URL from "../../utils/API";
 
@@ -21,6 +22,7 @@ import theme from "../../styles/theme";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const errorMessage = useSelector(selectLoginErrorMessage);
 
@@ -29,6 +31,7 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         if (e.target.id !== "demo1" && e.target.id !== "demo2") {
             if (email === "" || password === "") {
@@ -87,9 +90,13 @@ const Login = () => {
             console.error(error);
             dispatch(setLoginErrorMessage(error.message));
         }
+
+        setIsLoading(false);
     };
 
-    return (
+    return isLoading ? (
+        <Loader />
+    ) : (
         <Box
             component="form"
             onSubmit={handleSubmit}

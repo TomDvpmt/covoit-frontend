@@ -16,6 +16,7 @@ import UserInputFirstName from "../../components/form-inputs/UserInputFirstName"
 import UserInputLastName from "../../components/form-inputs/UserInputLastName";
 import UserInputPhone from "../../components/form-inputs/UserInputPhone";
 import ErrorMessage from "../../components/ErrorMessage";
+import Loader from "../../components/Loader";
 
 import BASE_API_URL from "../../utils/API";
 
@@ -35,11 +36,11 @@ const Register = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
-        dispatch(resetErrorMessages());
-
         e.preventDefault();
+        dispatch(resetErrorMessages());
 
         if (password !== passwordConfirm) {
             dispatch(
@@ -53,76 +54,94 @@ const Register = () => {
         // Register
 
         try {
-            const response = await fetch(`${BASE_API_URL}/API/users/register`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                    firstName,
-                    lastName,
-                    phone,
-                }),
-            });
-            if (!response.ok) {
-                response
+            setIsLoading(true);
+
+            const loginResponse = await fetch(
+                `${BASE_API_URL}/API/users/register`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                        firstName,
+                        lastName,
+                        phone,
+                    }),
+                }
+            );
+            if (!loginResponse.ok) {
+                loginResponse
                     .json()
                     .then((data) =>
                         dispatch(setRegisterErrorMessage(data.message))
                     );
+                setIsLoading(false);
                 return;
             }
-            const data = await response.json();
         } catch (error) {
+            setIsLoading(false);
             dispatch(setRegisterErrorMessage("Impossible de créer le compte."));
             return;
         }
 
-        // Auto log in after register
+        // Auto login after register
 
-        fetch(`${BASE_API_URL}/API/users/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email,
-                password,
-            }),
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    response
-                        .json()
-                        .then((data) =>
-                            dispatch(setRegisterErrorMessage(data.message))
-                        );
-                    return;
+        try {
+            const registerResponse = await fetch(
+                `${BASE_API_URL}/API/users/login`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                    }),
                 }
-                response.json().then((data) => {
-                    sessionStorage.setItem("token", data.token);
-                    dispatch(logIn());
-                    dispatch(
-                        setUserData({
-                            id: data.id,
-                            email: data.email,
-                            firstName: data.firstName,
-                            lastName: data.lastName,
-                            phone: data.phone,
-                        })
+            );
+
+            if (!registerResponse.ok) {
+                registerResponse
+                    .json()
+                    .then((data) =>
+                        dispatch(setRegisterErrorMessage(data.message))
                     );
-                });
-                navigate("/");
-            })
-            .catch((error) => {
-                console.error(error);
-                dispatch(setRegisterErrorMessage(error.message)); // to be tested
-            });
+                setIsLoading(false);
+                return;
+            }
+            const data = await registerResponse.json();
+
+            sessionStorage.setItem("token", data.token);
+            dispatch(logIn());
+            dispatch(
+                setUserData({
+                    id: data.id,
+                    email: data.email,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    phone: data.phone,
+                })
+            );
+
+            setIsLoading(false);
+            navigate("/");
+        } catch (error) {
+            console.log(error);
+            dispatch(setRegisterErrorMessage("Connexion impossible."));
+            setIsLoading(false);
+            return;
+        }
+
+        setIsLoading(false);
     };
 
-    return (
+    return isLoading ? (
+        <Loader />
+    ) : (
         <Box
             component="form"
             onSubmit={handleSubmit}
