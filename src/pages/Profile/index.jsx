@@ -28,7 +28,7 @@ import ValidationMessage from "../../components/ValidationMessage";
 import MessageCreateDialog from "../../components/MessageCreateDialog";
 import ErrorMessage from "../../components/ErrorMessage";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import {
     Box,
@@ -89,7 +89,7 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        fetch(`${BASE_API_URL}/API/conversations/`, {
+        fetch(`${API_BASE_URI}/API/conversations/`, {
             headers: {
                 Authorization: `BEARER ${token}`,
             },
@@ -144,7 +144,7 @@ const Profile = () => {
 
         try {
             const response = await fetch(
-                `${BASE_API_URL}/API/users/${userId}`,
+                `${API_BASE_URI}/API/users/${userId}`,
                 {
                     method: "PUT",
                     headers: {

@@ -6,7 +6,7 @@ import { selectDeleteUserErrorMessage } from "../../features/error/errorSlice";
 
 import ErrorMessage from "../ErrorMessage";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import {
     Dialog,
@@ -39,7 +39,7 @@ const UserDeleteDialog = ({
     const handleYes = async () => {
         try {
             const response = await fetch(
-                `${BASE_API_URL}/API/users/${userId}`,
+                `${API_BASE_URI}/API/users/${userId}`,
                 {
                     method: "DELETE",
                     headers: {

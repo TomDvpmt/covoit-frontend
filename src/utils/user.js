@@ -4,7 +4,7 @@ import {
     setRegisterErrorMessage,
 } from "../features/error/errorSlice";
 
-import BASE_API_URL from "./API";
+import API_BASE_URI from "../config/API";
 
 /** Get a user's data
  *
@@ -13,7 +13,7 @@ import BASE_API_URL from "./API";
  */
 
 export const getOneUser = async (id) => {
-    const response = await fetch(`${BASE_API_URL}/API/users/${id}`);
+    const response = await fetch(`${API_BASE_URI}/API/users/${id}`);
     const data = await response.json();
     if (!response.ok) {
         throw new Error(data.message);

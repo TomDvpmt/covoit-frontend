@@ -4,7 +4,7 @@ import ConversationCard from "../../components/ConversationCard";
 import Loader from "../../components/Loader";
 import ValidationMessage from "../../components/ValidationMessage";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import { Box, Typography } from "@mui/material";
 
@@ -24,7 +24,7 @@ const Conversations = () => {
         setValidationMessage("");
         setIsLoading(true);
 
-        fetch(`${BASE_API_URL}/API/conversations`, {
+        fetch(`${API_BASE_URI}/API/conversations`, {
             headers: {
                 Authorization: `BEARER ${token}`,
             },
@@ -45,7 +45,7 @@ const Conversations = () => {
                     (id) => id !== userId
                 );
 
-                return fetch(`${BASE_API_URL}/API/users/${interlocutorId}`)
+                return fetch(`${API_BASE_URI}/API/users/${interlocutorId}`)
                     .then((response) => response.json())
                     .then((data) => {
                         const interlocutorName = `${data.firstName}${

@@ -13,7 +13,7 @@ import UserInputPassword from "../../components/form-inputs/UserInputPassword";
 import ErrorMessage from "../../components/ErrorMessage";
 import Loader from "../../components/Loader";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import { Box, Button } from "@mui/material";
 
@@ -63,7 +63,7 @@ const Login = () => {
         }
 
         try {
-            const response = await fetch(`${BASE_API_URL}/API/users/login`, {
+            const response = await fetch(`${API_BASE_URI}/API/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

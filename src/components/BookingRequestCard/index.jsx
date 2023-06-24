@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import {
     selectUserFirstName,
@@ -37,7 +37,7 @@ const BookingRequestCard = ({ request, formatedDate }) => {
         // Update request status to "accepted"
         try {
             const response = await fetch(
-                `${BASE_API_URL}/API/bookingRequests/${request._id}`,
+                `${API_BASE_URI}/API/bookingRequests/${request._id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -68,7 +68,7 @@ const BookingRequestCard = ({ request, formatedDate }) => {
         // Add the request's author to ride's passengers list
         try {
             const response = await fetch(
-                `${BASE_API_URL}/API/rides/${request.rideId}`,
+                `${API_BASE_URI}/API/rides/${request.rideId}`,
                 {
                     method: "PUT",
                     headers: {
@@ -93,7 +93,7 @@ const BookingRequestCard = ({ request, formatedDate }) => {
         // Update request status to "rejected"
         try {
             const response = await fetch(
-                `${BASE_API_URL}/API/bookingRequests/${request._id}`,
+                `${API_BASE_URI}/API/bookingRequests/${request._id}`,
                 {
                     method: "PUT",
                     headers: {

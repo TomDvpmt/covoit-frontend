@@ -8,7 +8,7 @@ import {
 
 import ErrorMessage from "../ErrorMessage";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import {
     Dialog,
@@ -40,7 +40,7 @@ const RideDeleteDialog = ({
     const handleYes = async () => {
         try {
             const response = await fetch(
-                `${BASE_API_URL}/API/rides/${rideId}`,
+                `${API_BASE_URI}/API/rides/${rideId}`,
                 {
                     method: "DELETE",
                     headers: {

@@ -18,7 +18,7 @@ import { getOneUser } from "../../utils/user";
 import LoginDialog from "../LoginDialog";
 import ErrorMessage from "../ErrorMessage";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import { Button } from "@mui/material";
 
@@ -66,7 +66,7 @@ const RideBookingButton = ({ ride }) => {
             return;
         }
 
-        fetch(`${BASE_API_URL}/API/bookingRequests/`, {
+        fetch(`${API_BASE_URI}/API/bookingRequests/`, {
             method: "POST",
             headers: {
                 authorization: `BEARER ${token}`,
@@ -99,7 +99,7 @@ const RideBookingButton = ({ ride }) => {
     ) => {
         try {
             const response = await fetch(
-                `${BASE_API_URL}/API/bookingRequests/create`,
+                `${API_BASE_URI}/API/bookingRequests/create`,
                 {
                     method: "POST",
                     headers: {

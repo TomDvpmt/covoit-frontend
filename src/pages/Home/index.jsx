@@ -13,7 +13,7 @@ import RideInputPrice from "../../components/form-inputs/RideInputPrice";
 import RidesList from "../../components/RidesList";
 import ErrorMessage from "../../components/ErrorMessage";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import theme from "../../styles/theme";
 import { Box, Typography, Button } from "@mui/material";
@@ -44,7 +44,7 @@ const Home = () => {
             return;
         }
 
-        fetch(`${BASE_API_URL}/API/rides/`, {
+        fetch(`${API_BASE_URI}/API/rides/`, {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -156,6 +156,7 @@ const Home = () => {
                     <Button
                         type="submit"
                         variant="contained"
+                        color="secondary"
                         sx={{ mt: "1rem" }}>
                         Chercher
                     </Button>

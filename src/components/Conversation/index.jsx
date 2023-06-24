@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import { selectUserId } from "../../features/user/userSlice";
 import {
@@ -36,7 +36,7 @@ const Conversation = () => {
     useEffect(() => {
         setIsLoading(true);
 
-        fetch(`${BASE_API_URL}/API/conversations/${conversationId}`, {
+        fetch(`${API_BASE_URI}/API/conversations/${conversationId}`, {
             headers: {
                 Authorization: `BEARER ${token}`,
             },
@@ -55,7 +55,7 @@ const Conversation = () => {
 
     useEffect(() => {
         interlocutorId &&
-            fetch(`${BASE_API_URL}/API/users/${interlocutorId}`)
+            fetch(`${API_BASE_URI}/API/users/${interlocutorId}`)
                 .then((response) => response.json())
                 .then((data) => {
                     const fullName = `${data.firstName}${
@@ -82,7 +82,7 @@ const Conversation = () => {
 
         try {
             const response = await fetch(
-                `${BASE_API_URL}/API/conversations/${conversationId}`,
+                `${API_BASE_URI}/API/conversations/${conversationId}`,
                 {
                     method: "PUT",
                     headers: {

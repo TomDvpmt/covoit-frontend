@@ -12,7 +12,7 @@ import {
 import MessageInputContent from "../form-inputs/MessageInputContent";
 import ErrorMessage from "../ErrorMessage";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import {
     Dialog,
@@ -65,7 +65,7 @@ const MessageCreateDialog = ({
         try {
             // get all user's conversations
             const getAllConversationsResponse = await fetch(
-                `${BASE_API_URL}/API/conversations`,
+                `${API_BASE_URI}/API/conversations`,
                 {
                     headers: {
                         Authorization: `BEARER ${token}`,
@@ -91,7 +91,7 @@ const MessageCreateDialog = ({
                 )
             ) {
                 const createConversationResponse = await fetch(
-                    `${BASE_API_URL}/API/conversations`,
+                    `${API_BASE_URI}/API/conversations`,
                     {
                         method: "POST",
                         headers: {
@@ -125,7 +125,7 @@ const MessageCreateDialog = ({
             );
             const conversationId = withRecipientConversation._id;
             const addMessageResponse = await fetch(
-                `${BASE_API_URL}/API/conversations/${conversationId}`,
+                `${API_BASE_URI}/API/conversations/${conversationId}`,
                 {
                     method: "PUT",
                     headers: {

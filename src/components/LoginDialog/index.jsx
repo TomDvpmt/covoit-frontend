@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import { setUserData } from "../../features/user/userSlice";
 import {
@@ -48,7 +48,7 @@ const LoginDialog = ({
         e.preventDefault(e);
 
         try {
-            const response = await fetch(`${BASE_API_URL}/API/users/login`, {
+            const response = await fetch(`${API_BASE_URI}/API/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

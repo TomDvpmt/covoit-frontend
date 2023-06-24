@@ -82,7 +82,7 @@ Le back-end : <a href="https://github.com/TomDvpmt/covoit-backend" target="_blan
 
 `npm install`
 
--   Dans le fichier `/src/utils/API.js`, remplacer la valeur de `BASE_API_URL` par celle de votre serveur back-end.
+-   Dans le fichier `/src/config/API.js`, remplacer la valeur de `API_BASE_URI` par celle de votre serveur back-end.
 
 # Lancement de l'application
 

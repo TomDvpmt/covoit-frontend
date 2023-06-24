@@ -18,7 +18,7 @@ import UserInputPhone from "../../components/form-inputs/UserInputPhone";
 import ErrorMessage from "../../components/ErrorMessage";
 import Loader from "../../components/Loader";
 
-import BASE_API_URL from "../../utils/API";
+import API_BASE_URI from "../../config/API";
 
 import { Box, Button } from "@mui/material";
 
@@ -57,7 +57,7 @@ const Register = () => {
             setIsLoading(true);
 
             const loginResponse = await fetch(
-                `${BASE_API_URL}/API/users/register`,
+                `${API_BASE_URI}/API/users/register`,
                 {
                     method: "POST",
                     headers: {
@@ -91,7 +91,7 @@ const Register = () => {
 
         try {
             const registerResponse = await fetch(
-                `${BASE_API_URL}/API/users/login`,
+                `${API_BASE_URI}/API/users/login`,
                 {
                     method: "POST",
                     headers: {
