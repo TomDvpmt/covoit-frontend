@@ -62,11 +62,11 @@ const Footer = () => {
                         </TableCell>
                         <TableCell>
                             <Link
-                                href="https://github.com/TomDvpmt/Covoit"
+                                href="https://github.com/TomDvpmt/covoit-frontend"
                                 target="_blank"
                                 rel="noopener"
                                 underline="hover">
-                                github.com/TomDvpmt/Covoit
+                                github.com/TomDvpmt
                             </Link>
                         </TableCell>
                     </TableRow>
