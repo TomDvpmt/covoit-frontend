@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 import { selectUserId } from "../../features/user/userSlice";
 
 import BookingRequestCard from "../../components/BookingRequestCard";
+import Illustration from "../../components/Illustration";
+
+import illustration from "../../assets/img/illustrations/drive-passenger.webp";
 
 import API_BASE_URI from "../../config/API";
 import { getFormatedDate } from "../../utils/helpers";
@@ -72,6 +75,7 @@ const BookingRequests = () => {
 
     return (
         <>
+            <Illustration imgUrl={illustration} imgTitle="A great passenger" />
             <Box component="section">
                 <Typography component="h2" variant="h2">
                     Demandes reçues

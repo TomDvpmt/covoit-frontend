@@ -19,6 +19,9 @@ import {
 import RidesList from "../../components/RidesList";
 import RideCreateDialog from "../../components/RideCreateDialog";
 import ErrorMessage from "../../components/ErrorMessage";
+import Illustration from "../../components/Illustration";
+
+import illustration from "../../assets/img/illustrations/thelma.webp";
 
 import API_BASE_URI from "../../config/API";
 
@@ -88,7 +91,7 @@ const MyRides = () => {
                         )
                     );
                 });
-    }, [token, userId, showRideCreateDialog]);
+    }, [token, userId, showRideCreateDialog, dispatch]);
 
     // Get rides as a passenger
     useEffect(() => {
@@ -137,10 +140,11 @@ const MyRides = () => {
                         )
                     );
                 });
-    }, [token, userId]);
+    }, [token, userId, dispatch]);
 
     return (
         <>
+            <Illustration imgUrl={illustration} imgTitle="A great ride" />
             <Box component="section">
                 <Typography component="h2" variant="h2">
                     Comme conducteur

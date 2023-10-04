@@ -2,11 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { logOut, selectUserId } from "../../features/user/userSlice";
+import {
+    logOut,
+    selectUserId,
+    selectUserEmail,
+} from "../../features/user/userSlice";
 
 import RideCreateDialog from "../RideCreateDialog";
 
-import userAvatar from "../../assets/img/user/drive.jpg";
+import userAvatar1 from "../../assets/img/user/drive.jpg";
+import userAvatar2 from "../../assets/img/user/bond-driver.png";
 
 import {
     Menu,
@@ -26,6 +31,7 @@ import {
 
 const MenuUser = () => {
     const userId = useSelector(selectUserId);
+    const userEmail = useSelector(selectUserEmail);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [showMenuRideCreateDialog, setShowMenuRideCreateDialog] =
@@ -78,7 +84,14 @@ const MenuUser = () => {
     return (
         <>
             <IconButton onClick={handleOpen} size="large">
-                <Avatar alt="Your awesome profile avatar" src={userAvatar} />
+                <Avatar
+                    alt="Your awesome profile avatar"
+                    src={
+                        userEmail === "demo_user@gmail.com"
+                            ? userAvatar1
+                            : userAvatar2
+                    }
+                />
             </IconButton>
             <Menu
                 anchorEl={anchorEl}

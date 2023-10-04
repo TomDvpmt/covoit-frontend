@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 
 import { selectUserId } from "../../features/user/userSlice";
+import { selectPageLocation } from "../../features/page/pageSlice";
 
 import { getOneUser } from "../../utils/user";
 import { getFormatedDate } from "../../utils/helpers";
@@ -43,6 +44,7 @@ const RideCard = ({ ride }) => {
     const driverId = ride.driverId;
 
     const userId = useSelector(selectUserId);
+    const location = useSelector(selectPageLocation);
 
     const [driver, setDriver] = useState({});
     const [formatedDate, setFormatedDate] = useState("");
@@ -153,36 +155,46 @@ const RideCard = ({ ride }) => {
                         flexDirection: "column",
                         gap: ".5rem",
                     }}>
-                    {driverId !== userId && (
-                        <Typography
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: { xs: ".5rem", md: "1rem" },
-                            }}>
-                            <AirlineSeatReclineExtra />
-
+                    {location !== "myrides" &&
+                        (driverId === userId ? (
                             <Typography
-                                component="span"
                                 fontWeight="700"
-                                color="primary"
-                                fontSize={{ xs: ".9rem", md: "1rem" }}>
-                                Conducteur :{" "}
+                                color={theme.palette.secondary.main}>
+                                Vous êtes le conducteur de ce trajet.
                             </Typography>
-                            {driver && (
-                                <Link
-                                    component={RouterLink}
-                                    to={`/users/${driver._id}`}
-                                    sx={{
-                                        fontSize: { xs: ".9rem", md: "1rem" },
-                                    }}>{`${driver.firstName}${
-                                    driver.firstName && driver.lastName
-                                        ? " "
-                                        : ""
-                                }${driver.lastName}`}</Link>
-                            )}
-                        </Typography>
-                    )}
+                        ) : (
+                            <Typography
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: { xs: ".5rem", md: "1rem" },
+                                }}>
+                                <AirlineSeatReclineExtra />
+
+                                <Typography
+                                    component="span"
+                                    fontWeight="700"
+                                    color="primary"
+                                    fontSize={{ xs: ".9rem", md: "1rem" }}>
+                                    Conducteur :{" "}
+                                </Typography>
+                                {driver && (
+                                    <Link
+                                        component={RouterLink}
+                                        to={`/users/${driver._id}`}
+                                        sx={{
+                                            fontSize: {
+                                                xs: ".9rem",
+                                                md: "1rem",
+                                            },
+                                        }}>{`${driver.firstName}${
+                                        driver.firstName && driver.lastName
+                                            ? " "
+                                            : ""
+                                    }${driver.lastName}`}</Link>
+                                )}
+                            </Typography>
+                        ))}
 
                     <Typography
                         sx={{

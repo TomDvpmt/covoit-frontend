@@ -12,9 +12,9 @@ const Illustration = ({ imgUrl, imgTitle }) => {
             sx={{
                 display: "flex",
                 justifyContent: "center",
-                "& img": { borderRadius: "50% 50%" },
+                "& .illustration": { borderRadius: "2rem" },
             }}>
-            <img src={imgUrl} alt={imgTitle} />
+            <img src={imgUrl} alt={imgTitle} className="illustration" />
         </Box>
     );
 };

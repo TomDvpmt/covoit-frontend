@@ -130,6 +130,11 @@ const Home = () => {
                                         "Bordeaux => Lyon le 31/12/2023 à 09h00 pour 15€"
                                     }
                                 </Typography>
+                                <Typography component="li">
+                                    {
+                                        "Nantes => Nice le 01/06/2024 à 14h00 pour 20€"
+                                    }
+                                </Typography>
                             </Box>
                         </Box>
                     </Collapse>
@@ -137,9 +142,13 @@ const Home = () => {
                 <Box
                     sx={{
                         display: "flex",
+                        flexDirection: { xs: "column", md: "row" },
                         justifyContent: "center",
                         alignItems: "center",
                         gap: "3rem",
+                        "& .illustration": {
+                            maxWidth: "100%",
+                        },
                     }}>
                     <Illustration
                         imgUrl={mapImg}
@@ -176,41 +185,6 @@ const Home = () => {
                                 price={price}
                                 setPrice={setPrice}
                             />
-                            {/* <Box
-                                    sx={{
-                                        display: "flex",
-                                        flexWrap: "wrap",
-                                        gap: ".5rem",
-                                    }}>
-                                        <RideInputLocation
-                                            type="departure"
-                                            location={departure}
-                                            setLocation={setDeparture}
-                                            allCities={allCities}
-                                        />
-                                        <RideInputLocation
-                                            type="destination"
-                                            location={destination}
-                                            setLocation={setDestination}
-                                            allCities={allCities}
-                                        />
-                                </Box> */}
-                            {/* <Box
-                                    sx={{
-                                        display: "flex",
-                                        flexWrap: "wrap",
-                                        gap: ".5rem",
-                                    }}>
-                                    <RideInputDepartureDate
-                                        departureDate={departureDate}
-                                        setDepartureDate={setDepartureDate}
-                                    />
-                                    <RideInputPrice
-                                        type="max"
-                                        price={price}
-                                        setPrice={setPrice}
-                                    />
-                                </Box> */}
                             {homeErrorMessage && (
                                 <ErrorMessage errorMessage={homeErrorMessage} />
                             )}

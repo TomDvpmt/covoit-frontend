@@ -3,8 +3,11 @@ import { useState, useEffect } from "react";
 import ConversationCard from "../../components/ConversationCard";
 import Loader from "../../components/Loader";
 import ValidationMessage from "../../components/ValidationMessage";
+import Illustration from "../../components/Illustration";
 
 import API_BASE_URI from "../../config/API";
+
+import illustration from "../../assets/img/illustrations/bourne-money.webp";
 
 import { Box, Typography } from "@mui/material";
 
@@ -87,6 +90,18 @@ const Conversations = () => {
                         alignItems: "center",
                         gap: "1rem",
                     }}>
+                    <Box
+                        sx={{
+                            maxWidth: "600px",
+                            "& .illustration": {
+                                maxWidth: "100%",
+                            },
+                        }}>
+                        <Illustration
+                            imgUrl={illustration}
+                            imgTitle="A nice conversation"
+                        />
+                    </Box>
                     <Box sx={{ alignSelf: "start" }}>
                         {validationMessage && (
                             <ValidationMessage text={validationMessage} />

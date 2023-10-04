@@ -15,7 +15,7 @@ const PageHeading = () => {
         myrides: "Mes trajets",
         bookingRequests: "Demandes de réservation",
         conversations: "Mes conversations",
-        error404: "Page introuvable.",
+        error404: "Quelque chose s'est mal passé.",
     };
 
     return (
