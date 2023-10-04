@@ -10,7 +10,8 @@ import {
 } from "../../features/user/userSlice";
 import { selectPageLocation } from "../../features/page/pageSlice";
 
-import { AppBar, Toolbar, Box, Link, Typography } from "@mui/material";
+import { AppBar, Toolbar, Box, Link, Typography, Button } from "@mui/material";
+import { Login, PersonAddAlt1, Search } from "@mui/icons-material";
 import theme from "../../styles/theme";
 
 const navLinkStyle = {
@@ -50,36 +51,33 @@ const NavBar = () => {
                         gap: "2rem",
                     }}>
                     {page !== "home" && (
-                        <Link
+                        <Button
                             component={NavLink}
-                            variant="button"
-                            underline="none"
+                            startIcon={<Search />}
                             to="/"
                             sx={navLinkStyle}>
                             Trouver un trajet
-                        </Link>
+                        </Button>
                     )}
                     {!isLoggedIn && (
                         <>
                             {page !== "login" && (
-                                <Link
+                                <Button
                                     component={NavLink}
-                                    variant="button"
-                                    underline="none"
+                                    startIcon={<Login />}
                                     to="/login"
                                     sx={navLinkStyle}>
                                     Se connecter
-                                </Link>
+                                </Button>
                             )}
                             {page !== "register" && (
-                                <Link
+                                <Button
                                     component={NavLink}
-                                    variant="button"
-                                    underline="none"
+                                    startIcon={<PersonAddAlt1 />}
                                     to="/register"
                                     sx={navLinkStyle}>
                                     Créer un compte
-                                </Link>
+                                </Button>
                             )}
                         </>
                     )}

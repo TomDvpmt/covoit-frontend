@@ -7,6 +7,7 @@ import {
 } from "../../features/error/errorSlice";
 import { selectAllCities } from "../../features/cities/citiesSlice";
 
+import Illustration from "../../components/Illustration";
 import RideInputLocation from "../../components/form-inputs/RideInputLocation";
 import RideInputDepartureDate from "../../components/form-inputs/RideInputDepartureDate";
 import RideInputPrice from "../../components/form-inputs/RideInputPrice";
@@ -15,8 +16,11 @@ import ErrorMessage from "../../components/ErrorMessage";
 
 import API_BASE_URI from "../../config/API";
 
+import mapImg from "../../assets/img/illustrations/map.jpg";
+
 import theme from "../../styles/theme";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Collapse } from "@mui/material";
+import { HelpOutline } from "@mui/icons-material";
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -29,6 +33,7 @@ const Home = () => {
     const [price, setPrice] = useState(0);
     const [showResults, setShowResults] = useState(false);
     const [queryRides, setQueryRides] = useState([]);
+    const [showHelp, setShowHelp] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -75,49 +80,79 @@ const Home = () => {
             .catch((error) => console.error(error));
     };
 
+    const handleHelp = () => {
+        setShowHelp((showHelp) => !showHelp);
+    };
+
     return (
         <>
             <Box
                 component="section"
-                m="3rem auto"
-                p=".5rem"
-                maxWidth="600px"
-                sx={{ border: `1px solid ${theme.palette.primary.main}` }}>
-                <Typography
-                    component="h2"
-                    m="2rem 0"
-                    align="center"
-                    fontSize="1.2rem"
-                    fontWeight="700">
-                    Aide pour tester l'application
-                </Typography>
-                <Typography>Trajets existants : </Typography>
-                <Box component="ul">
-                    <Typography component="li">
-                        {"Paris => Strasbourg le 31/12/2023 à 16h00 pour 10€"}
-                    </Typography>
-                    <Typography component="li">
-                        {
-                            "Brest => Clermont-Ferrand le 31/12/2023 à 16h00 pour 10€"
-                        }
-                    </Typography>
-                    <Typography component="li">
-                        {"Bordeaux => Lyon le 31/12/2023 à 09h00 pour 15€"}
-                    </Typography>
+                sx={{
+                    m: "2rem 0",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "2rem",
+                }}>
+                <Box>
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                        <Button
+                            startIcon={<HelpOutline />}
+                            onClick={handleHelp}>
+                            Aide pour tester l'application
+                        </Button>
+                    </Box>
+                    <Collapse in={showHelp}>
+                        <Box
+                            sx={{
+                                m: "3rem 0 5rem",
+                                p: ".5rem",
+                                maxWidth: "600px",
+                                border: `1px solid ${theme.palette.primary.main}`,
+                            }}>
+                            <Typography fontWeight="700">
+                                Trajets existants :{" "}
+                            </Typography>
+                            <Box component="ul">
+                                <Typography component="li">
+                                    {
+                                        "Paris => Strasbourg le 31/12/2023 à 16h00 pour 10€"
+                                    }
+                                </Typography>
+                                <Typography component="li">
+                                    {
+                                        "Brest => Clermont-Ferrand le 31/12/2023 à 16h00 pour 10€"
+                                    }
+                                </Typography>
+                                <Typography component="li">
+                                    {
+                                        "Bordeaux => Lyon le 31/12/2023 à 09h00 pour 15€"
+                                    }
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Collapse>
                 </Box>
-            </Box>
-            <Box component="section">
-                <Box component="form" onSubmit={handleSubmit}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "3rem",
+                    }}>
+                    <Illustration
+                        imgUrl={mapImg}
+                        imgTitle="An awesome treasure map"
+                    />
                     <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: ".5rem",
-                        }}>
+                        component="form"
+                        onSubmit={handleSubmit}
+                        sx={{ minWidth: { lg: "600px" } }}>
                         <Box
                             sx={{
                                 display: "flex",
-                                flexWrap: "wrap",
+                                flexDirection: "column",
                                 gap: ".5rem",
                             }}>
                             <RideInputLocation
@@ -132,13 +167,6 @@ const Home = () => {
                                 setLocation={setDestination}
                                 allCities={allCities}
                             />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: ".5rem",
-                            }}>
                             <RideInputDepartureDate
                                 departureDate={departureDate}
                                 setDepartureDate={setDepartureDate}
@@ -148,18 +176,53 @@ const Home = () => {
                                 price={price}
                                 setPrice={setPrice}
                             />
+                            {/* <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: ".5rem",
+                                    }}>
+                                        <RideInputLocation
+                                            type="departure"
+                                            location={departure}
+                                            setLocation={setDeparture}
+                                            allCities={allCities}
+                                        />
+                                        <RideInputLocation
+                                            type="destination"
+                                            location={destination}
+                                            setLocation={setDestination}
+                                            allCities={allCities}
+                                        />
+                                </Box> */}
+                            {/* <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: ".5rem",
+                                    }}>
+                                    <RideInputDepartureDate
+                                        departureDate={departureDate}
+                                        setDepartureDate={setDepartureDate}
+                                    />
+                                    <RideInputPrice
+                                        type="max"
+                                        price={price}
+                                        setPrice={setPrice}
+                                    />
+                                </Box> */}
+                            {homeErrorMessage && (
+                                <ErrorMessage errorMessage={homeErrorMessage} />
+                            )}
                         </Box>
-                        {homeErrorMessage && (
-                            <ErrorMessage errorMessage={homeErrorMessage} />
-                        )}
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="secondary"
+                            sx={{ mt: "1rem" }}>
+                            Chercher
+                        </Button>
                     </Box>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="secondary"
-                        sx={{ mt: "1rem" }}>
-                        Chercher
-                    </Button>
                 </Box>
             </Box>
             {showResults && (

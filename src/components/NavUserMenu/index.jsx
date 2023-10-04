@@ -6,6 +6,8 @@ import { logOut, selectUserId } from "../../features/user/userSlice";
 
 import RideCreateDialog from "../RideCreateDialog";
 
+import userAvatar from "../../assets/img/user/drive.jpg";
+
 import {
     Menu,
     MenuItem,
@@ -75,8 +77,8 @@ const MenuUser = () => {
 
     return (
         <>
-            <IconButton onClick={handleOpen}>
-                <Avatar />
+            <IconButton onClick={handleOpen} size="large">
+                <Avatar alt="Your awesome profile avatar" src={userAvatar} />
             </IconButton>
             <Menu
                 anchorEl={anchorEl}
