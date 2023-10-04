@@ -1,6 +1,6 @@
 <center>
 
-![Logo de Covoit'](/src/assets/img/covoit-logo-bicolor-on-white.png)
+![Logo de Covoit'](/src/assets/img/covoit-logo2.png)
 
 </center>
 
@@ -48,7 +48,7 @@ Le back-end : <a href="https://github.com/TomDvpmt/covoit-backend" target="_blan
 
 <center>
 
-![Page d'accueil de Covoit'](/src/assets/img/captures/covoit-home.webp)
+![Page d'accueil de Covoit'](/src/assets/img/captures/covoit-home.png)
 
 </center>
 

@@ -6,7 +6,7 @@ import { selectUserId } from "../../features/user/userSlice";
 import BookingRequestCard from "../../components/BookingRequestCard";
 import Illustration from "../../components/Illustration";
 
-import illustration from "../../assets/img/illustrations/drive-passenger.webp";
+import illustration from "../../assets/img/illustrations/bourne-money.webp";
 
 import API_BASE_URI from "../../config/API";
 import { getFormatedDate } from "../../utils/helpers";

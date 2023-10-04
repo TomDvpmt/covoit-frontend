@@ -7,7 +7,7 @@ import Illustration from "../../components/Illustration";
 
 import API_BASE_URI from "../../config/API";
 
-import illustration from "../../assets/img/illustrations/bourne-money.webp";
+import illustration from "../../assets/img/illustrations/conversation.webp";
 
 import { Box, Typography } from "@mui/material";
 
