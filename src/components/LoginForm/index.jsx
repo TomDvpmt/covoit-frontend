@@ -89,7 +89,7 @@ const LoginForm = ({ setShowLoginDialog }) => {
             navigate("/");
         } catch (error) {
             console.error(error);
-            dispatch(setLoginErrorMessage(error.message));
+            dispatch(setLoginErrorMessage("Connexion impossible."));
         }
 
         setShowLoginDialog && setShowLoginDialog(false);

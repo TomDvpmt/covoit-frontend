@@ -56,7 +56,7 @@ const Register = () => {
         try {
             setIsLoading(true);
 
-            const loginResponse = await fetch(
+            const registerResponse = await fetch(
                 `${API_BASE_URI}/API/users/register`,
                 {
                     method: "POST",
@@ -72,11 +72,15 @@ const Register = () => {
                     }),
                 }
             );
-            if (!loginResponse.ok) {
-                loginResponse
+            if (!registerResponse.ok) {
+                registerResponse
                     .json()
                     .then((data) =>
-                        dispatch(setRegisterErrorMessage(data.message))
+                        dispatch(
+                            setRegisterErrorMessage(
+                                "Impossible de créer le compte."
+                            )
+                        )
                     );
                 setIsLoading(false);
                 return;
@@ -90,7 +94,7 @@ const Register = () => {
         // Auto login after register
 
         try {
-            const registerResponse = await fetch(
+            const loginResponse = await fetch(
                 `${API_BASE_URI}/API/users/login`,
                 {
                     method: "POST",
@@ -104,11 +108,13 @@ const Register = () => {
                 }
             );
 
-            if (!registerResponse.ok) {
-                registerResponse
+            if (!loginResponse.ok) {
+                loginResponse
                     .json()
                     .then((data) =>
-                        dispatch(setRegisterErrorMessage(data.message))
+                        dispatch(
+                            setRegisterErrorMessage("Connexion impossible.")
+                        )
                     );
                 setIsLoading(false);
                 return;
