@@ -119,7 +119,7 @@ const Register = () => {
                 setIsLoading(false);
                 return;
             }
-            const data = await registerResponse.json();
+            const data = await loginResponse.json();
 
             sessionStorage.setItem("token", data.token);
             dispatch(logIn());
